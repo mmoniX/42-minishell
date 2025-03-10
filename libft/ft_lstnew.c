@@ -1,37 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/10 14:47:03 by mmonika          ###   ########.fr       */
+/*   Created: 2025/03/10 13:20:44 by mmonika           #+#    #+#             */
+/*   Updated: 2025/03/10 14:10:13 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-# include "../libft/libft.h"
-
-# include <readline/readline.h>
-# include <readline/history.h>
-
-struct	s_shell
+t_list	*ft_lstnew(void *content)
 {
-	int	print;
-	char	**env;
-		
-} t_shell;
+	t_list	*temp;
 
-
-#endif
+	temp = malloc(sizeof(t_list));
+	if (!temp)
+		return (NULL);
+	temp->content = content;
+	temp->next = NULL;
+	return (temp);
+}

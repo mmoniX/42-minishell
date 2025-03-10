@@ -1,10 +1,10 @@
 MiniShell ToDo list:
 
 1️⃣ Basic Shell Setup
-- [ ] Display a prompt (minishell$ ).
-- [ ] Read user input using readline().
-- [ ] Implement command history using add_history().
-- [ ] Handle empty inputs (ignore and show a new prompt).
+- [x] Display a prompt (minishell$ ).
+- [x] Read user input using readline().
+- [x] Implement command history using add_history().
+- [x] Handle empty inputs (ignore and show a new prompt).
 
  2️⃣ Command Execution
 - [ ] Parse and tokenize the input.
@@ -42,7 +42,7 @@ MiniShell ToDo list:
 - [ ] Implement export to add environment variables.
 - [ ] Implement unset to remove environment variables.
 - [ ] Implement env to print the environment.
-- [ ] Implement exit to quit the shell.
+- [x] Implement exit to quit the shell.
 
 8️⃣ Signal Handling
 - [ ] Handle CTRL+C (^C should display a new prompt).

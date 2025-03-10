@@ -1,37 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/10 14:47:03 by mmonika          ###   ########.fr       */
+/*   Created: 2024/10/10 19:39:31 by mmonika           #+#    #+#             */
+/*   Updated: 2024/10/12 11:55:59 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-# include "../libft/libft.h"
-
-# include <readline/readline.h>
-# include <readline/history.h>
-
-struct	s_shell
+void	ft_putnbr_fd(int n, int fd)
 {
-	int	print;
-	char	**env;
-		
-} t_shell;
+	if (n < 0)
+	{
+		if (n == -2147483648)
+			write (fd, &"-2147483648", 11);
+		else
+		{
+			n = -n;
+			write (fd, "-", 1);
+			ft_putnbr_fd (n, fd);
+		}
+	}
+	else
+	{
+		if (n > 9)
+			ft_putnbr_fd (n / 10, fd);
+		write (fd, &"0123456789"[n % 10], 1);
+	}
+}
 
-
-#endif
+// int main()
+// {
+// 	int n = 2147483647;
+// 	ft_putnbr_fd(n, 0);
+// 	return (0);
+// }

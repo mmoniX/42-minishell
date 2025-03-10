@@ -1,37 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/10 14:47:03 by mmonika          ###   ########.fr       */
+/*   Created: 2024/10/07 18:47:29 by mmonika           #+#    #+#             */
+/*   Updated: 2024/10/10 12:38:39 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-# include "../libft/libft.h"
-
-# include <readline/readline.h>
-# include <readline/history.h>
-
-struct	s_shell
+int	ft_toupper(int c)
 {
-	int	print;
-	char	**env;
-		
-} t_shell;
+	if (c >= 'a' && c <= 'z')
+		c = c - 32;
+	return (c);
+}
 
-
-#endif
+// int main(void)
+// {
+//     char str[] = "v";
+//     ft_toupper(str);
+//     printf("%s\n", str);
+//     return 0;
+// }

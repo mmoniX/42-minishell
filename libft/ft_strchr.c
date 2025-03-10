@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/10 14:47:03 by mmonika          ###   ########.fr       */
+/*   Created: 2024/10/08 15:54:47 by mmonika           #+#    #+#             */
+/*   Updated: 2024/10/10 18:28:18 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-# include "../libft/libft.h"
-
-# include <readline/readline.h>
-# include <readline/history.h>
-
-struct	s_shell
+char	*ft_strchr(const char *str, int c)
 {
-	int	print;
-	char	**env;
-		
-} t_shell;
+	size_t	i;
 
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == (char)c)
+			return ((char *)(str + i));
+		i++;
+	}
+	if ((char)c == '\0')
+		return ((char *)(str + i));
+	return (0);
+}
 
-#endif
+// int main(void)
+// {
+//     char str[] = "hi there!";
+//     int ch = 'i';
+//     char *res = ft_strchr(str, ch);
+//     printf("%s\n", res);
+//     return (0);
+// }

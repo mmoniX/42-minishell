@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/10 13:43:42 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/10 14:46:24 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int ac, char **av, char **env)
         input = readline("minishell$ ");
         
         // ft_strcmp have to use from libft
-        if (!input || strcmp(input, "exit") == 0)
+        if (!input || ft_strcmp(input, "exit") == 0)
         {
             printf("exit\n");
 			free(input);

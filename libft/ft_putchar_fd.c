@@ -1,37 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putchr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/10 14:47:03 by mmonika          ###   ########.fr       */
+/*   Created: 2024/10/10 19:08:38 by mmonika           #+#    #+#             */
+/*   Updated: 2024/10/13 18:16:39 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-# include "../libft/libft.h"
-
-# include <readline/readline.h>
-# include <readline/history.h>
-
-struct	s_shell
+void	ft_putchar_fd(char c, int fd)
 {
-	int	print;
-	char	**env;
-		
-} t_shell;
+	write (fd, &c, 1);
+}
 
-
-#endif
+// int main()
+// {
+// 	char c = 'M';
+// 	ft_putchr_fd(c, 1);
+// 	return (0);
+// }

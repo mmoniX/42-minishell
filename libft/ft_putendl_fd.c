@@ -1,37 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/10 14:47:03 by mmonika          ###   ########.fr       */
+/*   Created: 2024/10/10 19:33:24 by mmonika           #+#    #+#             */
+/*   Updated: 2024/10/12 12:16:09 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-# include "../libft/libft.h"
-
-# include <readline/readline.h>
-# include <readline/history.h>
-
-struct	s_shell
+void	ft_putendl_fd(char *s, int fd)
 {
-	int	print;
-	char	**env;
-		
-} t_shell;
+	int	len;
 
+	len = ft_strlen(s);
+	if (fd < 0)
+		return ;
+	write (fd, s, len);
+	write (fd, "\n", 1);
+}
 
-#endif
+// int main()
+// {
+// 	char str[] = "2147483647";
+// 	ft_putendl_fd(str, 1);
+// 	return (0);
+// }

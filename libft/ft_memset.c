@@ -1,37 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/10 14:47:03 by mmonika          ###   ########.fr       */
+/*   Created: 2024/10/07 17:44:45 by mmonika           #+#    #+#             */
+/*   Updated: 2024/11/05 15:48:00 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-# include "../libft/libft.h"
-
-# include <readline/readline.h>
-# include <readline/history.h>
-
-struct	s_shell
+void	*ft_memset(void *b, int c, size_t len)
 {
-	int	print;
-	char	**env;
-		
-} t_shell;
+	char	*temp;
+	size_t	i;
 
+	i = 0;
+	temp = (char *)b;
+	while (i < len)
+	{
+		temp[i] = c;
+		i++;
+	}
+	return (b);
+}
 
-#endif
+// int main() 
+// { 
+// 	char str[] = "42 school"; 
+// 	memset(str, 'o', 8); 
+// 	printf("%s", str); 
+// 	return 0; 
+// }
