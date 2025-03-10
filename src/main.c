@@ -6,17 +6,32 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/09 13:50:31 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/10 13:43:42 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 int main(int ac, char **av, char **env)
 {
-	if (ac != 1)
-		return (1);
-    return (0);
-	
-	// next step
+    char	*input;
+
+    while (1)
+    {
+        input = readline("minishell$ ");
+        
+        // ft_strcmp have to use from libft
+        if (!input || strcmp(input, "exit") == 0)
+        {
+            printf("exit\n");
+			free(input);
+            break;
+        }
+
+        // If input is not empty, add it to history
+        if (*input)
+            add_history(input);
+        free(input);
+    }
+    return 0;
 }
