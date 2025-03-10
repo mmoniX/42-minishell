@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/09 12:41:41 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/09 13:50:31 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(int ac, char **av, char **env)
 {
-	if (argc != 1)
+	if (ac != 1)
 		return (1);
     return (0);
 	

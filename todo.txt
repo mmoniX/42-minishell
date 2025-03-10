@@ -1,0 +1,60 @@
+MiniShell ToDo list:
+
+1️⃣ Basic Shell Setup
+- [ ] Display a prompt (minishell$ ).
+- [ ] Read user input using readline().
+- [ ] Implement command history using add_history().
+- [ ] Handle empty inputs (ignore and show a new prompt).
+
+ 2️⃣ Command Execution
+- [ ] Parse and tokenize the input.
+- [ ] Search and launch executables:
+	- [ ] Check absolute path (/bin/ls).
+	- [ ] Check relative path (./my_script).
+	- [ ] Search in PATH.
+- [ ] Execute external commands using fork() and execve().
+
+ 3️⃣ Handling Quotes
+- [ ] Implement single quotes (') to prevent interpretation of metacharacters.
+- [ ] Implement double quotes (") to prevent interpretation of metacharacters except for $.
+- [ ] Ensure the shell does not interpret unclosed quotes.
+
+4️⃣ Environment Variables
+- [ ] Expand variables ($VAR) to their values.
+- [ ] Implement $? to return the last exit status.
+- [ ] Implement built-in env to display environment variables.
+
+5️⃣ Redirections
+- [ ] Implement input redirection (<).
+- [ ] Implement output redirection (>).
+- [ ] Implement heredoc (<<) to read input until a delimiter.
+- [ ] Implement append redirection (>>).
+
+6️⃣ Pipes (|)
+- [ ] Implement basic pipes (ls | wc -l).
+- [ ] Chain multiple pipes (cat file | grep text | wc -l).
+- [ ] Ensure proper file descriptor management.
+
+7️⃣ Built-in Commands
+- [ ] Implement echo with -n option.
+- [ ] Implement cd with relative/absolute paths.
+- [ ] Implement pwd with no options.
+- [ ] Implement export to add environment variables.
+- [ ] Implement unset to remove environment variables.
+- [ ] Implement env to print the environment.
+- [ ] Implement exit to quit the shell.
+
+8️⃣ Signal Handling
+- [ ] Handle CTRL+C (^C should display a new prompt).
+- [ ] Handle CTRL+D (should exit the shell).
+- [ ] Handle CTRL+\ (should do nothing).
+- [ ] Use only one global variable for signal handling.
+
+9️⃣ Error Handling & Edge Cases
+- [ ] Prevent execution of invalid commands (lsdskdfk).
+- [ ] Prevent execution of empty commands (;;, && not required).
+- [ ] Handle syntax errors (e.g., unclosed quotes).
+- [ ] Ensure proper memory management (check with valgrind).
+
+	
+	
