@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/11 12:49:56 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/11 14:00:03 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,11 @@ struct	s_shell
 
 //init and tokenize
 char	**tokenize_input(char *input);
+void	execute_command(char **tokens, char **env);
+char	*get_path(char *cmd, char **env);
+char	*get_env(char *key, char **env);
+
+//utils
+void	ft_free_tab(char **tab);
 
 #endif

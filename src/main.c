@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/11 13:14:46 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/11 13:54:25 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int main(int ac, char **av, char **env)
         if (*input)
             add_history(input);
 		tokens = tokenize_input(input);
+		execute_command(tokens, env);
 		// for Debug: Print tokens (remove later)
         i = 0;
 		while (tokens[i])
