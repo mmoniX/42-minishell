@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/11 12:12:25 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/11 12:49:56 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-
+#ifndef MAX_TOKENS
+#define MAX_TOKENS 100
+#endif
 struct	s_shell
 {
 	int	print;
@@ -34,5 +36,8 @@ struct	s_shell
 		
 } t_shell;
 
+
+//init and tokenize
+char	**tokenize_input(char *input);
 
 #endif

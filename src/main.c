@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/10 14:46:24 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/11 13:14:46 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 int main(int ac, char **av, char **env)
 {
     char	*input;
+    char	**tokens;
+	int		i;
 
+	if (ac != 1)
+		return (1);
     while (1)
     {
         input = readline("minishell$ ");
@@ -31,6 +35,19 @@ int main(int ac, char **av, char **env)
         // If input is not empty, add it to history
         if (*input)
             add_history(input);
+		tokens = tokenize_input(input);
+		// for Debug: Print tokens (remove later)
+        i = 0;
+		while (tokens[i])
+		{
+			printf("Token[%d]: %s\n", i, tokens[i]);
+			i++;	
+		}
+		// Free allocated memory
+		i = -1;
+		while (tokens[++i])
+			free(tokens[i]);
+		free(tokens);
         free(input);
     }
     return 0;
