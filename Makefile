@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -lreadline -g -fsanitize=address #-Wall -Wextra -Werror
+CFLAGS = -g -fsanitize=address #-Wall -Wextra -Werror
 VAL = valgrind --leak-check=full --track-origins=yes
 
 SRC = src/main.c src/init.c
@@ -16,7 +16,7 @@ $(LIBFT):
 	@make --no-print-directory -C libft
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT) -lreadline
 	@echo "\033[32mProgram is ready to execute\033[0m"
 
 $(OBJ_DIR)/%.o: %.c

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/11 13:54:25 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/14 12:52:02 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,15 @@ int main(int ac, char **av, char **env)
 	int		i;
 
 	if (ac != 1)
-		return (1);
+		return (printf("Invalid Input\n"), 0);
     while (1)
     {
         input = readline("minishell$ ");
-        
-        // ft_strcmp have to use from libft
         if (!input || ft_strcmp(input, "exit") == 0)
         {
-            printf("exit\n");
 			free(input);
-            break;
+            break ;
         }
-
-        // If input is not empty, add it to history
         if (*input)
             add_history(input);
 		tokens = tokenize_input(input);
