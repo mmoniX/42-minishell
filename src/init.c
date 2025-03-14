@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/14 11:38:43 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/14 12:04:29 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,8 @@ char	*get_path(char *cmd, char **env)
 	while (allpath[++i])
 	{
         path_part = malloc(ft_strlen(allpath[i]) + ft_strlen(cmd) + 2);
-        // check 
 		if (!path_part)
             continue;
-		// rebuild sprintf
         sprintf(path_part, "%s/%s", allpath[i], cmd);
         if (access(path_part, F_OK | X_OK) == 0)
         {
@@ -87,8 +85,7 @@ char	*get_path(char *cmd, char **env)
         }
         free(path_part);
 	}
-	ft_free_tab(allpath);
-	return (NULL);
+	return (ft_free_tab(allpath), NULL);
 }
 
 void	execute_command(char **tokens, char **env)
@@ -98,12 +95,12 @@ void	execute_command(char **tokens, char **env)
 	char	*cmd_path;
 
 	if (!tokens[0])
-		return;
+		return ;
 	cmd_path = get_path(tokens[0], env);
 	if (!cmd_path)
 	{
 		printf("minishell: command not found: \n");
-		return;
+		return ;
 	}
 	pid = fork();
 	if (pid == 0)
