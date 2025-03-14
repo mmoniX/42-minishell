@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/11 13:59:46 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/14 11:38:43 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,17 @@ char	*get_path(char *cmd, char **env)
 
 	i = -1;
 	if (access(cmd, F_OK | X_OK) == 0)
-        return strdup(cmd);
+        return ft_strdup(cmd);
 	allpath = ft_split(get_env("PATH", env), ':');
 	if (!allpath)
         return (NULL);
 	while (allpath[++i])
 	{
-        path_part = malloc(strlen(allpath[i]) + strlen(cmd) + 2);
-        if (!path_part)
+        path_part = malloc(ft_strlen(allpath[i]) + ft_strlen(cmd) + 2);
+        // check 
+		if (!path_part)
             continue;
+		// rebuild sprintf
         sprintf(path_part, "%s/%s", allpath[i], cmd);
         if (access(path_part, F_OK | X_OK) == 0)
         {
@@ -100,7 +102,7 @@ void	execute_command(char **tokens, char **env)
 	cmd_path = get_path(tokens[0], env);
 	if (!cmd_path)
 	{
-		fprintf(stderr, "minishell: command not found: %s\n", tokens[0]);
+		printf("minishell: command not found: \n");
 		return;
 	}
 	pid = fork();
@@ -112,8 +114,6 @@ void	execute_command(char **tokens, char **env)
 			exit(1);
 		}
 	}
-	else if (pid < 0)
-		perror("fork failed");
 	else
 		waitpid(pid, &status, 0);
 	free(cmd_path);

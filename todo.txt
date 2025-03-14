@@ -7,11 +7,11 @@ MiniShell ToDo list:
 - [x] Handle empty inputs (ignore and show a new prompt).
 
  2️⃣ Command Execution
-- [ ] Parse and tokenize the input.
-- [ ] Search and launch executables:
-	- [ ] Check absolute path (/bin/ls).
-	- [ ] Check relative path (./my_script).
-	- [ ] Search in PATH.
+- [x] Parse and tokenize the input.
+- [x] Search and launch executables:
+	- [x] Check absolute path (/bin/ls).
+	- [x] Check relative path (./my_script).
+	- [x] Search in PATH.
 - [ ] Execute external commands using fork() and execve().
 
  3️⃣ Handling Quotes
