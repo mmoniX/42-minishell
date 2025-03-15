@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/14 12:52:02 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/15 11:47:15 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,33 @@
 
 int main(int ac, char **av, char **env)
 {
-    char	*input;
-    char	**tokens;
-	int		i;
-
-	if (ac != 1)
-		return (printf("Invalid Input\n"), 0);
-    while (1)
-    {
-        input = readline("minishell$ ");
-        if (!input || ft_strcmp(input, "exit") == 0)
-        {
-			free(input);
-            break ;
-        }
-        if (*input)
-            add_history(input);
-		tokens = tokenize_input(input);
-		execute_command(tokens, env);
-		// for Debug: Print tokens (remove later)
-        i = 0;
-		while (tokens[i])
+	char *input;
+	char **tokens;
+	
+	while (1)
+	{
+		input = readline("minishell$ ");
+		if (!input)
 		{
-			printf("Token[%d]: %s\n", i, tokens[i]);
-			i++;	
+			printf("\nExiting minishell...\n");
+			break;
 		}
-		// Free allocated memory
-		i = -1;
-		while (tokens[++i])
-			free(tokens[i]);
-		free(tokens);
-        free(input);
-    }
+	
+		if (*input)
+			add_history(input);
+	
+		tokens = tokenize_input(input);
+		if (!tokens)  // Prevent passing NULL tokens to execute_command
+		{
+			free(input);
+			continue;
+		}
+	
+		execute_command(tokens, env);
+	
+		ft_free_tab(tokens);
+		free(input);
+	}
+	
     return 0;
 }
