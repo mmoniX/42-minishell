@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/15 12:38:16 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/15 14:00:33 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,38 @@ char *expand_exit_status(char *input)
     }
     result[j] = '\0';
     return result;
+}
+
+void builtin_env(char **env)
+{
+	int i;
+
+	i = 0;
+    while (env[i])
+	{
+    	printf("%s\n", env[i]);
+		i++;
+	}
+}
+
+void heredoc(char *delimiter)
+{
+    int fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0)
+    {
+        perror("minishell: heredoc file creation failed");
+        return;
+    }
+
+    char *line;
+    while (1)
+    {
+        line = readline("> ");
+        if (!line || strcmp(line, delimiter) == 0)  // Stop if delimiter is found
+            break;
+        write(fd, line, strlen(line));
+        write(fd, "\n", 1);
+        free(line);
+    }
+    close(fd);
 }

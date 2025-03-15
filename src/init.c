@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/15 12:40:13 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/15 14:01:55 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,23 +141,93 @@ char *get_path(char *cmd, char **env)
 }
 
 
+#include <fcntl.h>
+
 void execute_command(char **tokens, char **env)
 {
     pid_t pid;
-    int status;
+    int status, fd_in = 0, fd_out = 1;
     char *cmd_path;
+    int i = 0;
 
     if (!tokens[0])
         return;
-    
+
+    // ✅ Handle built-in commands first
+    if (strcmp(tokens[0], "env") == 0)
+    {
+        builtin_env(env);
+        g_last_exit_status = 0;
+        return;
+    }
+
+    // ✅ Check for input and output redirections
+    while (tokens[i])
+    {
+        if (strcmp(tokens[i], "<") == 0)  // Input Redirection
+        {
+            fd_in = open(tokens[i + 1], O_RDONLY);
+            if (fd_in < 0)
+            {
+                perror("minishell: input redirection failed");
+                g_last_exit_status = 1;
+                return;
+            }
+            dup2(fd_in, STDIN_FILENO);
+            close(fd_in);
+            tokens[i] = NULL; // Remove redirection from tokens
+        }
+        else if (strcmp(tokens[i], ">") == 0)  // Output Redirection (overwrite)
+        {
+            fd_out = open(tokens[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (fd_out < 0)
+            {
+                perror("minishell: output redirection failed");
+                g_last_exit_status = 1;
+                return;
+            }
+            dup2(fd_out, STDOUT_FILENO);
+            close(fd_out);
+            tokens[i] = NULL;
+        }
+        else if (strcmp(tokens[i], ">>") == 0)  // Output Redirection (append)
+        {
+            fd_out = open(tokens[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+            if (fd_out < 0)
+            {
+                perror("minishell: append redirection failed");
+                g_last_exit_status = 1;
+                return;
+            }
+            dup2(fd_out, STDOUT_FILENO);
+            close(fd_out);
+            tokens[i] = NULL;
+        }
+		else if (strcmp(tokens[i], "<<") == 0)  // Heredoc Redirection
+		{
+			heredoc(tokens[i + 1]);  
+			fd_in = open("/tmp/minishell_heredoc", O_RDONLY);
+			if (fd_in < 0)
+			{
+				perror("minishell: heredoc open failed");
+				g_last_exit_status = 1;
+				return;
+			}
+			dup2(fd_in, STDIN_FILENO);
+			close(fd_in);
+			tokens[i] = NULL;
+		}
+        i++;
+    }
+
     cmd_path = get_path(tokens[0], env);
     if (!cmd_path)
     {
         fprintf(stderr, "minishell: command not found: %s\n", tokens[0]);
-		g_last_exit_status = 127;
+        g_last_exit_status = 127;
         return;
     }
-    
+
     pid = fork();
     if (pid == 0)
     {
@@ -170,13 +240,16 @@ void execute_command(char **tokens, char **env)
     else if (pid < 0)
     {
         perror("fork failed");
-		g_last_exit_status = 1;
+        g_last_exit_status = 1;
     }
     else
     {
         waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-		g_last_exit_status = WEXITSTATUS(status);
+        if (WIFEXITED(status))
+            g_last_exit_status = WEXITSTATUS(status);
     }
+
     free(cmd_path);
 }
+
+

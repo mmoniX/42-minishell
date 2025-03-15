@@ -20,15 +20,15 @@ MiniShell ToDo list:
 - [x] Ensure the shell does not interpret unclosed quotes.
 
 4️⃣ Environment Variables
-- [ ] Expand variables ($VAR) to their values.
-- [ ] Implement $? to return the last exit status.
-- [ ] Implement built-in env to display environment variables.
+- [x] Expand variables ($VAR) to their values.
+- [x] Implement $? to return the last exit status.
+- [x] Implement built-in env to display environment variables.
 
 5️⃣ Redirections
-- [ ] Implement input redirection (<).
-- [ ] Implement output redirection (>).
-- [ ] Implement heredoc (<<) to read input until a delimiter.
-- [ ] Implement append redirection (>>).
+- [x] Implement input redirection (<).
+- [x] Implement output redirection (>).
+- [x] Implement heredoc (<<) to read input until a delimiter.
+- [x] Implement append redirection (>>).
 
 6️⃣ Pipes (|)
 - [ ] Implement basic pipes (ls | wc -l).
