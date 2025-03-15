@@ -6,11 +6,13 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/14 12:52:02 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/15 14:59:12 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+int	global_signal = 0;
 
 int main(int ac, char **av, char **env)
 {
@@ -20,6 +22,7 @@ int main(int ac, char **av, char **env)
 
 	if (ac != 1)
 		return (printf("Invalid Input\n"), 0);
+	signal_handler();
     while (1)
     {
         input = readline("minishell$ ");
