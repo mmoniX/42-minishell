@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/14 15:43:04 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/15 12:50:43 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ struct	s_shell
 		
 } t_shell;
 
+extern int g_last_exit_status;
 
 //init and tokenize
 char	**tokenize_input(char *input);
@@ -46,5 +47,9 @@ char *handle_quotes(const char *input, int *index, char quote_type);
 
 //utils
 void	ft_free_tab(char **tab);
+
+//env
+char *expand_variables(char *input, char **env);
+char *expand_exit_status(char *input);
 
 #endif

@@ -12,12 +12,12 @@ MiniShell ToDo list:
 	- [x] Check absolute path (/bin/ls).
 	- [x] Check relative path (./my_script).
 	- [x] Search in PATH.
-- [ ] Execute external commands using fork() and execve().
+- [x] Execute external commands using fork() and execve().
 
  3️⃣ Handling Quotes
-- [ ] Implement single quotes (') to prevent interpretation of metacharacters.
-- [ ] Implement double quotes (") to prevent interpretation of metacharacters except for $.
-- [ ] Ensure the shell does not interpret unclosed quotes.
+- [x] Implement single quotes (') to prevent interpretation of metacharacters.
+- [x] Implement double quotes (") to prevent interpretation of metacharacters except for $.
+- [x] Ensure the shell does not interpret unclosed quotes.
 
 4️⃣ Environment Variables
 - [ ] Expand variables ($VAR) to their values.

@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/15 11:39:20 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/15 12:40:13 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ void execute_command(char **tokens, char **env)
     if (!cmd_path)
     {
         fprintf(stderr, "minishell: command not found: %s\n", tokens[0]);
+		g_last_exit_status = 127;
         return;
     }
     
@@ -169,10 +170,13 @@ void execute_command(char **tokens, char **env)
     else if (pid < 0)
     {
         perror("fork failed");
+		g_last_exit_status = 1;
     }
     else
     {
         waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+		g_last_exit_status = WEXITSTATUS(status);
     }
     free(cmd_path);
 }
