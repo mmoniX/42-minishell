@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/15 14:58:53 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/15 15:35:49 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	ft_free_tab(char **tab);
 
 /* signal */
 void	signal_for_termination(int sig);
-void	terminal_control(void);
 void	signal_handler(void);
 
 #endif

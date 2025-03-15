@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:08:10 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/15 15:09:58 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/15 15:39:36 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,32 @@
 
 void	signal_for_termination(int sig)
 {
-	if (sig == SIGINT) //ctl_C
+	if (sig == SIGINT) /* ctl_C */
 	{
-		printf("\n");
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0); /* to remove ^C */
 		rl_redisplay();
 		global_signal = 1;
 	}
-	else if (sig == SIGQUIT) //ctl_D
-	{
-		rl_on_new_line();
-		rl_redisplay();
+	else if (sig == SIGQUIT) /* ctl_\ */
 		global_signal = 0;
-	}
-}
-void	terminal_control(void)
-{
-	struct termios terminal;
-
-	if (tcgetattr(STDIN_FILENO, &terminal) != 0)
-		return(perror("Terminal Error"));
-	else
-	{
-		terminal.c_cc[VQUIT] = _POSIX_VDISABLE;
-		terminal.c_lflag |= ECHOE | ICANON;
-		if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal) != 0)
-			return(perror("Terminal Error"));
-		if (tcgetattr(STDIN_FILENO, &terminal) != 0)
-			return(perror("Terminal Error"));
-	}
 }
 
 void	signal_handler(void)
 {
 	struct sigaction sa;
+	struct termios terminal;
 	
 	sa.sa_handler = signal_for_termination;
-	sa.sa_flags = SA_RESTART;
+	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
-	terminal_control();
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+	if (tcgetattr(STDIN_FILENO, &terminal) != 0)
+		return(perror("Terminal Error"));
+	terminal.c_cc[VQUIT] = _POSIX_VDISABLE; 	/* disable ctl_\ */
+	terminal.c_lflag |= ECHOE | ICANON; 		/* enable canonical mode */
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal) != 0)
+		return(perror("Terminal Error"));
 }
