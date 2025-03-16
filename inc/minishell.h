@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/15 15:35:49 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/16 15:45:38 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,19 @@ extern int global_signal;
 #ifndef MAX_TOKENS
 #define MAX_TOKENS 100
 #endif
-struct	s_shell
+
+typedef	struct	s_dlist
 {
-	int	print;
-	char	**env;
-		
-} t_shell;
+	void			*content;
+	struct s_dlist	*next;
+	struct s_dlist	*prev;
+}					t_dlist;
 
-
+typedef struct	s_shell
+{
+	t_list	*denv;
+	int		exit_code;
+}			t_shell;
 
 //init and tokenize
 char	**tokenize_input(char *input);
@@ -55,5 +60,14 @@ void	ft_free_tab(char **tab);
 /* signal */
 void	signal_for_termination(int sig);
 void	signal_handler(void);
+
+/* builtin */
+void	ft_echo(char **args, int fd);
+int		ft_pwd(void);
+void	unset_util(t_shell *minishell, char *var);
+void	ft_unset(t_shell *minishell, char **args);
+
+/* utils */
+int 	is_valid_env(char *var);
 
 #endif

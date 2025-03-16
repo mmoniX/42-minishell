@@ -36,19 +36,19 @@ MiniShell ToDo list:
 - [ ] Ensure proper file descriptor management.
 
 7️⃣ Built-in Commands
-- [ ] Implement echo with -n option.
+- [x] Implement echo with -n option.
 - [ ] Implement cd with relative/absolute paths.
-- [ ] Implement pwd with no options.
+- [x] Implement pwd with no options.
 - [ ] Implement export to add environment variables.
 - [ ] Implement unset to remove environment variables.
 - [ ] Implement env to print the environment.
 - [x] Implement exit to quit the shell.
 
 8️⃣ Signal Handling
-- [ ] Handle CTRL+C (^C should display a new prompt).
-- [ ] Handle CTRL+D (should exit the shell).
-- [ ] Handle CTRL+\ (should do nothing).
-- [ ] Use only one global variable for signal handling.
+- [x] Handle CTRL+C (^C should display a new prompt).
+- [x] Handle CTRL+D (should exit the shell).
+- [x] Handle CTRL+\ (should do nothing).
+- [x] Use only one global variable for signal handling.
 
 9️⃣ Error Handling & Edge Cases
 - [ ] Prevent execution of invalid commands (lsdskdfk).
