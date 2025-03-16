@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/16 11:50:59 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/16 14:16:49 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ char *expand_variables(char *input, char **env)
 {
     char *result = malloc(BUFSIZ); // Allocate buffer for expanded string
     if (!result)
-        return NULL;
-
+	{
+		perror("malloc failed in expand_variables");
+		return NULL;
+	}
     int i = 0, j = 0;
     while (input[i])
     {
@@ -50,8 +52,10 @@ char *expand_exit_status(char *input, t_shell *shell)
 {
     char *result = malloc(BUFSIZ);
     if (!result)
-        return NULL;
-
+	{
+		perror("malloc failed in expand_variables");
+		return NULL;
+	}
     int i = 0, j = 0;
     while (input[i])
     {

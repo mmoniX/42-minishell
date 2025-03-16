@@ -31,9 +31,9 @@ MiniShell ToDo list:
 - [x] Implement append redirection (>>).
 
 6️⃣ Pipes (|)
-- [ ] Implement basic pipes (ls | wc -l).
-- [ ] Chain multiple pipes (cat file | grep text | wc -l).
-- [ ] Ensure proper file descriptor management.
+- [x] Implement basic pipes (ls | wc -l).
+- [x] Chain multiple pipes (cat file | grep text | wc -l).
+- [x] Ensure proper file descriptor management.
 
 7️⃣ Built-in Commands
 - [ ] Implement echo with -n option.
