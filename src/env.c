@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/15 14:00:33 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/16 11:50:59 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char *expand_variables(char *input, char **env)
     return result;
 }
 
-char *expand_exit_status(char *input)
+char *expand_exit_status(char *input, t_shell *shell)
 {
     char *result = malloc(BUFSIZ);
     if (!result)
@@ -59,7 +59,7 @@ char *expand_exit_status(char *input)
         {
             i += 2;
             char exit_str[10];
-            sprintf(exit_str, "%d", g_last_exit_status);  // Convert to string
+            sprintf(exit_str, "%d", shell->last_exit_status);  // Convert to string
             int k = 0;
             while (exit_str[k])
                 result[j++] = exit_str[k++];

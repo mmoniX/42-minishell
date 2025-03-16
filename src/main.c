@@ -6,18 +6,19 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/15 12:51:25 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/16 12:03:15 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int g_last_exit_status = 0;
-
 int main(int ac, char **av, char **env)
 {
 	char *input;
 	char **tokens;
+	t_shell shell;
+	shell.last_exit_status = 0;
+	shell.env = env;
 
 	while (1)
 	{
@@ -31,7 +32,7 @@ int main(int ac, char **av, char **env)
 			break;
 		add_history(input);
 		char *expanded_input = expand_variables(input, env);
-		char *final_input = expand_exit_status(expanded_input);
+		char *final_input = expand_exit_status(expanded_input, &shell);
 		free(expanded_input);
 		if (!final_input)
 			continue;
@@ -41,7 +42,7 @@ int main(int ac, char **av, char **env)
 		{
 			continue;
 		}
-		execute_command(tokens, env);
+		execute_command(tokens, &shell);
 		ft_free_tab(tokens);
 	}
 	

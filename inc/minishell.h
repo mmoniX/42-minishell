@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/15 14:00:50 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/16 11:59:41 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,16 @@
 #ifndef MAX_TOKENS
 #define MAX_TOKENS 100
 #endif
-struct	s_shell
+typedef struct	s_shell
 {
-	int	print;
+	int	last_exit_status;
 	char	**env;
 		
 } t_shell;
 
-extern int g_last_exit_status;
-
 //init and tokenize
 char	**tokenize_input(char *input);
-void	execute_command(char **tokens, char **env);
+void execute_command(char **tokens, t_shell *shell);
 char	*get_path(char *cmd, char **env);
 char	*get_env(char *key, char **env);
 char	*handle_quotes(const char *input, int *index, char quote_type);
@@ -50,7 +48,7 @@ void	ft_free_tab(char **tab);
 
 //env
 char	*expand_variables(char *input, char **env);
-char	*expand_exit_status(char *input);
+char	*expand_exit_status(char *input, t_shell *shell);
 void	builtin_env(char **env);
 void heredoc(char *delimiter);
 
