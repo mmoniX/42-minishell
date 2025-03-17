@@ -6,13 +6,12 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/17 12:17:33 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:53:32 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/* shall implement only -n or -nnnn ?? */
 int	ft_echo(char **args)
 {
 	int	i;
@@ -59,7 +58,7 @@ int	ft_pwd(void)
 	return (SUCCESS);
 }
 
-void	unset_util(t_shell *minishell, char *var)
+void	update_unset(t_shell *minishell, char *var)
 {
 	t_dlist	*current;
 	size_t	len;
@@ -88,22 +87,6 @@ void	unset_util(t_shell *minishell, char *var)
 	}
 }
 
-int is_valid_var(char *var)
-{
-	int	i;
-
-	if (!var || !var[0] || ft_isdigit(var[0]))
-		return (0);
-	i = 0;
-	while (var[i])
-	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 int	ft_unset(t_shell *minishell, char **args)
 {
 	int	i;
@@ -119,7 +102,7 @@ int	ft_unset(t_shell *minishell, char **args)
 			minishell->exit_code = 1;
 		}
 		else
-			unset_util(minishell, args[i]);
+			update_unset(minishell, args[i]);
 		i++;
 	}
 	return (SUCCESS);

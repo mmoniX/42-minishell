@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/17 12:06:35 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/17 13:47:10 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,20 @@ void	signal_handler(void);
 /* builtin */
 int		ft_echo(char **args);
 int		ft_pwd(void);
-void	unset_util(t_shell *minishell, char *var);
-int 	is_valid_var(char *var);
+void	update_unset(t_shell *minishell, char *var);
 int		ft_unset(t_shell *minishell, char **args);
 
 /* builtin_2 */
-int	is_builtin(char *args);
-int	execute_builtin(char **tokens, t_shell *minishell);
+void	update_env(t_shell *minishell, char *var);
+int		ft_export(t_shell *minishell, char **custom_env);
+
+/* builtin_utils */
+int 	is_valid_var(char *var);
+int		is_builtin(char *args);
+int		execute_builtin(char **tokens, t_shell *minishell);
+
+/* utils */
+void	ft_dlstadd_back(t_dlist **lst, t_dlist *new);
+t_dlist	*ft_dlstnew(void *content);
 
 #endif

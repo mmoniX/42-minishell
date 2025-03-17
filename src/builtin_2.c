@@ -6,32 +6,65 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:55:35 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/17 12:04:52 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/17 13:57:38 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	is_builtin(char *args)
+void	update_env(t_shell *minishell, char *var)
 {
-	if (!args)
-		return (0);
-	else if (!ft_strcmp(args, "echo"))
-		return (1);
-	else if (!ft_strcmp(args, "pwd"))
-		return (1);
-	else if (!ft_strcmp(args, "unset"))
-		return (1);
-	return (0);
+	t_dlist	*current;
+	char	*str;
+	size_t	i;
+	
+	current = minishell->denv;
+	i = 0;
+	while (var[i] && var[i] != '=')
+		i++;
+	while (current)
+	{
+		str = (char *)current->content;
+		if (ft_strncmp(str, var, i) == 0 && (str[i] == '=' || str[i] == '\0'))
+		{
+			free (current->content);
+			current->content = ft_strdup(var);
+			return ;
+		}
+		current = current->next;
+	}
+	ft_dlstadd_back(&minishell->denv, ft_dlstnew(ft_strdup(var)));
 }
 
-int	execute_builtin(char **tokens, t_shell *minishell)
+int	ft_export(t_shell *minishell, char **custom_env)
 {
-	if (!ft_strcmp(tokens[0], "echo"))
-		return (ft_echo(tokens));
-	if (!ft_strcmp(tokens[0], "pwd"))
-		return (ft_pwd());
-	if (!ft_strcmp(tokens[0], "unset"))
-		return (ft_unset(minishell, tokens));
-	return (1);
+	int	i;
+	t_dlist	*current;
+
+	i = 1;
+	current = minishell->denv;
+	if (!custom_env[1])
+	{
+		while (current)
+		{
+			printf("declare -x %s\n", (char *)current->content);
+        	current = current->next;
+		}
+		return (SUCCESS);
+	}
+	while (custom_env[i])
+	{
+		printf("Processing: %s\n", custom_env[i]);
+		if (!is_valid_var(custom_env[i]))
+		{
+			ft_putstr_fd("export: ", STDERR_FILENO);
+			ft_putstr_fd(custom_env[i], STDERR_FILENO);
+			ft_putstr_fd(" is invalid\n", STDERR_FILENO);
+			minishell->exit_code = 1;
+		}
+		else
+			update_env(minishell, custom_env[i]);
+		i++;
+	}
+	return (SUCCESS);
 }
