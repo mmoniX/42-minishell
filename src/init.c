@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/14 12:57:32 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:05:41 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	*get_path(char *cmd, char **env)
 }
 
 
-void	execute_command(char **tokens, char **env)
+void	execute_command(char **tokens, char **env, t_shell *minishell)
 {
 	pid_t 	pid;
 	int		status;
@@ -96,6 +96,11 @@ void	execute_command(char **tokens, char **env)
 
 	if (!tokens[0])
 		return ;
+	if (is_builtin(tokens[0]))
+	{
+		execute_builtin(tokens, minishell);
+		return ;
+	}
 	cmd_path = get_path(tokens[0], env);
 	if (!cmd_path)
 	{

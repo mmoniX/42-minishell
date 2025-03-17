@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -g -fsanitize=address #-Wall -Wextra -Werror
 VAL = valgrind --leak-check=full --track-origins=yes
 
-SRC = src/main.c src/init.c src/builtin.c src/signal.c
+SRC = src/main.c src/init.c src/builtin.c src/signal.c src/builtin_2.c
 OBJ_DIR = obj
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 

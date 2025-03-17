@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/15 14:59:12 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:07:32 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int main(int ac, char **av, char **env)
     char	*input;
     char	**tokens;
 	int		i;
+	t_shell	*minishell;
 
 	if (ac != 1)
 		return (printf("Invalid Input\n"), 0);
@@ -34,7 +35,7 @@ int main(int ac, char **av, char **env)
         if (*input)
             add_history(input);
 		tokens = tokenize_input(input);
-		execute_command(tokens, env);
+		execute_command(tokens, env, minishell);
 		// for Debug: Print tokens (remove later)
         i = 0;
 		while (tokens[i])

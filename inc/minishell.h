@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/16 15:45:38 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:06:35 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ typedef	struct	s_dlist
 
 typedef struct	s_shell
 {
-	t_list	*denv;
+	t_dlist	*denv;
 	int		exit_code;
 }			t_shell;
 
 //init and tokenize
 char	**tokenize_input(char *input);
-void	execute_command(char **tokens, char **env);
+void	execute_command(char **tokens, char **env, t_shell *minishell);
 char	*get_path(char *cmd, char **env);
 char	*get_env(char *key, char **env);
 
@@ -62,12 +62,14 @@ void	signal_for_termination(int sig);
 void	signal_handler(void);
 
 /* builtin */
-void	ft_echo(char **args, int fd);
+int		ft_echo(char **args);
 int		ft_pwd(void);
 void	unset_util(t_shell *minishell, char *var);
-void	ft_unset(t_shell *minishell, char **args);
+int 	is_valid_var(char *var);
+int		ft_unset(t_shell *minishell, char **args);
 
-/* utils */
-int 	is_valid_env(char *var);
+/* builtin_2 */
+int	is_builtin(char *args);
+int	execute_builtin(char **tokens, t_shell *minishell);
 
 #endif

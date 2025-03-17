@@ -6,14 +6,14 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/16 15:44:36 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:17:33 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /* shall implement only -n or -nnnn ?? */
-void	ft_echo(char **args, int fd)
+int	ft_echo(char **args)
 {
 	int	i;
 	int	j;
@@ -33,13 +33,14 @@ void	ft_echo(char **args, int fd)
 	}
 	while (args[i])
 	{
-		ft_putstr_fd (args[i], fd);
+		ft_putstr_fd (args[i], 1);
 		if (args[i + 1])
-			ft_putstr_fd (" ", fd);
+			ft_putstr_fd (" ", 1);
 		i++;
 	}
 	if (line)
-		ft_putstr_fd ("\n", fd);
+		ft_putstr_fd ("\n", 1);
+	return (SUCCESS);
 }
 
 int	ft_pwd(void)
@@ -53,6 +54,7 @@ int	ft_pwd(void)
 		return (free(directory), FAIL);
 	}
 	write(1, directory, ft_strlen(directory));
+	write(1, "\n", 1);
 	free (directory);
 	return (SUCCESS);
 }
@@ -86,14 +88,30 @@ void	unset_util(t_shell *minishell, char *var)
 	}
 }
 
-void	ft_unset(t_shell *minishell, char **args)
+int is_valid_var(char *var)
+{
+	int	i;
+
+	if (!var || !var[0] || ft_isdigit(var[0]))
+		return (0);
+	i = 0;
+	while (var[i])
+	{
+		if (!ft_isalnum(var[i]) && var[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	ft_unset(t_shell *minishell, char **args)
 {
 	int	i;
 
 	i = 1;
 	while (args[i])
 	{
-		if (!is_valid_env(args[i]))
+		if (!is_valid_var(args[i]))
 		{
 			ft_putstr_fd("unset: ", STDERR_FILENO);
 			ft_putstr_fd(args[i], STDERR_FILENO);
@@ -104,4 +122,5 @@ void	ft_unset(t_shell *minishell, char **args)
 			unset_util(minishell, args[i]);
 		i++;
 	}
+	return (SUCCESS);
 }
