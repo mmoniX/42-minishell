@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/16 16:06:19 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/17 11:34:46 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,6 @@ void heredoc(char *delimiter);
 void execute_piped_commands(char **commands, t_shell *shell);
 void execute_single_command(char **tokens, t_shell *shell);
 
-char **split_commands_by_pipe(char **tokens);
+char **split_pipes(char *input);
 
 #endif
