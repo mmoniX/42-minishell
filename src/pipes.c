@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/16 16:14:11 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/17 12:35:29 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,37 @@ void execute_piped_commands(char **commands, t_shell *shell)
     while (commands[i])
     {
         char **tokens = tokenize_input(commands[i]);
-        pipe(fd);
+        if (!tokens || !tokens[0])
+        {
+            ft_free_tab(tokens);
+            i++;
+            continue;
+        }
+
+        if (commands[i + 1])
+        {
+            if (pipe(fd) == -1)
+            {
+                perror("pipe failed");
+                ft_free_tab(tokens);
+                return;
+            }
+        }
+
         pid = fork();
         if (pid == 0)
         {
-            dup2(input_fd, STDIN_FILENO);
+            if (input_fd != 0)
+            {
+                dup2(input_fd, STDIN_FILENO);
+                close(input_fd);
+            }
             if (commands[i + 1])
+            {
                 dup2(fd[1], STDOUT_FILENO);
-            close(fd[0]);
+                close(fd[0]);
+                close(fd[1]);
+            }
             execvp(tokens[0], tokens);
             perror("execvp failed");
             exit(1);
@@ -64,9 +87,18 @@ void execute_piped_commands(char **commands, t_shell *shell)
             shell->last_exit_status = 1;
             return;
         }
-        close(fd[1]);
-        input_fd = fd[0];
+        // Parent process
+        if (input_fd != 0) 
+            close(input_fd);
+        if (commands[i + 1])
+        {
+            close(fd[1]);
+            input_fd = fd[0];
+        }
+
+        ft_free_tab(tokens);
         i++;
     }
     while (wait(NULL) > 0);
 }
+

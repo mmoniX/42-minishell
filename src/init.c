@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/17 11:49:44 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/17 12:34:51 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ char *handle_quotes(const char *input, int *index, char quote_type)
 {
     int start = *index + 1;
     int end = start;
+
     while (input[end] && input[end] != quote_type)
         end++;
+
     if (input[end] != quote_type)
     {
         fprintf(stderr, "Error: Unclosed quote\n");
@@ -29,6 +31,7 @@ char *handle_quotes(const char *input, int *index, char quote_type)
 }
 
 
+
 char **tokenize_input(char *input)
 {
     char **tokens = malloc(sizeof(char *) * MAX_TOKENS);
@@ -37,37 +40,43 @@ char **tokenize_input(char *input)
         exit(1);
     }
     int i = 0, j = 0;
+
     while (input[i] && j < MAX_TOKENS - 1)
-	{
-        while (input[i] == ' ' || input[i] == '\t') {
+    {
+        while (input[i] == ' ' || input[i] == '\t')
             i++;
-        }
+
         if (!input[i]) break;
-        if (input[i] == '|' && j < MAX_TOKENS - 1) {
+
+        if (input[i] == '|')
+        {
             tokens[j++] = ft_strdup("|");
-            if (!tokens[j-1]) {
-                perror("strdup failed");
-                exit(1);
-            }
             i++;
         }
-        else {
+        else if (input[i] == '"' || input[i] == '\'')
+        {
+            char *quoted_str = handle_quotes(input, &i, input[i]);
+            if (!quoted_str) {
+                free(tokens);
+                return NULL;
+            }
+            tokens[j++] = quoted_str;
+        }
+        else 
+        {
             int start = i;
-            while (input[i] && input[i] != ' ' && input[i] != '|') {
+            while (input[i] && input[i] != ' ' && input[i] != '|' && input[i] != '"' && input[i] != '\'')
                 i++;
-            }
             tokens[j] = strndup(&input[start], i - start);
-            if (!tokens[j]) {
-                perror("strndup failed");
-                exit(1);
-            }
             j++;
         }
     }
     tokens[j] = NULL;
+
     // Debug print all tokens
     printf("Tokenized Input:\n");
-    for (int k = 0; tokens[k]; k++) {
+    for (int k = 0; tokens[k]; k++)
+    {
         printf("[%d]: %s\n", k, tokens[k]);
     }
 

@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/17 11:41:11 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/17 12:34:12 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,16 @@ char **split_pipes(char *input)
     char **commands;
     char *token;
     int i = 0;
-
-    // Allocate memory for commands array (assuming a reasonable max number of pipes)
     commands = malloc(sizeof(char *) * 1024);
     if (!commands)
     {
         perror("malloc failed");
         return NULL;
     }
-
-    // Use `strtok` to split the input string by `|`
     token = strtok(input, "|");
     while (token)
     {
-        while (*token == ' ') // Trim leading spaces
+        while (*token == ' ')
             token++;
 
         commands[i] = strdup(token);
@@ -44,7 +40,7 @@ char **split_pipes(char *input)
         i++;
         token = strtok(NULL, "|");
     }
-    commands[i] = NULL; // NULL-terminate the array
+    commands[i] = NULL;
 
     return commands;
 }
@@ -78,13 +74,11 @@ int main(int ac, char **av, char **env)
         char *final_input = expand_exit_status(expanded_input, &shell);
         free(expanded_input);
 
-        if (!final_input || !*final_input) // Check for empty input
+        if (!final_input || !*final_input)
         {
             free(input);
             continue;
         }
-
-        // ✅ Use `strdup` before `split_pipes` to avoid `strtok` modifying original input
         char *final_input_copy = strdup(final_input);
         if (!final_input_copy)
         {
