@@ -39,7 +39,7 @@ MiniShell ToDo list:
 - [x] Implement echo with -n option.
 - [ ] Implement cd with relative/absolute paths.
 - [x] Implement pwd with no options.
-- [ ] Implement export to add environment variables.
+- [x] Implement export to add environment variables.
 - [x] Implement unset to remove environment variables.
 - [ ] Implement env to print the environment.
 - [x] Implement exit to quit the shell.
