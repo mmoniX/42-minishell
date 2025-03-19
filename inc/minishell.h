@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 14:40:48 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 15:47:17 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct	s_shell
 {
 	t_dlist	*denv;
 	int		exit_code;
+	char	*old_pwd;
 	int		last_exit_status;
 	char	**env;
 }			t_shell;
@@ -67,13 +68,15 @@ void	signal_handler(void);
 /* builtin */
 int		ft_echo(char **args);
 int		ft_pwd(void);
+int		ft_env(t_shell *minishell, int export_flag);
 void	update_unset(t_shell *minishell, char *var);
 int		ft_unset(t_shell *minishell, char **args);
 
 /* builtin_2 */
 void	update_env(t_shell *minishell, char *var);
 int		ft_export(t_shell *minishell, char **custom_env);
-int		ft_env(t_shell *minishell, int export_flag);
+void	update_directory(t_shell *minishell);
+int		ft_cd(t_shell *minishell, char **args);
 
 /* builtin_utils */
 int 	is_valid_var(char *var);

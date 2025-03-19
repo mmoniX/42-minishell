@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:55:35 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 13:34:41 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 16:14:13 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,57 @@ int	ft_export(t_shell *minishell, char **custom_env)
 			update_env(minishell, custom_env[i]);
 		i++;
 	}
+	return (SUCCESS);
+}
+
+void	update_directory(t_shell *minishell)
+{
+	char	*new_pwd;
+	t_dlist	*current;
+
+	new_pwd = getcwd(NULL, 0);
+	if (!new_pwd)
+		return (perror("cd: getcwd error"));
+	if (minishell->old_pwd)
+		free (minishell->old_pwd);
+	minishell->old_pwd = ft_strdup(new_pwd);
+	current = minishell->denv;
+	while (current)
+	{
+		if (ft_strncmp(current->content, "PWD=", 4) == 0)
+		{
+			free(current->content);
+			current->content = ft_strjoin("PWD=", new_pwd);
+			break;
+		}
+		current = current->next;
+	}
+	free(new_pwd);
+}
+
+int	ft_cd(t_shell *minishell, char **args)
+{
+	char	*path;
+	
+	if (!args[1])
+	{
+		path = getenv("HOME");
+		if (!path)
+		{
+			ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
+			minishell->exit_code = 1;
+			return (FAIL);
+		}
+	}
+	else
+		path = args[1];
+	if (chdir(path) != 0)
+	{
+		ft_putstr_fd("cd: ", STDERR_FILENO);
+		perror(path);
+		minishell->exit_code = 1;
+		return (FAIL);
+	}
+	update_directory(minishell);
 	return (SUCCESS);
 }

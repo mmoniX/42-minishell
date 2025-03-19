@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/19 14:40:36 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 15:29:55 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void execute_redirection(char **tokens, t_shell *shell)
                 exit(1);
             }
             handle_heredoc(tokens[i + 1]);
-            i++;
+            i += 2;
         }
         else
         {

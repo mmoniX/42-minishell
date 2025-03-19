@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:29:57 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 12:46:48 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 15:48:14 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ int	is_builtin(char *args)
 		return (0);
 	else if (!ft_strcmp(args, "echo"))
 		return (1);
-	// else if (!ft_strcmp(args, "cd"))
-	// 	return (1);
+	else if (!ft_strcmp(args, "cd"))
+		return (1);
 	else if (!ft_strcmp(args, "pwd"))
 		return (1);
 	else if (!ft_strcmp(args, "export"))
@@ -55,6 +55,8 @@ int	execute_builtin(char **tokens, t_shell *minishell)
 {
 	if (!ft_strcmp(tokens[0], "echo"))
 		return (ft_echo(tokens));
+	if (!ft_strcmp(tokens[0], "cd"))
+		return (ft_cd(minishell, tokens));
 	if (!ft_strcmp(tokens[0], "pwd"))
 		return (ft_pwd());
 	if (!ft_strcmp(tokens[0], "export"))

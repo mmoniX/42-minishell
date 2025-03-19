@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/19 14:58:00 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 16:08:20 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,6 @@ char **tokenize_input(char *input)
         }
     }
     tokens[j] = NULL;
-
-    // Debug print all tokens
-    printf("Tokenized Input:\n");
-    for (int k = 0; tokens[k]; k++)
-    {
-        printf("[%d]: %s\n", k, tokens[k]);
-    }
-
     return tokens;
 }
 

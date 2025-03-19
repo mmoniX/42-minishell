@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 15:02:00 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 15:41:20 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int main(int ac, char **av, char **env)
 	shell.exit_code = 0;
     shell.env = env;
     shell.last_exit_status = 0;
+	shell.old_pwd = NULL;
     
     while (1)
     {
