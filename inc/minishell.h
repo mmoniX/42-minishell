@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/17 11:34:46 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/19 11:57:03 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,16 @@ void	ft_free_tab(char **tab);
 char	*expand_variables(char *input, char **env);
 char	*expand_exit_status(char *input, t_shell *shell);
 void	builtin_env(char **env);
-void heredoc(char *delimiter);
+
+//redirection
+int handle_input_redirection(char **tokens, int *i);
+int handle_output_redirection(char **tokens, int *i, int append);
+int handle_heredoc(char *delimiter);
 
 //pipes
 void execute_piped_commands(char **commands, t_shell *shell);
-void execute_single_command(char **tokens, t_shell *shell);
+// void execute_single_command(char **tokens, t_shell *shell);
+void execute_redirection(char **tokens, t_shell *shell);
 
 char **split_pipes(char *input);
 

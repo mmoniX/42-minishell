@@ -6,37 +6,73 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/17 12:35:29 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/19 11:56:45 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void execute_single_command(char **tokens, t_shell *shell)
-{
-    char *cmd_path;
+// void execute_single_command(char **tokens, t_shell *shell)
+// {
+//     char *cmd_path;
 
-    if (!tokens || !tokens[0]) {
-        printf("No command to execute.\n");
-        return;
+//     if (!tokens || !tokens[0]) {
+//         printf("No command to execute.\n");
+//         return;
+//     }
+//     if (ft_strcmp(tokens[0], "env") == 0) {
+//         builtin_env(shell->env);
+//         shell->last_exit_status = 0;
+//         return;
+//     }
+//     cmd_path = get_path(tokens[0], shell->env);
+//     if (!cmd_path) {
+//         fprintf(stderr, "minishell: command not found: %s\n", tokens[0]);
+//         shell->last_exit_status = 127;
+//         return;
+//     }
+//     if (execve(cmd_path, tokens, shell->env) == -1) {
+//         perror("execve failed");
+//         shell->last_exit_status = 127;
+//         return;
+//     }
+// }
+
+void execute_redirection(char **tokens, t_shell *shell)
+{
+    int i = 0;
+
+    // Handle redirections
+    while (tokens[i])
+    {
+        if (strcmp(tokens[i], "<") == 0)
+        {
+            if (handle_input_redirection(tokens, &i) < 0) return;
+        }
+        else if (strcmp(tokens[i], ">") == 0)
+        {
+            if (handle_output_redirection(tokens, &i, 0) < 0) return;
+        }
+        else if (strcmp(tokens[i], ">>") == 0)
+        {
+            if (handle_output_redirection(tokens, &i, 1) < 0) return;
+        }
+        else if (strcmp(tokens[i], "<<") == 0)
+        {
+            if (handle_heredoc(tokens[i + 1]) < 0) return;
+        }
+        else
+        {
+            i++;
+        }
     }
-    if (ft_strcmp(tokens[0], "env") == 0) {
-        builtin_env(shell->env);
-        shell->last_exit_status = 0;
-        return;
-    }
-    cmd_path = get_path(tokens[0], shell->env);
-    if (!cmd_path) {
-        fprintf(stderr, "minishell: command not found: %s\n", tokens[0]);
-        shell->last_exit_status = 127;
-        return;
-    }
-    if (execve(cmd_path, tokens, shell->env) == -1) {
-        perror("execve failed");
-        shell->last_exit_status = 127;
-        return;
-    }
+
+    // Execute command
+    execvp(tokens[0], tokens);
+    perror("execvp failed");
+    exit(1);
 }
+
 
 void execute_piped_commands(char **commands, t_shell *shell)
 {

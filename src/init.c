@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/17 12:34:51 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/19 11:57:48 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,19 +156,48 @@ char *get_path(char *cmd, char **env)
 }
 
 
+// void execute_command(char **tokens, t_shell *shell)
+// {
+//     pid_t pid;
+//     int status;
+
+//     if (!tokens || !tokens[0]) {
+//         printf("No command to execute.\n");
+//         return;
+//     }
+//     pid = fork();
+//     if (pid == 0)
+//     {
+//         execute_single_command(tokens, shell);
+//         exit(shell->last_exit_status);
+//     }
+//     else if (pid < 0)
+//     {
+//         perror("fork failed");
+//         shell->last_exit_status = 1;
+//         return;
+//     }
+//     waitpid(pid, &status, 0);
+//     if (WIFEXITED(status)) {
+//         shell->last_exit_status = WEXITSTATUS(status);
+//     }
+// }
+
 void execute_command(char **tokens, t_shell *shell)
 {
     pid_t pid;
     int status;
 
-    if (!tokens || !tokens[0]) {
+    if (!tokens || !tokens[0])
+    {
         printf("No command to execute.\n");
         return;
     }
     pid = fork();
     if (pid == 0)
     {
-        execute_single_command(tokens, shell);
+        // execute_single_command(tokens, shell);
+		execute_redirection(tokens, shell);
         exit(shell->last_exit_status);
     }
     else if (pid < 0)
@@ -178,7 +207,8 @@ void execute_command(char **tokens, t_shell *shell)
         return;
     }
     waitpid(pid, &status, 0);
-    if (WIFEXITED(status)) {
+    if (WIFEXITED(status))
+    {
         shell->last_exit_status = WEXITSTATUS(status);
     }
 }
