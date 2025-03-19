@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/17 15:46:20 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/19 12:20:53 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int handle_input_redirection(char **tokens, int *i)
     }
 
     // Open the file for reading
-    int fd = open(tokens[*i + 1], O_RDONLY, 0777);
+    int fd = open(tokens[*i + 1], O_RDONLY);
     if (fd < 0)
     {
         perror("minishell: input redirection failed");
@@ -36,12 +36,19 @@ int handle_input_redirection(char **tokens, int *i)
         return -1;
     }
 
-    close(fd); // Close file descriptor after redirection
+    close(fd);
+	*i += 1; 
     return 0;
 }
 
 int handle_output_redirection(char **tokens, int *i, int append)
 {
+    if (!tokens[*i + 1])
+    {
+        fprintf(stderr, "minishell: syntax error: missing file for output redirection\n");
+        return -1;
+    }
+
     int flags = O_WRONLY | O_CREAT | (append ? O_APPEND : O_TRUNC);
     int fd = open(tokens[*i + 1], flags, 0644);
     
@@ -50,10 +57,19 @@ int handle_output_redirection(char **tokens, int *i, int append)
         perror("minishell: output redirection failed");
         return -1;
     }
-    dup2(fd, STDOUT_FILENO);
+
+    if (dup2(fd, STDOUT_FILENO) < 0)
+    {
+        perror("minishell: dup2 failed");
+        close(fd);
+        return -1;
+    }
+
     close(fd);
+    *i += 1;
     return 0;
 }
+
 
 int handle_heredoc(char *delimiter)
 {
@@ -65,6 +81,7 @@ int handle_heredoc(char *delimiter)
         perror("minishell: heredoc file creation failed");
         return -1;
     }
+
     while (1)
     {
         line = readline("> ");
@@ -76,13 +93,18 @@ int handle_heredoc(char *delimiter)
     }
     free(line);
     close(fd);
+
+    // Open heredoc file for reading
     fd = open("/tmp/minishell_heredoc", O_RDONLY);
     if (fd < 0)
     {
         perror("minishell: heredoc read failed");
         return -1;
     }
+
     dup2(fd, STDIN_FILENO);
     close(fd);
+    unlink("/tmp/minishell_heredoc"); // Remove temporary file
     return 0;
 }
+

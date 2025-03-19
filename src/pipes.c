@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/19 11:56:45 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/19 12:46:38 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,35 +41,75 @@
 void execute_redirection(char **tokens, t_shell *shell)
 {
     int i = 0;
+    char **cmd = calloc(1024, sizeof(char *));
+    int cmd_index = 0;
 
-    // Handle redirections
-    while (tokens[i])
+    if (!cmd)
     {
-        if (strcmp(tokens[i], "<") == 0)
+        perror("malloc failed");
+        exit(1);
+    }
+
+    // Debugging: Print tokens
+    for (int j = 0; tokens[j] != NULL; j++)
+        printf("Token[%d]: %s\n", j, tokens[j]);
+
+    while (tokens[i] != NULL) // Ensure tokens[i] is non-NULL
+    {
+        if (tokens[i] && strcmp(tokens[i], "<") == 0)
         {
-            if (handle_input_redirection(tokens, &i) < 0) return;
+            if (tokens[i + 1] == NULL)
+            {
+                fprintf(stderr, "minishell: syntax error: missing file for input redirection\n");
+                free(cmd);
+                exit(1);
+            }
+            handle_input_redirection(tokens, &i);
+            i++;
         }
-        else if (strcmp(tokens[i], ">") == 0)
+        else if (tokens[i] && (strcmp(tokens[i], ">") == 0 || strcmp(tokens[i], ">>") == 0))
         {
-            if (handle_output_redirection(tokens, &i, 0) < 0) return;
+            if (tokens[i + 1] == NULL)
+            {
+                fprintf(stderr, "minishell: syntax error: missing file for output redirection\n");
+                free(cmd);
+                exit(1);
+            }
+            handle_output_redirection(tokens, &i, strcmp(tokens[i], ">>") == 0);
+            i++;
         }
-        else if (strcmp(tokens[i], ">>") == 0)
+        else if (tokens[i] && strcmp(tokens[i], "<<") == 0)
         {
-            if (handle_output_redirection(tokens, &i, 1) < 0) return;
-        }
-        else if (strcmp(tokens[i], "<<") == 0)
-        {
-            if (handle_heredoc(tokens[i + 1]) < 0) return;
+            if (tokens[i + 1] == NULL)
+            {
+                fprintf(stderr, "minishell: syntax error: missing delimiter for heredoc\n");
+                free(cmd);
+                exit(1);
+            }
+            handle_heredoc(tokens[i + 1]);
+            i++;
         }
         else
         {
+            cmd[cmd_index++] = strdup(tokens[i]); // Copy tokens[i]
             i++;
         }
     }
 
-    // Execute command
-    execvp(tokens[0], tokens);
+    cmd[cmd_index] = NULL;
+
+    // Debugging: Print parsed command
+    // for (int j = 0; cmd[j] != NULL; j++)
+    //     printf("CMD[%d]: %s\n", j, cmd[j]);
+
+    execvp(cmd[0], cmd);
     perror("execvp failed");
+
+    // Free allocated memory before exiting
+    for (int j = 0; j < cmd_index; j++)
+        free(cmd[j]);
+    free(cmd);
+
     exit(1);
 }
 
