@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
+/*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/17 12:53:32 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 13:04:34 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,22 @@ int	ft_pwd(void)
 	write(1, directory, ft_strlen(directory));
 	write(1, "\n", 1);
 	free (directory);
+	return (SUCCESS);
+}
+
+int	ft_env(t_shell *minishell, int export_flag)
+{
+	t_dlist	*current;
+
+	current = minishell->denv;
+	while (current)
+	{
+		if (export_flag == 1)
+			printf("declare -x %s\n", (char *)current->content);
+		else
+			printf("%s\n", (char *)current->content);
+    	current = current->next;
+	}
 	return (SUCCESS);
 }
 

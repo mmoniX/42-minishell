@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:29:57 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/18 15:43:57 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/19 12:46:48 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,18 @@ int	is_builtin(char *args)
 		return (0);
 	else if (!ft_strcmp(args, "echo"))
 		return (1);
+	// else if (!ft_strcmp(args, "cd"))
+	// 	return (1);
 	else if (!ft_strcmp(args, "pwd"))
-		return (1);
-	else if (!ft_strcmp(args, "unset"))
 		return (1);
 	else if (!ft_strcmp(args, "export"))
 		return (1);
+	else if (!ft_strcmp(args, "unset"))
+		return (1);
 	else if (!ft_strcmp(args, "env"))
 		return (1);
+	// else if (!ft_strcmp(args, "exit"))
+	// 	return (1);
 	return (0);
 }
 
@@ -53,11 +57,11 @@ int	execute_builtin(char **tokens, t_shell *minishell)
 		return (ft_echo(tokens));
 	if (!ft_strcmp(tokens[0], "pwd"))
 		return (ft_pwd());
-	if (!ft_strcmp(tokens[0], "unset"))
-		return (ft_unset(minishell, tokens));
 	if (!ft_strcmp(tokens[0], "export"))
 		return (ft_export(minishell, tokens));
+	if (!ft_strcmp(tokens[0], "unset"))
+		return (ft_unset(minishell, tokens));
 	if (!ft_strcmp(tokens[0], "env"))
-		return (ft_env(minishell));
+		return (ft_env(minishell, 0));
 	return (1);
 }

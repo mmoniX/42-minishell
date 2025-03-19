@@ -3,34 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:55:35 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/18 15:37:27 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/19 13:34:41 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-// int	var_len(char *var)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (var[i] && var[i] != '=')
-// 		i++;
-// 	return (i);
-// }
-
-// char	*var_str(char *var)
-// {
-// 	size_t	i;
-
-// 	i = var_len(var);
-// 	if (!var[i])
-// 		return (NULL);
-// 	return (ft_strdup(var + i + 1));
-// }
 
 void	update_env(t_shell *minishell, char *var)
 {
@@ -59,17 +39,11 @@ void	update_env(t_shell *minishell, char *var)
 int	ft_export(t_shell *minishell, char **custom_env)
 {
 	int	i;
-	t_dlist	*current;
 
 	i = 1;
-	current = minishell->denv;
 	if (!custom_env[1])
 	{
-		while (current)
-		{
-			printf("declare -x %s\n", (char *)current->content);
-        	current = current->next;
-		}
+		ft_env(minishell, 1);
 		return (SUCCESS);
 	}
 	while (custom_env[i])
@@ -84,19 +58,6 @@ int	ft_export(t_shell *minishell, char **custom_env)
 		else
 			update_env(minishell, custom_env[i]);
 		i++;
-	}
-	return (SUCCESS);
-}
-
-int	ft_env(t_shell *minishell)
-{
-	t_dlist	*current;
-
-	current = minishell->denv;
-	while (current)
-	{
-		printf("%s\n", (char *)current->content);
-    	current = current->next;
 	}
 	return (SUCCESS);
 }

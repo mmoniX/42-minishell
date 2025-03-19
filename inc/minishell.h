@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/18 15:40:40 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/19 12:56:39 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		ft_unset(t_shell *minishell, char **args);
 /* builtin_2 */
 void	update_env(t_shell *minishell, char *var);
 int		ft_export(t_shell *minishell, char **custom_env);
-int		ft_env(t_shell *minishell);
+int		ft_env(t_shell *minishell, int export_flag);
 
 /* builtin_utils */
 int 	is_valid_var(char *var);
