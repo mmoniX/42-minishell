@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 14:33:13 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 14:40:48 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ t_dlist	*ft_dlstnew(void *content);
 //env
 char	*expand_variables(char *input, char **env);
 char	*expand_exit_status(char *input, t_shell *shell);
-void	builtin_env(char **env);
 
 //redirection
 int handle_input_redirection(char **tokens, int *i);

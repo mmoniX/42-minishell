@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/19 12:46:38 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/19 14:40:36 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-// void execute_single_command(char **tokens, t_shell *shell)
-// {
-//     char *cmd_path;
-
-//     if (!tokens || !tokens[0]) {
-//         printf("No command to execute.\n");
-//         return;
-//     }
-//     if (ft_strcmp(tokens[0], "env") == 0) {
-//         builtin_env(shell->env);
-//         shell->last_exit_status = 0;
-//         return;
-//     }
-//     cmd_path = get_path(tokens[0], shell->env);
-//     if (!cmd_path) {
-//         fprintf(stderr, "minishell: command not found: %s\n", tokens[0]);
-//         shell->last_exit_status = 127;
-//         return;
-//     }
-//     if (execve(cmd_path, tokens, shell->env) == -1) {
-//         perror("execve failed");
-//         shell->last_exit_status = 127;
-//         return;
-//     }
-// }
 
 void execute_redirection(char **tokens, t_shell *shell)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/17 12:55:57 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/19 14:40:42 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,4 @@ char *expand_exit_status(char *input, t_shell *shell)
     }
     result[j] = '\0';
     return result;
-}
-
-void builtin_env(char **env)
-{
-	int i;
-
-	i = 0;
-    while (env[i])
-	{
-    	printf("%s\n", env[i]);
-		i++;
-	}
 }
