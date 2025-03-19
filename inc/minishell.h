@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 14:04:08 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 14:33:13 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct	s_shell
 char	**tokenize_input(char *input);
 char	*get_path(char *cmd, char **env);
 char	*get_env(char *key, char **env);
-void	execute_command(char **tokens, char **env, t_shell *minishell);
+void 	execute_command(char **tokens, t_shell *shell);
 char	*handle_quotes(const char *input, int *index, char quote_type);
 
 //utils

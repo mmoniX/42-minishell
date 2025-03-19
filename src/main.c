@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 14:20:03 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 14:32:14 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,34 +34,6 @@ t_dlist	*convert_env_to_list(char **env)
 	}
 	return (temp);
 }
-
-// void	parse_env(t_minishell *minishell, char **env)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	minishell->env = dlist_new(ft_strdup(env[i]));
-// 	while (env[++i])
-// 		dlist_add_back(&minishell->env, dlist_new(ft_strdup(env[i])));
-// }
-
-
-
-int main(int ac, char **av, char **env)
-{
-    char	*input;
-    char	**tokens;
-	int		i;
-	t_shell	*minishell;
-
-	if (ac != 1)
-		return (printf("Invalid Input\n"), 0);
-	minishell = (t_shell *)malloc(sizeof(t_shell));
-	if (!minishell)
-		return (printf("Memory allocation failed\n"), 1);
-	signal_handler();
-	minishell->denv = convert_env_to_list(env);
-	minishell->exit_code = 0;
 
 char **split_pipes(char *input)
 {
@@ -102,8 +74,12 @@ int main(int ac, char **av, char **env)
     char **tokens;
     char **commands;
 
-    (void)ac;
-    (void)av;
+	if (ac != 1)
+		return (printf("Invalid Input\n"), 0);
+	signal_handler();
+
+	shell.denv = convert_env_to_list(env);
+	shell.exit_code = 0;
     shell.env = env;
     shell.last_exit_status = 0;
     

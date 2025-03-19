@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/19 14:15:10 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/19 14:23:22 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,64 +124,31 @@ char	*get_env(char *key, char **env)
 
 char *get_path(char *cmd, char **env)
 {
-    int i;
-    char *exec;
-    char **allpath;
-    char *path_part;
+	int        i;
+    char    *exec;
+    char    **allpath;
+    char    *path_part;
 
+    i = -1;
     if (access(cmd, F_OK | X_OK) == 0)
-        return strdup(cmd);
-    char *path_env = get_env("PATH", env);
-    if (!path_env)
-        return NULL;
-    allpath = ft_split(path_env, ':');
+        return (ft_strdup(cmd));
+    allpath = ft_split(get_env("PATH", env), ':');
     if (!allpath)
-        return NULL;
-    for (i = 0; allpath[i]; i++)
+        return (NULL);
+    while (allpath[++i])
     {
-        path_part = malloc(strlen(allpath[i]) + strlen(cmd) + 2);
+        path_part = malloc(ft_strlen(allpath[i]) + ft_strlen(cmd) + 2);
         if (!path_part)
             continue;
-        sprintf(path_part, "%s/%s", allpath[i], cmd);
-        
+        ft_strcpy(path_part, allpath[i]);
+        ft_strcat(path_part, "/");
+        ft_strcat(path_part, cmd);
         if (access(path_part, F_OK | X_OK) == 0)
-        {
-            free(allpath);
-            return path_part;
-        }
+            return (ft_free_tab(allpath), path_part);
         free(path_part);
     }
-    free(allpath);
-    return NULL;
+    return (ft_free_tab(allpath), NULL);
 }
-
-
-// void execute_command(char **tokens, t_shell *shell)
-// {
-//     pid_t pid;
-//     int status;
-
-//     if (!tokens || !tokens[0]) {
-//         printf("No command to execute.\n");
-//         return;
-//     }
-//     pid = fork();
-//     if (pid == 0)
-//     {
-//         execute_single_command(tokens, shell);
-//         exit(shell->last_exit_status);
-//     }
-//     else if (pid < 0)
-//     {
-//         perror("fork failed");
-//         shell->last_exit_status = 1;
-//         return;
-//     }
-//     waitpid(pid, &status, 0);
-//     if (WIFEXITED(status)) {
-//         shell->last_exit_status = WEXITSTATUS(status);
-//     }
-// }
 
 void execute_command(char **tokens, t_shell *shell)
 {
@@ -192,6 +159,11 @@ void execute_command(char **tokens, t_shell *shell)
     {
         printf("No command to execute.\n");
         return;
+    }
+	if (is_builtin(tokens[0]))
+    {
+        execute_builtin(tokens, shell);
+        return ;
     }
     pid = fork();
     if (pid == 0)
