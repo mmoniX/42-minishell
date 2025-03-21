@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 12:43:30 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 14:02:33 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,13 +169,13 @@ void execute_piped_commands(char **commands, t_shell *shell)
                 close(fd[0]);
                 close(fd[1]);
             }
-            execute_redirection(tokens, tokens);
-            exit(shell->last_exit_status);
+            execute_redirection(tokens, shell);
+            exit(shell->exit_code);
         }
         else if (pid < 0)
         {
             perror("fork failed");
-            shell->last_exit_status = 1;
+            shell->exit_code = 1;
             return;
         }
         if (input_fd != 0) 

@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 13:20:50 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 14:01:51 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**tokenize_input(char *input)
 
 	tokens = malloc(sizeof(char *) * MAX_TOKENS);
 	if (!tokens)
-		return (perror("malloc failed for tokens"), 1);
+		return (perror("malloc failed for tokens"), NULL);
 	i = 0;
 	j = 0;
 	while (input[i] && j < MAX_TOKENS - 1)
@@ -135,7 +135,10 @@ void	execute_command(char **tokens, t_shell *shell)
 	int		status;
 
 	if (!tokens || !tokens[0])
-		return (printf("No command to execute.\n"));
+	{
+		printf("No command to execute.\n");
+		return ;
+	}
 	if (is_builtin(tokens[0]))
 	{
 		execute_builtin(tokens, shell);
@@ -145,15 +148,15 @@ void	execute_command(char **tokens, t_shell *shell)
 	if (pid == 0)
 	{
 		execute_redirection(tokens, shell);
-		exit(shell->last_exit_status);
+		exit(shell->exit_code);
 	}
 	else if (pid < 0)
 	{
 		perror("fork failed");
-		shell->last_exit_status = 1;
+		shell->exit_code = 1;
 		return ;
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		shell->last_exit_status = WEXITSTATUS(status);
+		shell->exit_code = WEXITSTATUS(status);
 }
