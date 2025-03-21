@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 14:18:02 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/21 15:17:07 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,22 +133,31 @@ void	execute_command(char **tokens, t_shell *shell)
 {
 	pid_t	pid;
 	int		status;
+	int		original_stdin = dup(STDIN_FILENO);
+	int		original_stdout = dup(STDOUT_FILENO);
 
 	if (!tokens || !tokens[0])
 	{
 		printf("No command to execute.\n");
 		return;
 	}
+	execute_redirection(tokens, shell);
 	if (is_builtin(tokens[0]))
 	{
 		execute_builtin(tokens, shell);
-		return ;
+		dup2(original_stdin, STDIN_FILENO);
+		dup2(original_stdout, STDOUT_FILENO);
+		close(original_stdin);
+		close(original_stdout);
+
+		return;
 	}
 	pid = fork();
 	if (pid == 0)
 	{
-		execute_redirection(tokens, shell);
-		exit(shell->last_exit_status);
+		execvp(tokens[0], tokens);
+		perror("execvp failed");
+		exit(127);
 	}
 	else if (pid < 0)
 	{
