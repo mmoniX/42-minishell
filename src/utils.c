@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:14:30 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/21 12:29:58 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 13:08:55 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,16 @@ t_dlist	*convert_env_to_list(char **env)
 		i++;
 	}
 	return (temp);
+}
+
+void	ft_free_tab(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	if (!tab)
+		return ;
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
 }

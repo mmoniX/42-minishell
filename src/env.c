@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/19 14:40:42 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 13:16:15 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 
 char *expand_variables(char *input, char **env)
 {
-    char *result = malloc(BUFSIZ); // Allocate buffer for expanded string
+    char	*result;
+	int		i;
+	int		j;
+	
+
+	result = malloc(BUFSIZ); // Allocate buffer for expanded string
     if (!result)
-	{
-		perror("malloc failed in expand_variables");
-		return NULL;
-	}
-    int i = 0, j = 0;
+		return (perror("malloc failed in expand_variables"), NULL);
+    i = 0;
+	j = 0;
     while (input[i])
     {
         if (input[i] == '$' && (ft_isalnum(input[i + 1]) || input[i + 1] == '_'))
@@ -38,39 +41,38 @@ char *expand_variables(char *input, char **env)
             }
         }
         else
-        {
             result[j++] = input[i++];
-        }
     }
     result[j] = '\0';
-    return result;
+    return (result);
 }
 
 char *expand_exit_status(char *input, t_shell *shell)
 {
-    char *result = malloc(BUFSIZ);
+    char	exit_str[10];
+	char	*result;
+	int		i;
+	int		j;
+	int		k;
+	
+	result = malloc(BUFSIZ);
     if (!result)
-	{
-		perror("malloc failed in expand_variables");
-		return NULL;
-	}
-    int i = 0, j = 0;
+		return (perror("malloc failed in expand_variables"), NULL);
+    i = 0;
+	j = 0;
     while (input[i])
     {
         if (input[i] == '$' && input[i + 1] == '?')
         {
             i += 2;
-            char exit_str[10];
             sprintf(exit_str, "%d", shell->last_exit_status);
-            int k = 0;
+            k = 0;
             while (exit_str[k])
                 result[j++] = exit_str[k++];
         }
         else
-        {
             result[j++] = input[i++];
-        }
     }
     result[j] = '\0';
-    return result;
+    return (result);
 }

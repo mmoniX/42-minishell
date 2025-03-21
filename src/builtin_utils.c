@@ -6,13 +6,13 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:29:57 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 15:48:14 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 13:26:16 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int is_valid_var(char *var)
+int	is_valid_var(char *var)
 {
 	int	i;
 

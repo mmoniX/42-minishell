@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:55:35 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 16:14:13 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 13:25:58 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	update_env(t_shell *minishell, char *var)
 	t_dlist	*current;
 	char	*str;
 	size_t	i;
-	
+
 	current = minishell->denv;
 	i = 0;
 	while (var[i] && var[i] != '=')
@@ -80,7 +80,7 @@ void	update_directory(t_shell *minishell)
 		{
 			free(current->content);
 			current->content = ft_strjoin("PWD=", new_pwd);
-			break;
+			break ;
 		}
 		current = current->next;
 	}
@@ -90,7 +90,7 @@ void	update_directory(t_shell *minishell)
 int	ft_cd(t_shell *minishell, char **args)
 {
 	char	*path;
-	
+
 	if (!args[1])
 	{
 		path = getenv("HOME");

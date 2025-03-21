@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 15:49:13 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 13:18:20 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_echo(char **args)
 	int	line;
 
 	i = 1;
-	line = 1;	
+	line = 1;
 	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
 	{
 		j = 1;
@@ -45,7 +45,7 @@ int	ft_echo(char **args)
 int	ft_pwd(void)
 {
 	char	*directory;
-	
+
 	directory = getcwd (NULL, 0);
 	if (!directory)
 	{
@@ -69,7 +69,7 @@ int	ft_env(t_shell *minishell, int export_flag)
 			printf("declare -x %s\n", (char *)current->content);
 		else
 			printf("%s\n", (char *)current->content);
-    	current = current->next;
+		current = current->next;
 	}
 	return (SUCCESS);
 }
@@ -87,7 +87,7 @@ void	update_unset(t_shell *minishell, char *var)
 	while (current)
 	{
 		env_var = (char *)current->content;
-		if (ft_strncmp(env_var, var, len) == 0	&& env_var[len] == '=')
+		if (ft_strncmp (env_var, var, len) == 0 && env_var[len] == '=')
 		{
 			if (current->prev)
 				current->prev->next = current->next;
