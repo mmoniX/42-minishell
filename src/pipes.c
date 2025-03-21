@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 14:13:53 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/21 14:19:30 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ void execute_piped_commands(char **commands, t_shell *shell)
                 close(fd[0]);
                 close(fd[1]);
             }
-            execute_redirection(tokens, tokens);
+            execute_redirection(tokens, shell);
             exit(shell->last_exit_status);
         }
         else if (pid < 0)

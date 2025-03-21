@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/21 12:23:20 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 14:16:19 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int		execute_builtin(char **tokens, t_shell *minishell);
 void	ft_dlstadd_back(t_dlist **lst, t_dlist *new);
 t_dlist	*ft_dlstnew(void *content);
 void	ft_free_tab(char **tab);
+t_dlist	*convert_env_to_list(char **env);
 
 /* env */
 char	*expand_variables(char *input, char **env);
