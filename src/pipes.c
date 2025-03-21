@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 14:19:30 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/21 16:00:16 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,7 @@ void execute_piped_commands(char **commands, t_shell *shell)
 {
     int i = 0, fd[2], input_fd = 0;
     pid_t pid;
-	int j = 0;
-	int heredoc_fd = -1;
+    int heredoc_fd = -1;
 
     while (commands[i])
     {
@@ -131,16 +130,22 @@ void execute_piped_commands(char **commands, t_shell *shell)
             i++;
             continue;
         }
-		while (tokens[j] != NULL)
+        for (int j = 0; tokens[j] != NULL; j++)
         {
             if (strcmp(tokens[j], "<<") == 0 && tokens[j + 1])
             {
                 handle_heredoc(tokens[j + 1]);
                 heredoc_fd = open("/tmp/minishell_heredoc", O_RDONLY);
+                if (heredoc_fd == -1)
+                {
+                    perror("open failed for heredoc");
+                    ft_free_tab(tokens);
+                    return;
+                }
+                for (int k = j; tokens[k + 2] != NULL; k++)
+                    tokens[k] = tokens[k + 2];
                 tokens[j] = NULL;
-                tokens[j + 1] = NULL;
             }
-			j++;
         }
         if (commands[i + 1])
         {
@@ -151,15 +156,15 @@ void execute_piped_commands(char **commands, t_shell *shell)
                 return;
             }
         }
+        // Fork to create a child process
         pid = fork();
         if (pid == 0)
         {
-			if (heredoc_fd != -1)
-			{
-				dup2(heredoc_fd, STDIN_FILENO);
-				close(heredoc_fd);
-				heredoc_fd = -1;
-			}
+            if (heredoc_fd != -1)
+            {
+                dup2(heredoc_fd, STDIN_FILENO);
+                close(heredoc_fd);
+            }
             else if (input_fd != 0)
             {
                 dup2(input_fd, STDIN_FILENO);
@@ -172,7 +177,14 @@ void execute_piped_commands(char **commands, t_shell *shell)
                 close(fd[1]);
             }
             execute_redirection(tokens, shell);
-            exit(shell->last_exit_status);
+            if (is_builtin(tokens[0]))
+                execute_builtin(tokens, shell);
+            else
+            {
+                execvp(tokens[0], tokens);
+                perror("execvp failed");
+                exit(127);
+            }
         }
         else if (pid < 0)
         {
@@ -180,17 +192,16 @@ void execute_piped_commands(char **commands, t_shell *shell)
             shell->last_exit_status = 1;
             return;
         }
-        if (input_fd != 0) 
+        if (input_fd != 0)
             close(input_fd);
+
         if (commands[i + 1])
         {
             close(fd[1]);
             input_fd = fd[0];
         }
-
         ft_free_tab(tokens);
         i++;
     }
     while (wait(NULL) > 0);
 }
-

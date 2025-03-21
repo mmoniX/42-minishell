@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 15:23:50 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/21 15:52:42 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,6 @@ void	execute_command(char **tokens, t_shell *shell)
 		printf("No command to execute.\n");
 		return;
 	}
-	execute_redirection(tokens, shell);
 	if (is_builtin(tokens[0]))
 	{
 		execute_builtin(tokens, shell);
@@ -149,12 +148,12 @@ void	execute_command(char **tokens, t_shell *shell)
 		dup2(original_stdout, STDOUT_FILENO);
 		close(original_stdin);
 		close(original_stdout);
-
 		return;
 	}
 	pid = fork();
 	if (pid == 0)
 	{
+		execute_redirection(tokens, shell);
 		execvp(tokens[0], tokens);
 		perror("execvp failed");
 		exit(127);
@@ -168,4 +167,8 @@ void	execute_command(char **tokens, t_shell *shell)
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		shell->last_exit_status = WEXITSTATUS(status);
+	dup2(original_stdin, STDIN_FILENO);
+	dup2(original_stdout, STDOUT_FILENO);
+	close(original_stdin);
+	close(original_stdout);
 }
