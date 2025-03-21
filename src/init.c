@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/19 16:08:20 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 12:41:22 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,13 @@ char **tokenize_input(char *input)
 
 void	ft_free_tab(char **tab)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	if (!tab)
 		return;
 	while (tab[i])
-	{
 		free(tab[i++]);
-	}
 	free(tab);
 }
 

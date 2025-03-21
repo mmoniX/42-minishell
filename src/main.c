@@ -6,66 +6,13 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/19 15:41:20 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 12:40:33 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	global_signal = 0;
-
-t_dlist	*convert_env_to_list(char **env)
-{
-	t_dlist	*temp;
-	t_dlist	*current;
-	int		i;
-
-	if (!env || !*env)
-		return (NULL);
-	temp = ft_dlstnew(env[0]);
-	current = temp;
-	i = 1;
-	while (env[i])
-	{
-		current->next = ft_dlstnew(ft_strdup(env[i]));
-		current->next->prev = current;
-		current = current->next;
-		i++;
-	}
-	return (temp);
-}
-
-char **split_pipes(char *input)
-{
-    char **commands;
-    char *token;
-    int i = 0;
-    commands = malloc(sizeof(char *) * 1024);
-    if (!commands)
-    {
-        perror("malloc failed");
-        return NULL;
-    }
-    token = strtok(input, "|");
-    while (token)
-    {
-        while (*token == ' ')
-            token++;
-
-        commands[i] = strdup(token);
-        if (!commands[i])
-        {
-            perror("strdup failed");
-            free(commands);
-            return NULL;
-        }
-        i++;
-        token = strtok(NULL, "|");
-    }
-    commands[i] = NULL;
-
-    return commands;
-}
+int	g_signal = 0;
 
 int main(int ac, char **av, char **env)
 {

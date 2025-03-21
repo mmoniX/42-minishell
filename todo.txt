@@ -39,7 +39,7 @@ MiniShell ToDo list:
 
 7️⃣ Built-in Commands
 - [x] Implement echo with -n option.
-- [ ] Implement cd with relative/absolute paths.
+- [x] Implement cd with relative/absolute paths.
 - [x] Implement pwd with no options.
 - [x] Implement export to add environment variables.
 - [x] Implement unset to remove environment variables.

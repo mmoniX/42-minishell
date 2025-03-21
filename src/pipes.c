@@ -6,11 +6,36 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/19 15:29:55 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 12:34:18 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+char	**split_pipes(char *input)
+{
+	char	**commands;
+	char	*token;
+	int		i;
+
+	i = 0;
+	commands = malloc(sizeof(char *) * 1024);
+	if (!commands)
+		return (perror("malloc failed"), NULL);
+	token = strtok(input, "|");
+	while (token)
+	{
+		while (*token == ' ')
+			token++;
+		commands[i] = strdup(token);
+		if (!commands[i])
+			return (perror("strdup failed"), free(commands), NULL);
+		i++;
+		token = strtok(NULL, "|");
+	}
+	commands[i] = NULL;
+	return (commands);
+}
 
 void execute_redirection(char **tokens, t_shell *shell)
 {
