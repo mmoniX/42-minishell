@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:14:30 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/21 13:08:55 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 15:23:03 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,22 @@ void	ft_free_tab(char **tab)
 	while (tab[i])
 		free(tab[i++]);
 	free(tab);
+}
+
+char	*ft_strndup(const char *src, size_t n)
+{
+	size_t	i;
+	char	*dup;
+	
+	dup = (char *)malloc(n + 1);
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < n && src[i])
+	{
+		dup[i] = src[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
 }

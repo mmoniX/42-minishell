@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:08:10 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/21 13:54:03 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 16:16:06 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ void	signal_for_termination(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 		g_signal = 1;
+		g_signal = 1;
 	}
 	else if (sig == SIGQUIT)
+		g_signal = 0;
 		g_signal = 0;
 }
 

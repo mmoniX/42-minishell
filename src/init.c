@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 14:01:51 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 16:19:30 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*handle_quotes(const char *input, int *index, char quote_type)
 		ft_putstr_fd("Error: Unclosed quote\n", STDERR_FILENO);
 		return (NULL);
 	}
-	quoted_str = strndup(&input[start], end - start); //strndup not allowed
+	quoted_str = ft_strndup(&input[start], end - start);
 	*index = end + 1;
 	return (quoted_str);
 }
@@ -42,6 +42,7 @@ char	**tokenize_input(char *input)
 
 	tokens = malloc(sizeof(char *) * MAX_TOKENS);
 	if (!tokens)
+		return (perror("malloc failed for tokens"), NULL);
 		return (perror("malloc failed for tokens"), NULL);
 	i = 0;
 	j = 0;
@@ -69,7 +70,7 @@ char	**tokenize_input(char *input)
 			while (input[i] && input[i] != ' '
 				&& input[i] != '|' && input[i] != '"' && input[i] != '\'')
 				i++;
-			tokens[j] = strndup (&input[start], i - start); //strndup not allowed
+			tokens[j] = ft_strndup (&input[start], i - start);
 			j++;
 		}
 	}
@@ -133,6 +134,8 @@ void	execute_command(char **tokens, t_shell *shell)
 {
 	pid_t	pid;
 	int		status;
+	int		original_stdin = dup(STDIN_FILENO);
+	int		original_stdout = dup(STDOUT_FILENO);
 
 	if (!tokens || !tokens[0])
 	{
@@ -142,13 +145,20 @@ void	execute_command(char **tokens, t_shell *shell)
 	if (is_builtin(tokens[0]))
 	{
 		execute_builtin(tokens, shell);
-		return ;
+		dup2(original_stdin, STDIN_FILENO);
+		dup2(original_stdout, STDOUT_FILENO);
+		close(original_stdin);
+		close(original_stdout);
+		return;
 	}
 	pid = fork();
 	if (pid == 0)
 	{
 		execute_redirection(tokens, shell);
 		exit(shell->exit_code);
+		execvp(tokens[0], tokens);
+		perror("execvp failed");
+		exit(127);
 	}
 	else if (pid < 0)
 	{
@@ -158,5 +168,9 @@ void	execute_command(char **tokens, t_shell *shell)
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		shell->exit_code = WEXITSTATUS(status);
+		shell->last_exit_status = WEXITSTATUS(status);
+	dup2(original_stdin, STDIN_FILENO);
+	dup2(original_stdout, STDOUT_FILENO);
+	close(original_stdin);
+	close(original_stdout);
 }
