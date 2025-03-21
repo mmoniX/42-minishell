@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 12:43:30 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 14:13:53 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	**split_pipes(char *input)
 
 void execute_redirection(char **tokens, t_shell *shell)
 {
-    int i = 0;
+    int i = 0, j = 0;
     char **cmd = calloc(1024, sizeof(char *));
     int cmd_index = 0;
 
@@ -48,12 +48,23 @@ void execute_redirection(char **tokens, t_shell *shell)
         perror("malloc failed");
         exit(1);
     }
-
     // Debugging: Print tokens
-    for (int j = 0; tokens[j] != NULL; j++)
-        printf("Token[%d]: %s\n", j, tokens[j]);
-
-    while (tokens[i] != NULL) // Ensure tokens[i] is non-NULL
+    // for (int j = 0; tokens[j] != NULL; j++)
+    //     printf("Token[%d]: %s\n", j, tokens[j]);
+	
+	//detect and handle pipes early
+	while(tokens[j] != NULL)
+	{
+		if (strcmp(tokens[j], "|") == 0)
+        {
+            tokens[j] = NULL;
+            execute_piped_commands(tokens, shell);
+            free(cmd);
+            return;
+        }
+		j++; 
+	}
+    while (tokens[i] != NULL)
     {
         if (tokens[i] && strcmp(tokens[i], "<") == 0)
         {
@@ -90,25 +101,16 @@ void execute_redirection(char **tokens, t_shell *shell)
         }
         else
         {
-            cmd[cmd_index++] = strdup(tokens[i]); // Copy tokens[i]
+            cmd[cmd_index++] = strdup(tokens[i]);
             i++;
         }
     }
-
     cmd[cmd_index] = NULL;
-
-    // Debugging: Print parsed command
-    // for (int j = 0; cmd[j] != NULL; j++)
-    //     printf("CMD[%d]: %s\n", j, cmd[j]);
-
     execvp(cmd[0], cmd);
     perror("execvp failed");
-
-    // Free allocated memory before exiting
     for (int j = 0; j < cmd_index; j++)
         free(cmd[j]);
     free(cmd);
-
     exit(1);
 }
 
