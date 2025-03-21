@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 12:34:18 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 12:43:30 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ void execute_piped_commands(char **commands, t_shell *shell)
 {
     int i = 0, fd[2], input_fd = 0;
     pid_t pid;
+	int j = 0;
+	int heredoc_fd = -1;
 
     while (commands[i])
     {
@@ -127,7 +129,17 @@ void execute_piped_commands(char **commands, t_shell *shell)
             i++;
             continue;
         }
-
+		while (tokens[j] != NULL)
+        {
+            if (strcmp(tokens[j], "<<") == 0 && tokens[j + 1])
+            {
+                handle_heredoc(tokens[j + 1]);
+                heredoc_fd = open("/tmp/minishell_heredoc", O_RDONLY);
+                tokens[j] = NULL;
+                tokens[j + 1] = NULL;
+            }
+			j++;
+        }
         if (commands[i + 1])
         {
             if (pipe(fd) == -1)
@@ -137,11 +149,16 @@ void execute_piped_commands(char **commands, t_shell *shell)
                 return;
             }
         }
-
         pid = fork();
         if (pid == 0)
         {
-            if (input_fd != 0)
+			if (heredoc_fd != -1)
+			{
+				dup2(heredoc_fd, STDIN_FILENO);
+				close(heredoc_fd);
+				heredoc_fd = -1;
+			}
+            else if (input_fd != 0)
             {
                 dup2(input_fd, STDIN_FILENO);
                 close(input_fd);
@@ -152,9 +169,8 @@ void execute_piped_commands(char **commands, t_shell *shell)
                 close(fd[0]);
                 close(fd[1]);
             }
-            execvp(tokens[0], tokens);
-            perror("execvp failed");
-            exit(1);
+            execute_redirection(tokens, tokens);
+            exit(shell->last_exit_status);
         }
         else if (pid < 0)
         {
@@ -162,7 +178,6 @@ void execute_piped_commands(char **commands, t_shell *shell)
             shell->last_exit_status = 1;
             return;
         }
-        // Parent process
         if (input_fd != 0) 
             close(input_fd);
         if (commands[i + 1])
