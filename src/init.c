@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 15:17:07 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/21 15:23:50 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*handle_quotes(const char *input, int *index, char quote_type)
 		ft_putstr_fd("Error: Unclosed quote\n", STDERR_FILENO);
 		return (NULL);
 	}
-	quoted_str = strndup(&input[start], end - start); //strndup not allowed
+	quoted_str = ft_strndup(&input[start], end - start);
 	*index = end + 1;
 	return (quoted_str);
 }
@@ -69,7 +69,7 @@ char	**tokenize_input(char *input)
 			while (input[i] && input[i] != ' '
 				&& input[i] != '|' && input[i] != '"' && input[i] != '\'')
 				i++;
-			tokens[j] = strndup (&input[start], i - start); //strndup not allowed
+			tokens[j] = ft_strndup (&input[start], i - start);
 			j++;
 		}
 	}

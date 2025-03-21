@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 13:16:15 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/21 15:24:20 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char *expand_variables(char *input, char **env)
 	int		j;
 	
 
-	result = malloc(BUFSIZ); // Allocate buffer for expanded string
+	result = malloc(BUFSIZ);
     if (!result)
 		return (perror("malloc failed in expand_variables"), NULL);
     i = 0;
@@ -31,7 +31,7 @@ char *expand_variables(char *input, char **env)
             int start = ++i;
             while (ft_isalnum(input[i]) || input[i] == '_')
                 i++;
-            char *var_name = strndup(&input[start], i - start);
+            char *var_name = ft_strndup(&input[start], i - start);
             char *var_value = get_env(var_name, env);
             free(var_name);
             if (var_value)
