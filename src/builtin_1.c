@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/21 13:18:20 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/22 16:14:25 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,26 @@
 int	ft_echo(char **args)
 {
 	int	i;
-	int	j;
 	int	line;
 
 	i = 1;
 	line = 1;
 	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
 	{
-		j = 1;
-		while (args[i][j] == 'n')
-			j++;
-		if (args[i][j])
+		if (ft_strspn(args[i] + 1, "n") != ft_strlen(args[i] + 1))
 			break ;
 		line = 0;
 		i++;
 	}
 	while (args[i])
 	{
-		ft_putstr_fd (args[i], 1);
+		ft_putstr_fd(args[i], 1);
 		if (args[i + 1])
-			ft_putstr_fd (" ", 1);
+			ft_putstr_fd(" ", 1);
 		i++;
 	}
 	if (line)
-		ft_putstr_fd ("\n", 1);
+		ft_putstr_fd("\n", 1);
 	return (SUCCESS);
 }
 
@@ -48,10 +44,7 @@ int	ft_pwd(void)
 
 	directory = getcwd (NULL, 0);
 	if (!directory)
-	{
-		perror ("pwd error");
-		return (free(directory), FAIL);
-	}
+		return (perror("pwd error"), free(directory), FAIL);
 	write(1, directory, ft_strlen(directory));
 	write(1, "\n", 1);
 	free (directory);
