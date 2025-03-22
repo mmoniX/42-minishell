@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/22 13:06:09 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/22 14:30:54 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_shell
 	t_dlist	*denv;
 	int		exit_code;
 	char	*old_pwd;
-	int		last_exit_status;
 	char	**env;
 }			t_shell;
 
@@ -90,10 +89,12 @@ void	ft_dlstadd_back(t_dlist **lst, t_dlist *new);
 t_dlist	*ft_dlstnew(void *content);
 void	ft_free_tab(char **tab);
 t_dlist	*convert_env_to_list(char **env);
+t_dlist	*convert_env_to_list(char **env);
 char	*ft_strndup(const char *src, size_t n);
 
 /* env */
-char	*expand_variables(char *input, char **env);
+char	*expand_env_variables(char *input, t_shell *shell);
+char	*expand_variables(char *input, t_shell *shell);
 char	*expand_exit_status(char *input, t_shell *shell);
 
 /* redirection */

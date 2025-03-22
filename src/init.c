@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 15:52:42 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/21 16:19:30 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ char	**tokenize_input(char *input)
 
 	tokens = malloc(sizeof(char *) * MAX_TOKENS);
 	if (!tokens)
+		return (perror("malloc failed for tokens"), NULL);
 		return (perror("malloc failed for tokens"), NULL);
 	i = 0;
 	j = 0;
@@ -139,7 +140,7 @@ void	execute_command(char **tokens, t_shell *shell)
 	if (!tokens || !tokens[0])
 	{
 		printf("No command to execute.\n");
-		return;
+		return ;
 	}
 	if (is_builtin(tokens[0]))
 	{
@@ -154,6 +155,7 @@ void	execute_command(char **tokens, t_shell *shell)
 	if (pid == 0)
 	{
 		execute_redirection(tokens, shell);
+		exit(shell->exit_code);
 		execvp(tokens[0], tokens);
 		perror("execvp failed");
 		exit(127);
@@ -161,7 +163,7 @@ void	execute_command(char **tokens, t_shell *shell)
 	else if (pid < 0)
 	{
 		perror("fork failed");
-		shell->last_exit_status = 1;
+		shell->exit_code = 1;
 		return ;
 	}
 	waitpid(pid, &status, 0);

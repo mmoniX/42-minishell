@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/22 13:31:51 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/22 14:31:36 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ void execute_piped_commands(char **commands, t_shell *shell)
         else if (pid < 0)
         {
             perror("fork failed");
-            shell->last_exit_status = 1;
+            shell->exit_code = 1;
             return;
         }
         else
