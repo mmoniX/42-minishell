@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/21 15:23:20 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/22 13:06:09 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,14 @@ typedef struct s_shell
 	int		last_exit_status;
 	char	**env;
 }			t_shell;
+
+typedef struct s_exec
+{
+    int input_fd;
+    int fd[2];
+    int heredoc_fd;
+    t_shell *shell;
+} t_exec;
 
 /* init and tokenize */
 char	**tokenize_input(char *input);
@@ -97,5 +105,7 @@ int		handle_heredoc(char *delimiter);
 void	execute_piped_commands(char **commands, t_shell *shell);
 void	execute_redirection(char **tokens, t_shell *shell);
 char	**split_pipes(char *input);
+void	execute_child_process(char **tokens, t_exec *exec_data, int has_next_command);
+void	execute_parent_process(pid_t pid, t_exec *exec_data, int has_next_command);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 16:00:16 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/22 13:31:51 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,39 +117,57 @@ void execute_redirection(char **tokens, t_shell *shell)
 
 void execute_piped_commands(char **commands, t_shell *shell)
 {
-    int i = 0, fd[2], input_fd = 0;
+    int i;
+    int j;
+    int k;
     pid_t pid;
-    int heredoc_fd = -1;
+    t_exec exec_data;
+	char	**tokens;
+	int next_command;
 
+	exec_data.input_fd = 0;
+	exec_data.heredoc_fd = -1;
+	exec_data.shell = shell;
+	i = 0;
     while (commands[i])
     {
-        char **tokens = tokenize_input(commands[i]);
+        tokens = tokenize_input(commands[i]);
         if (!tokens || !tokens[0])
         {
             ft_free_tab(tokens);
             i++;
             continue;
         }
-        for (int j = 0; tokens[j] != NULL; j++)
+		j = 0;
+        while (tokens[j] != NULL)
         {
             if (strcmp(tokens[j], "<<") == 0 && tokens[j + 1])
             {
                 handle_heredoc(tokens[j + 1]);
-                heredoc_fd = open("/tmp/minishell_heredoc", O_RDONLY);
-                if (heredoc_fd == -1)
+                exec_data.heredoc_fd = open("/tmp/minishell_heredoc", O_RDONLY);
+                if (exec_data.heredoc_fd == -1)
                 {
                     perror("open failed for heredoc");
                     ft_free_tab(tokens);
                     return;
                 }
-                for (int k = j; tokens[k + 2] != NULL; k++)
-                    tokens[k] = tokens[k + 2];
+				k = j;
+                while (tokens[k + 2] != NULL)
+				{
+                	tokens[k] = tokens[k + 2];
+					k++;
+				}
                 tokens[j] = NULL;
             }
+			j++;
         }
-        if (commands[i + 1])
+		if(commands[i + 1])
+			next_command = 1;
+		else
+			next_command = 0;
+        if (next_command)
         {
-            if (pipe(fd) == -1)
+            if (pipe(exec_data.fd) == -1)
             {
                 perror("pipe failed");
                 ft_free_tab(tokens);
@@ -159,49 +177,59 @@ void execute_piped_commands(char **commands, t_shell *shell)
         // Fork to create a child process
         pid = fork();
         if (pid == 0)
-        {
-            if (heredoc_fd != -1)
-            {
-                dup2(heredoc_fd, STDIN_FILENO);
-                close(heredoc_fd);
-            }
-            else if (input_fd != 0)
-            {
-                dup2(input_fd, STDIN_FILENO);
-                close(input_fd);
-            }
-            if (commands[i + 1])
-            {
-                dup2(fd[1], STDOUT_FILENO);
-                close(fd[0]);
-                close(fd[1]);
-            }
-            execute_redirection(tokens, shell);
-            if (is_builtin(tokens[0]))
-                execute_builtin(tokens, shell);
-            else
-            {
-                execvp(tokens[0], tokens);
-                perror("execvp failed");
-                exit(127);
-            }
-        }
+			execute_child_process(tokens, &exec_data, next_command);
         else if (pid < 0)
         {
             perror("fork failed");
             shell->last_exit_status = 1;
             return;
         }
-        if (input_fd != 0)
-            close(input_fd);
-
-        if (commands[i + 1])
-        {
-            close(fd[1]);
-            input_fd = fd[0];
-        }
+        else
+			execute_parent_process(pid, &exec_data, next_command);
         ft_free_tab(tokens);
         i++;
     }
     while (wait(NULL) > 0);
 }
+
+void execute_child_process(char **tokens, t_exec *exec_data, int has_next_command)
+{
+    if (exec_data->heredoc_fd != -1)
+    {
+        dup2(exec_data->heredoc_fd, STDIN_FILENO);
+        close(exec_data->heredoc_fd);
+    }
+    else if (exec_data->input_fd != 0)
+    {
+        dup2(exec_data->input_fd, STDIN_FILENO);
+        close(exec_data->input_fd);
+    }
+    if (has_next_command)
+    {
+        dup2(exec_data->fd[1], STDOUT_FILENO);
+        close(exec_data->fd[0]);
+        close(exec_data->fd[1]);
+    }
+    execute_redirection(tokens, exec_data->shell);
+    if (is_builtin(tokens[0]))
+        execute_builtin(tokens, exec_data->shell);
+    else
+    {
+        execvp(tokens[0], tokens);
+        perror("execvp failed");
+        exit(127);
+    }
+}
+
+void execute_parent_process(pid_t pid, t_exec *exec_data, int has_next_command)
+{
+    if (exec_data->input_fd != 0)
+        close(exec_data->input_fd);
+
+    if (has_next_command)
+    {
+        close(exec_data->fd[1]);
+        exec_data->input_fd = exec_data->fd[0];
+    }
+}
+
