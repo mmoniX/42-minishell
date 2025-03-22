@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/22 14:30:54 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/22 15:45:28 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,10 @@ t_dlist	*convert_env_to_list(char **env);
 char	*ft_strndup(const char *src, size_t n);
 
 /* env */
-char	*expand_env_variables(char *input, t_shell *shell);
-char	*expand_variables(char *input, t_shell *shell);
-char	*expand_exit_status(char *input, t_shell *shell);
+char	*env_value(char *key, t_shell *shell);
+char	*get_value(char *input, int *i, t_shell *shell);
+char	*expand_variables(char *inputtt, t_shell *shell);
+char    *ms_strjoin(char *s1, char *s2);
 
 /* redirection */
 int		handle_input_redirection(char **tokens, int *i);

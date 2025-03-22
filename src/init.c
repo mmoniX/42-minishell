@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 16:19:30 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/22 15:20:33 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	**tokenize_input(char *input)
 
 	tokens = malloc(sizeof(char *) * MAX_TOKENS);
 	if (!tokens)
-		return (perror("malloc failed for tokens"), NULL);
 		return (perror("malloc failed for tokens"), NULL);
 	i = 0;
 	j = 0;
@@ -168,7 +167,7 @@ void	execute_command(char **tokens, t_shell *shell)
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		shell->last_exit_status = WEXITSTATUS(status);
+		shell->exit_code = WEXITSTATUS(status);
 	dup2(original_stdin, STDIN_FILENO);
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdin);

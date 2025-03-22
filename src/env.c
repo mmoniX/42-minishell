@@ -6,79 +6,88 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/21 16:17:43 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/22 15:44:46 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*expand_env_variables(char *input, t_shell *shell)
+char	*env_value(char *key, t_shell *shell)
 {
-	char	*result;
-	char	*var_name;
-	char	*var_value;
-	int		i;
-	int		j;
-	int		start;
+	char	*value;
 
-	result = malloc(BUFSIZ);
-	if (!result)
-		return (perror("malloc failed in expand_env_variables"), NULL);
-	i = 0;
-	j = 0;
-	start = 0;
-	while (input[i])
-	{
-		if (input[i] == '$' && (ft_isalnum(input[i + 1]) || input[i + 1] == '_'))
-		{
-			start = ++i;
-			while (ft_isalnum(input[i]) || input[i] == '_')
-				i++;
-			var_name = ft_substr(input, start, i - start);
-			var_value = get_env(var_name, shell->env);
-			free(var_name);
-			while (var_value && *var_value)
-				result[j++] = *var_value++;
-		}
-		else
-			result[j++] = input[i++];
-	}
-	result[j] = '\0';
-	free(input);
-	return (result);
+	value = get_env(key, shell->env);
+	if (value)
+		return (ft_strdup(value));
+	else
+		return (ft_strdup(""));
 }
 
-char *expand_exit_status(char *input, t_shell *shell)
+char	*get_value(char *input, int *i, t_shell *shell)
 {
-    char	*exit_status;
-	char	*result;
-	char	*position;
-	
-	position = ft_strstr(input, "$?");
-	if (!position)
-		return (ft_strdup(input));
-	exit_status = ft_itoa(shell->exit_code);
-	if (!exit_status)
-		return (NULL);
-	result = malloc(ft_strlen(input) + ft_strlen(exit_status) - 1);
-    if (!result)
-		return (perror("malloc failed: $?"), free(exit_status), NULL);
-	ft_strncpy(result, input, position - input);
-	result[position - input] = '\0';
-	ft_strcat(result, exit_status);
-	ft_strcat(result, position + 2);
-	free (exit_status);
-    return (result);
+	char	*var_name;
+	char	*var_value;
+	int		start;
+
+	start = ++(*i);
+	if (input[start] == '?')
+	{
+		(*i)++;
+		return (ft_itoa(shell->exit_code));
+	}
+	while (ft_isalnum(input[*i]) || input[*i] == '_')
+		(*i)++;
+	if (*i == start)
+		return (ft_strdup("$"));
+	var_name = ft_substr(input, start, (*i) - start);
+	var_value = env_value(var_name, shell);
+	free(var_name);
+	return (var_value);
 }
 
 char	*expand_variables(char *input, t_shell *shell)
 {
-	char	*expanded_exit;
-	char	*final_expansion;
+	char	*result;
+	char	*temp;
+	int		i;
 
-	expanded_exit = expand_exit_status(input, shell);
-	if (!expanded_exit)
+	i = 0;
+	result = ft_calloc(1, 1);
+	if (!result)
 		return (NULL);
-	final_expansion = expand_env_variables(expanded_exit, shell);
-	return (final_expansion);
+	while (input[i])
+	{
+		if (input[i] == '$' && (ft_isalnum(input[i + 1])
+				|| input[i + 1] == '_' || input[i + 1] == '?'))
+		{
+			temp = get_value(input, &i, shell);
+			result = ms_strjoin(result, temp);
+		}
+		else
+		{
+			temp = ft_substr(input, i, 1);
+			result = ms_strjoin(result, temp);
+			i++;
+		}
+	}
+	return (free (temp), result);
+}
+
+char	*ms_strjoin(char *s1, char *s2)
+{
+	char	*str;
+	size_t	len;
+
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (s1);
+	len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	str = malloc (len * sizeof(char));
+	if (!str)
+		return (free (s1), NULL);
+	ft_strcpy(str, s1);
+	ft_strcat(str, s2);
+	free(s1);
+	return (str);
 }
