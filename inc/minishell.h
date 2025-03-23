@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 12:02:52 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/23 13:16:49 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ typedef struct s_shell
 
 typedef struct s_exec
 {
-    int input_fd;
-    int fd[2];
-    int heredoc_fd;
-    t_shell *shell;
-} t_exec;
+	int		input_fd;
+	int		fd[2];
+	int		heredoc_fd;
+	t_shell	*shell;
+}			t_exec;
 
 /* init and tokenize */
 char	**tokenize_input(char *input);
@@ -97,7 +97,7 @@ int	ft_execvp(char *cmd, char **args, char **env);
 char	*env_value(char *key, t_shell *shell);
 char	*get_value(char *input, int *i, t_shell *shell);
 char	*expand_variables(char *inputtt, t_shell *shell);
-char    *ms_strjoin(char *s1, char *s2);
+char	*ms_strjoin(char *s1, char *s2);
 
 /* redirection */
 int		handle_input_redirection(char **tokens, int *i);

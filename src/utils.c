@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:14:30 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 12:02:42 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/23 13:17:11 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*ft_strndup(const char *src, size_t n)
 {
 	size_t	i;
 	char	*dup;
-	
+
 	dup = (char *)malloc(n + 1);
 	if (!dup)
 		return (NULL);
