@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 12:12:23 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/23 15:30:39 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,13 @@
 int	ft_echo(char **args)
 {
 	int	i;
-	int	j;
 	int	line;
 
 	i = 1;
 	line = 1;
 	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
 	{
-		j = 1;
-		while (args[i][j] == 'n')
-			j++;
-		if (args[i][j])
+		if (ft_strspn(args[i] + 1, "n") != ft_strlen(args[i] + 1))
 			break ;
 		line = 0;
 		i++;

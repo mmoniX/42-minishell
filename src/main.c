@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 15:27:16 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/23 15:54:10 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,35 +20,6 @@ void	init_shell(t_shell *shell, char **env)
 	shell->env = env;
 	shell->exit_code = 0;
 	shell->old_pwd = NULL;
-}
-
-void	process_input(t_shell *shell, char *input)
-{
-	char	**tokens;
-	char	**commands;
-	char	*final_input;
-
-	final_input = expand_variables(input, shell);
-	if (!final_input || !*final_input)
-		return (free(input));
-	if (ft_strchr(final_input, '|'))
-	{
-		commands = split_pipes(final_input);
-		if (commands)
-		{
-			execute_piped_commands(commands, shell);
-			ft_free_tab(commands);
-		}
-	}
-	else
-	{
-		tokens = tokenize_input(final_input);
-		if (tokens && tokens[0])
-			execute_command(tokens, shell);
-		ft_free_tab(tokens);
-	}
-	free(final_input);
-	free(input);
 }
 
 int	main(int ac, char **av, char **env)

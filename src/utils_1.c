@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:14:30 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 14:21:08 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/23 15:55:45 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,46 +88,4 @@ void	ft_free_tab(char **tab)
 	while (tab[i])
 		free(tab[i++]);
 	free(tab);
-}
-
-char	*ft_strndup(const char *src, size_t n)
-{
-	size_t	i;
-	char	*dup;
-
-	dup = (char *)malloc(n + 1);
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (i < n && src[i])
-	{
-		dup[i] = src[i];
-		i++;
-	}
-	dup[i] = '\0';
-	return (dup);
-}
-
-int	ft_execvp(char *cmd, char **args, char **env)
-{
-	char *full_path;
-
-	if (ft_strchr(cmd, '/') && access(cmd, F_OK | X_OK) == 0)
-		return execve(cmd, args, env);
-	full_path = get_path(cmd, env);
-	if (!full_path)
-	{
-		ft_putstr_fd("Command not found: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd("\n", 2);
-		return -1;
-	}
-	if (execve(full_path, args, env) == -1)
-	{
-		perror("execve failed");
-		free(full_path);
-		return -1;
-	}
-	free(full_path);
-	return 0;
 }

@@ -1,18 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_define.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/22 15:44:46 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/23 15:53:47 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*env_value(char *key, t_shell *shell)
+char	*get_env(char *key, char **env)
+{
+	int		i;
+	int		j;
+	char	*prefix;
+
+	i = 0;
+	while (env[i])
+	{
+		j = 0;
+		while (env[i][j] && env[i][j] != '=')
+			j++;
+		prefix = ft_substr(env[i], 0, j);
+		if (ft_strcmp(prefix, key) == 0)
+		{
+			free(prefix);
+			return (env[i] + j + 1);
+		}
+		free(prefix);
+		i++;
+	}
+	return (NULL);
+}
+
+char	*env_str(char *key, t_shell *shell)
 {
 	char	*value;
 
@@ -40,9 +64,28 @@ char	*get_value(char *input, int *i, t_shell *shell)
 	if (*i == start)
 		return (ft_strdup("$"));
 	var_name = ft_substr(input, start, (*i) - start);
-	var_value = env_value(var_name, shell);
+	var_value = env_str(var_name, shell);
 	free(var_name);
 	return (var_value);
+}
+
+char	*ms_strjoin(char *s1, char *s2)
+{
+	char	*str;
+	size_t	len;
+
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (s1);
+	len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	str = malloc (len * sizeof(char));
+	if (!str)
+		return (free (s1), NULL);
+	ft_strcpy(str, s1);
+	ft_strcat(str, s2);
+	free(s1);
+	return (str);
 }
 
 char	*expand_variables(char *input, t_shell *shell)
@@ -71,23 +114,4 @@ char	*expand_variables(char *input, t_shell *shell)
 		}
 	}
 	return (free (temp), result);
-}
-
-char	*ms_strjoin(char *s1, char *s2)
-{
-	char	*str;
-	size_t	len;
-
-	if (!s1)
-		return (ft_strdup(s2));
-	if (!s2)
-		return (s1);
-	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	str = malloc (len * sizeof(char));
-	if (!str)
-		return (free (s1), NULL);
-	ft_strcpy(str, s1);
-	ft_strcat(str, s2);
-	free(s1);
-	return (str);
 }

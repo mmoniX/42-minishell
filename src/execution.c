@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/23 14:07:41 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/23 15:49:20 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,58 +77,6 @@ char	**tokenize_input(char *input)
 	return (tokens);
 }
 
-char	*get_env(char *key, char **env)
-{
-	int		i;
-	int		j;
-	char	*prefix;
-
-	i = 0;
-	while (env[i])
-	{
-		j = 0;
-		while (env[i][j] && env[i][j] != '=')
-			j++;
-		prefix = ft_substr(env[i], 0, j);
-		if (ft_strcmp(prefix, key) == 0)
-		{
-			free(prefix);
-			return (env[i] + j + 1);
-		}
-		free(prefix);
-		i++;
-	}
-	return (NULL);
-}
-
-char	*get_path(char *cmd, char **env)
-{
-	int		i;
-	char	*exec;
-	char	**allpath;
-	char	*path_part;
-
-	i = -1;
-	if (access(cmd, F_OK | X_OK) == 0)
-		return (ft_strdup(cmd));
-	allpath = ft_split(get_env("PATH", env), ':');
-	if (!allpath)
-		return (NULL);
-	while (allpath[++i])
-	{
-		path_part = malloc(ft_strlen(allpath[i]) + ft_strlen(cmd) + 2);
-		if (!path_part)
-			continue ;
-		ft_strcpy(path_part, allpath[i]);
-		ft_strcat(path_part, "/");
-		ft_strcat(path_part, cmd);
-		if (access(path_part, F_OK | X_OK) == 0)
-			return (ft_free_tab(allpath), path_part);
-		free(path_part);
-	}
-	return (ft_free_tab(allpath), NULL);
-}
-
 void	execute_command(char **tokens, t_shell *shell)
 {
 	pid_t	pid;
@@ -172,4 +120,33 @@ void	execute_command(char **tokens, t_shell *shell)
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdin);
 	close(original_stdout);
+}
+
+void	process_input(t_shell *shell, char *input)
+{
+	char	**tokens;
+	char	**commands;
+	char	*final_input;
+
+	final_input = expand_variables(input, shell);
+	if (!final_input || !*final_input)
+		return (free(input));
+	if (ft_strchr(final_input, '|'))
+	{
+		commands = split_pipes(final_input);
+		if (commands)
+		{
+			execute_piped_commands(commands, shell);
+			ft_free_tab(commands);
+		}
+	}
+	else
+	{
+		tokens = tokenize_input(final_input);
+		if (tokens && tokens[0])
+			execute_command(tokens, shell);
+		ft_free_tab(tokens);
+	}
+	free(final_input);
+	free(input);
 }
