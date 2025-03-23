@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/23 11:51:56 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/23 14:08:12 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,15 @@ void execute_redirection(char **tokens, t_shell *shell)
         }
     }
     cmd[cmd_index] = NULL;
-    execvp(cmd[0], cmd);
-    perror("execvp failed");
+    if (is_builtin(cmd[0]))
+    {
+        execute_builtin(cmd, shell);
+    }
+    else
+    {
+        ft_execvp(cmd[0], cmd, shell->env);
+        perror("execvp failed");
+    }
     for (int j = 0; j < cmd_index; j++)
         free(cmd[j]);
     free(cmd);
@@ -215,7 +222,7 @@ void execute_child_process(char **tokens, t_exec *exec_data, int has_cmd)
         execute_builtin(tokens, exec_data->shell);
     else
     {
-        execvp(tokens[0], tokens);
+        ft_execvp(tokens[0], tokens, exec_data->shell->env);
         perror("execvp failed");
         exit(127);
     }
