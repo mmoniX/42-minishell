@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/22 15:20:33 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/23 14:07:41 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void	execute_command(char **tokens, t_shell *shell)
 	{
 		execute_redirection(tokens, shell);
 		exit(shell->exit_code);
-		execvp(tokens[0], tokens);
+		ft_execvp(tokens[0], tokens, shell->env);
 		perror("execvp failed");
 		exit(127);
 	}
