@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 14:14:51 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/23 15:27:16 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,65 +22,55 @@ void	init_shell(t_shell *shell, char **env)
 	shell->old_pwd = NULL;
 }
 
-int main(int ac, char **av, char **env)
+void	process_input(t_shell *shell, char *input)
 {
-    t_shell shell;
-    char *input = NULL;
-    char **tokens;
-    char **commands;
+	char	**tokens;
+	char	**commands;
+	char	*final_input;
+
+	final_input = expand_variables(input, shell);
+	if (!final_input || !*final_input)
+		return (free(input));
+	if (ft_strchr(final_input, '|'))
+	{
+		commands = split_pipes(final_input);
+		if (commands)
+		{
+			execute_piped_commands(commands, shell);
+			ft_free_tab(commands);
+		}
+	}
+	else
+	{
+		tokens = tokenize_input(final_input);
+		if (tokens && tokens[0])
+			execute_command(tokens, shell);
+		ft_free_tab(tokens);
+	}
+	free(final_input);
+	free(input);
+}
+
+int	main(int ac, char **av, char **env)
+{
+	t_shell	shell;
+	char	*input;
 
 	if (ac != 1)
 		return (printf("Invalid Input\n"), 0);
 	signal_handler();
 	init_shell(&shell, env);
-    while (1)
-    {
-        input = readline("\033[33mminishell$ \033[0m");
-        if (!input || ft_strcmp(input, "exit") == 0)
+	while (1)
+	{
+		input = readline("\033[33mminishell$ \033[0m");
+		if (!input || ft_strcmp(input, "exit") == 0)
 		{
 			shell.exit_code = ft_exit(&shell, input);
-            break;
-        }
-        if (*input)
-            add_history(input);
-
-        char *final_input = expand_variables(input, &shell); //check;
-        if (!final_input || !*final_input)
-        {
-            free(input);
-            continue;
-        }
-        char *final_input_copy = ft_strdup(final_input);
-        if (!final_input_copy)
-        {
-            free(final_input);
-            free(input);
-            continue;
-        }
-
-        if (ft_strchr(final_input, '|'))
-        {
-            commands = split_pipes(final_input_copy);
-            if (commands)
-            {
-                execute_piped_commands(commands, &shell);
-                ft_free_tab(commands);
-            }
-        }
-        else
-        {
-            tokens = tokenize_input(final_input);
-            if (tokens && tokens[0])
-                execute_command(tokens, &shell);
-            ft_free_tab(tokens);
-        }
-
-        free(final_input);
-        free(final_input_copy);
-        free(input);
-    }
-    return shell.exit_code;
+			break ;
+		}
+		if (*input)
+			add_history(input);
+		process_input(&shell, input);
+	}
+	return (shell.exit_code);
 }
-
-
-
