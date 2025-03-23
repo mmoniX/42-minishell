@@ -6,13 +6,21 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/21 16:06:12 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/23 14:14:51 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 int	g_signal = 0;
+
+void	init_shell(t_shell *shell, char **env)
+{
+	shell->denv = convert_env_to_list(env);
+	shell->env = env;
+	shell->exit_code = 0;
+	shell->old_pwd = NULL;
+}
 
 int main(int ac, char **av, char **env)
 {
@@ -24,22 +32,15 @@ int main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (printf("Invalid Input\n"), 0);
 	signal_handler();
-
-	shell.denv = convert_env_to_list(env);
-	shell.exit_code = 0;
-    shell.env = env;
-	shell.old_pwd = NULL;
-    
+	init_shell(&shell, env);
     while (1)
     {
         input = readline("\033[33mminishell$ \033[0m");
         if (!input || ft_strcmp(input, "exit") == 0)
-        {
-            printf("Exiting minishell...\n");
-            free(input);
+		{
+			shell.exit_code = ft_exit(&shell, input);
             break;
         }
-
         if (*input)
             add_history(input);
 

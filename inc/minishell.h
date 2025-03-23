@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 13:16:49 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/23 13:54:11 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	update_env(t_shell *minishell, char *var);
 int		ft_export(t_shell *minishell, char **custom_env);
 void	update_directory(t_shell *minishell);
 int		ft_cd(t_shell *minishell, char **args);
+int		ft_exit(t_shell *shell, char *args);
 
 /* builtin_utils */
 int		is_valid_var(char *var);
@@ -92,6 +93,7 @@ t_dlist	*convert_env_to_list(char **env);
 t_dlist	*convert_env_to_list(char **env);
 char	*ft_strndup(const char *src, size_t n);
 int	ft_execvp(char *cmd, char **args, char **env);
+void	ft_free_dlist(t_dlist *env);
 
 /* env */
 char	*env_value(char *key, t_shell *shell);

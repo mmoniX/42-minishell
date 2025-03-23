@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:14:30 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 13:17:11 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/23 14:19:25 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_dlist	*convert_env_to_list(char **env)
 
 	if (!env || !*env)
 		return (NULL);
-	temp = ft_dlstnew(env[0]);
+	temp = ft_dlstnew(ft_strdup(env[0]));
 	current = temp;
 	i = 1;
 	while (env[i])
@@ -62,6 +62,20 @@ t_dlist	*convert_env_to_list(char **env)
 		i++;
 	}
 	return (temp);
+}
+
+void	ft_free_dlist(t_dlist *env)
+{
+	t_dlist	*temp;
+
+	while (env)
+	{
+		temp = env;
+		env = env->next;
+		if (temp->content)
+			free(temp->content);
+		free(temp);
+	}
 }
 
 void	ft_free_tab(char **tab)
