@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/22 14:31:36 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/23 11:51:56 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,20 @@ char	**split_pipes(char *input)
 
 void execute_redirection(char **tokens, t_shell *shell)
 {
-    int i = 0, j = 0;
-    char **cmd = calloc(1024, sizeof(char *));
-    int cmd_index = 0;
+    int i;
+	int	j;
+    char **cmd;
+    int cmd_index;
 
+	i = 0;
+	j = 0;
+	cmd = calloc(1024, sizeof(char *));
+	cmd_index = 0;
     if (!cmd)
     {
         perror("malloc failed");
         exit(1);
     }
-    // Debugging: Print tokens
-    // for (int j = 0; tokens[j] != NULL; j++)
-    //     printf("Token[%d]: %s\n", j, tokens[j]);
-	
-	//detect and handle pipes early
 	while(tokens[j] != NULL)
 	{
 		if (strcmp(tokens[j], "|") == 0)
@@ -192,7 +192,7 @@ void execute_piped_commands(char **commands, t_shell *shell)
     while (wait(NULL) > 0);
 }
 
-void execute_child_process(char **tokens, t_exec *exec_data, int has_next_command)
+void execute_child_process(char **tokens, t_exec *exec_data, int has_cmd)
 {
     if (exec_data->heredoc_fd != -1)
     {
@@ -204,7 +204,7 @@ void execute_child_process(char **tokens, t_exec *exec_data, int has_next_comman
         dup2(exec_data->input_fd, STDIN_FILENO);
         close(exec_data->input_fd);
     }
-    if (has_next_command)
+    if (has_cmd)
     {
         dup2(exec_data->fd[1], STDOUT_FILENO);
         close(exec_data->fd[0]);
@@ -221,12 +221,12 @@ void execute_child_process(char **tokens, t_exec *exec_data, int has_next_comman
     }
 }
 
-void execute_parent_process(pid_t pid, t_exec *exec_data, int has_next_command)
+void execute_parent_process(pid_t pid, t_exec *exec_data, int has_cmd)
 {
     if (exec_data->input_fd != 0)
         close(exec_data->input_fd);
 
-    if (has_next_command)
+    if (has_cmd)
     {
         close(exec_data->fd[1]);
         exec_data->input_fd = exec_data->fd[0];

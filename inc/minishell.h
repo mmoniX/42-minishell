@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/22 15:45:28 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/23 12:02:52 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	ft_free_tab(char **tab);
 t_dlist	*convert_env_to_list(char **env);
 t_dlist	*convert_env_to_list(char **env);
 char	*ft_strndup(const char *src, size_t n);
+int	ft_execvp(char *cmd, char **args, char **env);
 
 /* env */
 char	*env_value(char *key, t_shell *shell);
@@ -107,7 +108,7 @@ int		handle_heredoc(char *delimiter);
 void	execute_piped_commands(char **commands, t_shell *shell);
 void	execute_redirection(char **tokens, t_shell *shell);
 char	**split_pipes(char *input);
-void	execute_child_process(char **tokens, t_exec *exec_data, int has_next_command);
-void	execute_parent_process(pid_t pid, t_exec *exec_data, int has_next_command);
+void	execute_child_process(char **tokens, t_exec *exec_data, int has_cmd);
+void	execute_parent_process(pid_t pid, t_exec *exec_data, int has_cmd);
 
 #endif
