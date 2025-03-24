@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 15:30:39 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/24 14:07:58 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ int	ft_echo(char **args)
 	}
 	while (args[i])
 	{
-		ft_putstr_fd (args[i], 1);
+		ft_putstr_fd (args[i], STDOUT_FILENO);
 		if (args[i + 1])
-			ft_putstr_fd (" ", 1);
+			ft_putstr_fd (" ", STDOUT_FILENO);
 		i++;
 	}
 	if (line)
-		ft_putstr_fd ("\n", 1);
+		ft_putstr_fd ("\n", STDOUT_FILENO);
 	return (SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/23 15:49:20 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/24 14:55:40 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ void	execute_command(char **tokens, t_shell *shell)
 	{
 		printf("No command to execute.\n");
 		return ;
+	}
+	if (handle_redirections(tokens) < 0)
+	{
+		printf("Redirection failed!\n");
+        return;
 	}
 	if (is_builtin(tokens[0]))
 	{
