@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 15:56:08 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/24 13:28:25 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,6 @@ void	execute_piped_commands(char **commands, t_shell *shell);
 void	execute_redirection(char **tokens, t_shell *shell);
 char	**split_pipes(char *input);
 void	execute_child_process(char **tokens, t_exec *exec_data, int has_cmd);
-void	execute_parent_process(pid_t pid, t_exec *exec_data, int has_cmd);
+void	execute_parent_process(t_exec *exec_data, int has_cmd);
 
 #endif

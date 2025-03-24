@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/23 14:08:12 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/24 13:28:02 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void execute_piped_commands(char **commands, t_shell *shell)
             return;
         }
         else
-			execute_parent_process(pid, &exec_data, next_command);
+			execute_parent_process(&exec_data, next_command);
         ft_free_tab(tokens);
         i++;
     }
@@ -228,7 +228,7 @@ void execute_child_process(char **tokens, t_exec *exec_data, int has_cmd)
     }
 }
 
-void execute_parent_process(pid_t pid, t_exec *exec_data, int has_cmd)
+void execute_parent_process(t_exec *exec_data, int has_cmd)
 {
     if (exec_data->input_fd != 0)
         close(exec_data->input_fd);

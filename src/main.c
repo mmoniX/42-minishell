@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 15:54:10 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/24 13:27:26 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int ac, char **av, char **env)
 	t_shell	shell;
 	char	*input;
 
+	(void)av;
 	if (ac != 1)
 		return (printf("Invalid Input\n"), 0);
 	signal_handler();

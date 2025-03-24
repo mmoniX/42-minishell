@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:54:41 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 15:55:42 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/24 13:28:56 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ char	*ft_strndup(const char *src, size_t n)
 char	*get_path(char *cmd, char **env)
 {
 	int		i;
-	char	*exec;
 	char	**allpath;
 	char	*path_part;
 
