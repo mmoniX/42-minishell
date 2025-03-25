@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/24 13:27:26 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/25 16:42:06 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		input = readline("\033[33mminishell$ \033[0m");
-		if (!input || ft_strcmp(input, "exit") == 0)
+		if (!input || ft_strncmp(input, "exit", 4) == 0)
 		{
 			shell.exit_code = ft_exit(&shell, input);
 			break ;
