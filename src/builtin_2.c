@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:55:35 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 15:37:33 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/25 13:32:53 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	ft_export(t_shell *minishell, char **custom_env)
 			ft_putstr_fd(custom_env[i], STDERR_FILENO);
 			ft_putstr_fd(" is invalid\n", STDERR_FILENO);
 			minishell->exit_code = 1;
+			return (FAIL);
 		}
 		else
 			update_env(minishell, custom_env[i]);

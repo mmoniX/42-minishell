@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/24 14:07:58 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/25 13:34:22 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int	ft_unset(t_shell *minishell, char **args)
 			ft_putstr_fd(args[i], STDERR_FILENO);
 			ft_putstr_fd(" is invalid\n", STDERR_FILENO);
 			minishell->exit_code = 1;
+			return (FAIL);
 		}
 		else
 			update_unset(minishell, args[i]);

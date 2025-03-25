@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/24 15:14:15 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/25 15:22:09 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,32 +57,54 @@ int	handle_output_redirection(char **tokens, int *i, int append)
 	return (0);
 }
 
-int	handle_heredoc(char *delimiter)
-{
-	char	*line;
-	int		fd;
+// int	handle_heredoc(char *delimiter)
+// {
+// 	char	*line;
+// 	int		fd;
 
-	fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-		return (perror("minishell: heredoc file creation failed"), -1);
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
-			break ;
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-	}
-	free(line);
-	close(fd);
-	fd = open("/tmp/minishell_heredoc", O_RDONLY);
-	if (fd < 0)
-		return (perror("minishell: heredoc read failed"), -1);
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	unlink("/tmp/minishell_heredoc");
-	return (0);
+// 	fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 	if (fd < 0)
+// 		return (perror("minishell: heredoc file creation failed"), -1);
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line || ft_strcmp(line, delimiter) == 0)
+// 			break ;
+// 		write(fd, line, ft_strlen(line));
+// 		write(fd, "\n", 1);
+// 		free(line);
+// 	}
+// 	free(line);
+// 	close(fd);
+// 	fd = open("/tmp/minishell_heredoc", O_RDONLY);
+// 	if (fd < 0)
+// 		return (perror("minishell: heredoc read failed"), -1);
+// 	dup2(fd, STDIN_FILENO);
+// 	close(fd);
+// 	unlink("/tmp/minishell_heredoc");
+// 	return (0);
+// }
+
+int handle_heredoc(char *delimiter)
+{
+    int pipe_fds[2];
+    char *line;
+
+    if (pipe(pipe_fds) == -1)
+        return (perror("pipe failed"), -1);
+
+    while (1)
+    {
+        line = readline("> ");
+        if (!line || ft_strcmp(line, delimiter) == 0)
+            break;
+        write(pipe_fds[1], line, ft_strlen(line));
+        write(pipe_fds[1], "\n", 1);
+        free(line);
+    }
+    free(line);
+    close(pipe_fds[1]); // Close write-end
+    return pipe_fds[0]; // Return read-end of pipe
 }
 
 void execute_redirection(char **tokens, t_shell *shell)
@@ -176,31 +198,25 @@ void execute_redirection(char **tokens, t_shell *shell)
 
 int handle_redirections(char **tokens)
 {
-    int i = 0;
+    int i = 0, j = 0;
     int fd;
+    char *new_tokens[1024]; // Temporary array for modified tokens
 
     while (tokens[i])
     {
-        if (strcmp(tokens[i], ">") == 0)  // Handle output redirection
+        if (strcmp(tokens[i], ">") == 0 || strcmp(tokens[i], ">>") == 0)
         {
-            fd = open(tokens[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+            fd = open(tokens[i + 1], O_CREAT | O_WRONLY | (strcmp(tokens[i], ">>") == 0 ? O_APPEND : O_TRUNC), 0644);
             if (fd < 0)
             {
                 perror("open failed");
                 return -1;
             }
-            printf("Redirecting STDOUT from %d to %d\n", STDOUT_FILENO, fd);
             dup2(fd, STDOUT_FILENO);
             close(fd);
-            // Remove `> file` from tokens
-            while (tokens[i])
-            {
-                tokens[i] = tokens[i + 2];
-                i++;
-            }
-            i = -1;  // Reset i to re-check remaining tokens
+            i += 2; // Skip redirection tokens
         }
-        else if (strcmp(tokens[i], "<") == 0)  // Handle input redirection
+        else if (strcmp(tokens[i], "<") == 0)
         {
             fd = open(tokens[i + 1], O_RDONLY);
             if (fd < 0)
@@ -208,18 +224,15 @@ int handle_redirections(char **tokens)
                 perror("open failed");
                 return -1;
             }
-            printf("Redirecting STDIN from %d to %d\n", STDIN_FILENO, fd);
             dup2(fd, STDIN_FILENO);
             close(fd);
-            // Remove `< file` from tokens
-            while (tokens[i])
-            {
-                tokens[i] = tokens[i + 2];
-                i++;
-            }
-            i = -1;
+            i += 2;
         }
-        i++;
+        else
+            new_tokens[j++] = tokens[i++];
     }
+    new_tokens[j] = NULL;
+    memcpy(tokens, new_tokens, (j + 1) * sizeof(char *)); // Update tokens safely
     return 0;
 }
+
