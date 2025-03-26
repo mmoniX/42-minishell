@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/24 15:01:35 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/26 16:59:38 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void execute_piped_commands(char **commands, t_shell *shell)
                 	tokens[k] = tokens[k + 2];
 					k++;
 				}
-                tokens[j] = NULL;
+                tokens[k] = NULL;
             }
 			j++;
         }
@@ -99,7 +99,14 @@ void execute_piped_commands(char **commands, t_shell *shell)
         // Fork to create a child process
         pid = fork();
         if (pid == 0)
+		{
+			if (exec_data.heredoc_fd != -1 && i == 0)
+			{
+				dup2(exec_data.heredoc_fd, STDIN_FILENO);
+				close (exec_data.heredoc_fd);
+			}
 			execute_child_process(tokens, &exec_data, next_command);
+		}
         else if (pid < 0)
         {
             perror("fork failed");
@@ -112,11 +119,12 @@ void execute_piped_commands(char **commands, t_shell *shell)
         i++;
     }
     while (wait(NULL) > 0);
+	unlink("/tmp/minishell_heredoc");
 }
 
 void execute_child_process(char **tokens, t_exec *exec_data, int has_cmd)
 {
-    if (exec_data->heredoc_fd != -1)
+    if (exec_data->heredoc_fd != -1 && exec_data->input_fd == 0)
     {
         dup2(exec_data->heredoc_fd, STDIN_FILENO);
         close(exec_data->heredoc_fd);
