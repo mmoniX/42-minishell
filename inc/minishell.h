@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/29 13:44:44 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/29 14:50:59 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,11 @@ typedef struct s_shell
 	int		exit_code;
 	char	*old_pwd;
 	char	**env;
-}			t_shell;
-
-typedef struct s_exec
-{
 	int		input_fd;
 	int		fd[2];
 	int		heredoc_fd;
 	int		is_piped;
-	t_shell	*shell;
-}			t_exec;
+}			t_shell;
 
 /* builtin_1 */
 int		ft_echo(char **args);
@@ -114,7 +109,7 @@ void	execute_redirection(char **tokens, t_shell *shell);
 /* pipes */
 void	execute_piped_commands(char **commands, t_shell *shell);
 char	**split_pipes(char *input);
-void	execute_child_process(char **tokens, t_exec *exec_data, int has_cmd);
-void	execute_parent_process(t_exec *exec_data, int has_cmd);
+void	execute_child_process(char **tokens, t_shell *shell, int has_cmd);
+void	execute_parent_process(t_shell *shell, int has_cmd);
 
 #endif

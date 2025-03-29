@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/25 16:42:06 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/29 14:49:58 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	init_shell(t_shell *shell, char **env)
 	shell->env = env;
 	shell->exit_code = 0;
 	shell->old_pwd = NULL;
+	shell->heredoc_fd = -1;
+	shell->input_fd = 0;
 }
 
 int	main(int ac, char **av, char **env)
