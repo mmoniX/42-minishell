@@ -6,7 +6,7 @@
 /*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/29 13:47:13 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/03/29 14:23:11 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,31 @@
 char	**split_pipes(char *input)
 {
 	char	**commands;
-	char	*token;
 	int		i;
+	int		start;
+	int		end;
 
 	i = 0;
+	start = 0;
+	end = 0;
 	commands = malloc(sizeof(char *) * 1024);
 	if (!commands)
 		return (perror("malloc failed"), NULL);
-	token = strtok(input, "|");
-	while (token)
+	while (input[end])
 	{
-		while (*token == ' ')
-			token++;
-		commands[i] = strdup(token);
-		if (!commands[i])
-			return (perror("strdup failed"), free(commands), NULL);
-		i++;
-		token = strtok(NULL, "|");
+		if (input[end] == '|')
+		{
+			commands[i++] = ft_strndup(&input[start], end - start);
+			start = end + 1;
+		}
+		end++;
 	}
+	commands[i++] = ft_strndup(&input[start], end - start);
 	commands[i] = NULL;
 	return (commands);
 }
+
+
 
 void execute_piped_commands(char **commands, t_shell *shell)
 {
