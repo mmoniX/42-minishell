@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/26 16:41:00 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/29 13:48:34 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	output_redirection(char **tokens, int *i, int append)
 	return (SUCCESS);
 }
 
-int	handle_heredoc(char *delimiter)
+int	handle_heredoc(char *delimiter, int is_piped)
 {
 	char	*line;
 	int		fd;
@@ -60,7 +60,7 @@ int	handle_heredoc(char *delimiter)
 		return (perror("minishell: heredoc file creation failed"), -1);
 	while (1)
 	{
-		line = readline("heredoc> ");
+		line = readline("> ");
 		if (!line || ft_strcmp(line, delimiter) == 0)
 			break ;
 		write(fd, line, ft_strlen(line));
@@ -72,9 +72,16 @@ int	handle_heredoc(char *delimiter)
 	fd = open("/tmp/minishell_heredoc", O_RDONLY);
 	if (fd < 0)
 		return (perror("minishell: heredoc read failed"), -1);
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	return (0);
+	if(!is_piped)
+	{
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+		return (0);
+	}
+	else
+	{
+		return (fd);
+	}
 }
 
 void execute_redirection(char **tokens, t_shell *shell)
@@ -96,7 +103,7 @@ void execute_redirection(char **tokens, t_shell *shell)
                 free(cmd);
                 exit(1);
             }
-            if (handle_heredoc(tokens[i + 1]) < 0)
+            if (handle_heredoc(tokens[i + 1], 0) < 0)
             {
                 fprintf(stderr, "minishell: heredoc failed\n");
                 free(cmd);
@@ -107,7 +114,7 @@ void execute_redirection(char **tokens, t_shell *shell)
         else
             tokens[j++] = tokens[i++];
     }
-    tokens[j] = NULL; // Update tokens after removing heredoc parts
+    tokens[j] = NULL;
     if (handle_redirections(tokens) < 0)
     {
         fprintf(stderr, "Redirection failed!\n");

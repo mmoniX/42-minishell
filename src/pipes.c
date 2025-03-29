@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/26 16:59:38 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/29 13:47:13 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void execute_piped_commands(char **commands, t_shell *shell)
 	exec_data.input_fd = 0;
 	exec_data.heredoc_fd = -1;
 	exec_data.shell = shell;
+	exec_data.is_piped = (commands[1] != NULL);
 	i = 0;
     while (commands[i])
     {
@@ -65,7 +66,7 @@ void execute_piped_commands(char **commands, t_shell *shell)
         {
             if (strcmp(tokens[j], "<<") == 0 && tokens[j + 1])
             {
-                handle_heredoc(tokens[j + 1]);
+                handle_heredoc(tokens[j + 1], exec_data.is_piped);
                 exec_data.heredoc_fd = open("/tmp/minishell_heredoc", O_RDONLY);
                 if (exec_data.heredoc_fd == -1)
                 {

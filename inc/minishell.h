@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/26 13:50:15 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/03/29 13:44:44 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_exec
 	int		input_fd;
 	int		fd[2];
 	int		heredoc_fd;
+	int		is_piped;
 	t_shell	*shell;
 }			t_exec;
 
@@ -106,7 +107,7 @@ int		ft_execvp(char *cmd, char **args, char **env);
 /* redirection */
 int		input_redirection(char **tokens, int *i);
 int		output_redirection(char **tokens, int *i, int append);
-int		handle_heredoc(char *delimiter);
+int		handle_heredoc(char *delimiter, int is_piped);
 int		handle_redirections(char **tokens);
 void	execute_redirection(char **tokens, t_shell *shell);
 
