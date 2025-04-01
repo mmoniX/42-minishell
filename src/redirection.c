@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/01 11:51:29 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/01 19:45:41 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,63 +78,6 @@ int	handle_heredoc(char *delimiter, int is_piped)
 		return (fd);
 }
 
-void execute_redirection(char **tokens, t_shell *shell)
-{
-    int i = 0, j = 0;
-    char **cmd = calloc(1024, sizeof(char *));
-    if (!cmd)
-    {
-        perror("malloc failed");
-        exit(1);
-    }
-    while (tokens[i])
-    {
-        if (strcmp(tokens[i], "<<") == 0) // Handle heredoc
-        {
-            if (!tokens[i + 1])
-            {
-                fprintf(stderr, "minishell: syntax error: missing delimiter for heredoc\n");
-                free(cmd);
-                exit(1);
-            }
-            if (handle_heredoc(tokens[i + 1], 0) < 0)
-            {
-                fprintf(stderr, "minishell: heredoc failed\n");
-                free(cmd);
-                return;
-            }
-            i += 2; // Skip `<<` and its delimiter
-        }
-        else
-            tokens[j++] = tokens[i++];
-    }
-    tokens[j] = NULL;
-    if (handle_redirections(tokens) < 0)
-    {
-        fprintf(stderr, "Redirection failed!\n");
-        free(cmd);
-        return;
-    }
-    i = 0;
-    int cmd_index = 0;
-    while (tokens[i])
-        cmd[cmd_index++] = strdup(tokens[i++]);
-    cmd[cmd_index] = NULL;
-
-    if (is_builtin(cmd[0]))
-        execute_builtin(cmd, shell);
-    else
-    {
-        ft_execvp(cmd[0], cmd, shell->env);
-        perror("execvp failed");
-    }
-
-    for (int j = 0; j < cmd_index; j++)
-        free(cmd[j]);
-    free(cmd);
-    exit(1);
-}
-
 int handle_redirections(char **tokens)
 {
     int i;
@@ -144,16 +87,22 @@ int handle_redirections(char **tokens)
 	j = 0;
     while (tokens[i])
     {
-        if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
+		if (ft_strcmp(tokens[i], "<<") == 0)
         {
-            if (output_redirection(tokens, &i, ft_strcmp(tokens[i], ">>") == 0))
-                return -1;
+			if (handle_heredoc(tokens[i + 1], 0))
+				return (FAIL);
+			i += 2;
+		}
+        else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
+        {
+			if (output_redirection(tokens, &i, ft_strcmp(tokens[i], ">>") == 0))
+				return(FAIL);
 			i++;
         }
         else if (ft_strcmp(tokens[i], "<") == 0)
         {
-            if (input_redirection(tokens, &i))
-                return -1;
+			if (input_redirection(tokens, &i))
+				return (FAIL);
 			i++;
         }
         else
@@ -162,3 +111,64 @@ int handle_redirections(char **tokens)
 	tokens[j] = NULL;
     return (SUCCESS);
 }
+
+void execute_redirection(char **tokens, t_shell *shell)
+{
+    int		i;
+	int		j;
+	int		cmd_index;
+	char	**cmd;
+
+	i = 0;
+    cmd = ft_calloc(1024, sizeof(char *));
+    if (!cmd)
+        return (perror("execute_redirection: malloc failed"));
+    if (handle_redirections(tokens) < 0)
+        return (ft_putstr_fd("Redirection failed!\n", STDERR_FILENO), free(cmd));
+    i = 0;
+    cmd_index = 0;
+    while (tokens[i])
+        cmd[cmd_index++] = ft_strdup(tokens[i++]);
+    cmd[cmd_index] = NULL;
+    if (is_builtin(cmd[0]))
+        execute_builtin(cmd, shell);
+    else
+    {
+        ft_execvp(cmd[0], cmd, shell->env);
+		shell->exit_code = 127;
+        return (perror("execvp failed"));
+    }
+	j = -1;
+    while (++j < cmd_index)
+        free(cmd[j]);
+    free(cmd);
+	exit (1);
+}
+
+// int handle_redirections(char **tokens)
+// {
+//     int i;
+// 	int	j;
+	
+// 	i = 0;
+// 	j = 0;
+//     while (tokens[i])
+//     {
+//         if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
+//         {
+//             if (output_redirection(tokens, &i, ft_strcmp(tokens[i], ">>") == 0))
+//                 return -1;
+// 			i++;
+//         }
+//         else if (ft_strcmp(tokens[i], "<") == 0)
+//         {
+//             if (input_redirection(tokens, &i))
+//                 return -1;
+// 			i++;
+//         }
+//         else
+//             tokens[j++] = tokens[i++];
+//     }
+// 	tokens[j] = NULL;
+//     return (SUCCESS);
+// }

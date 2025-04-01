@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/01 12:01:07 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/01 19:44:43 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,14 @@ char	**split_pipes(char *input)
 void	execute_piped_commands(char **commands, t_shell *shell)
 {
     int		i;
-    int		j;
-    int		k;
+	int		j;
+	int		k;
     pid_t	pid;
 	char	**tokens;
 	int		next_command;
 
 	i = 0;
+	shell->is_piped = (commands[1] != NULL);
     while (commands[i])
     {
         tokens = tokenize_input(commands[i]);
@@ -80,18 +81,12 @@ void	execute_piped_commands(char **commands, t_shell *shell)
             }
 			j++;
         }
-		if(commands[i + 1])
-			next_command = 1;
-		else
-			next_command = 0;
-        if (next_command)
+		next_command = (commands[i + 1] != NULL);
+        if (next_command && pipe(shell->fd) == -1)
         {
-            if (pipe(shell->fd) == -1)
-			{
-                perror("pipe failed");
-                ft_free_tab(tokens);
-                return;
-            }
+            perror("pipe failed");
+            ft_free_tab(tokens);
+            return;
         }
         pid = fork();
         if (pid == 0)
@@ -115,7 +110,6 @@ void	execute_piped_commands(char **commands, t_shell *shell)
         i++;
     }
     while (wait(NULL) > 0);
-	unlink("/tmp/minishell_heredoc");
 }
 
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd)
