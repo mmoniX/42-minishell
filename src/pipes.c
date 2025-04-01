@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/29 15:06:06 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/01 12:01:07 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**split_pipes(char *input)
 	end = 0;
 	commands = malloc(sizeof(char *) * 1024);
 	if (!commands)
-		return (perror("malloc failed"), NULL);
+		return (perror("malloc failed"), free(commands), NULL);
 	while (input[end])
 	{
 		if (input[end] == '|')
@@ -156,4 +156,6 @@ void	execute_parent_process(t_shell *shell, int has_cmd)
 		close(shell->fd[1]);
 		shell->input_fd = shell->fd[0];
 	}
+	else
+		shell->input_fd = 0;
 }

@@ -29,9 +29,9 @@ MiniShell ToDo list:
 - [x] Implement output redirection (>).
 - [x] Implement heredoc (<<) to read input until a delimiter.
 - [x] Implement append redirection (>>).
-- [ ] Implement ft_echo for redirection.
+- [x] Implement ft_echo for redirection.
 - [x] avoid execvep
-- [ ] heredoc and pip
+- [x] heredoc and pip
 
 6️⃣ Pipes (|)
 - [x] Implement basic pipes (ls | wc -l).

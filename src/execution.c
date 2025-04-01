@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/29 16:06:15 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/04/01 11:44:22 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,57 +32,12 @@ char	*handle_quotes(const char *input, int *index, char quote_type)
 	return (quoted_str);
 }
 
-// char	**tokenize_input(char *input)
-// {
-// 	char	**tokens;
-// 	char	*quoted_str;
-// 	int		start;
-// 	int		i;
-// 	int		j;
-
-// 	tokens = malloc(sizeof(char *) * MAX_TOKENS);
-// 	if (!tokens)
-// 		return (perror("malloc failed for tokens"), NULL);
-// 	i = 0;
-// 	j = 0;
-// 	while (input[i] && j < MAX_TOKENS - 1)
-// 	{
-// 		while (input[i] == ' ' || input[i] == '\t')
-// 			i++;
-// 		if (!input[i])
-// 			break ;
-// 		if (input[i] == '|')
-// 		{
-// 			tokens[j++] = ft_strdup("|");
-// 			i++;
-// 		}
-// 		else if (input[i] == '"' || input[i] == '\'')
-// 		{
-// 			quoted_str = handle_quotes(input, &i, input[i]);
-// 			if (!quoted_str)
-// 				return (free(tokens), NULL);
-// 			tokens[j++] = quoted_str;
-// 		}
-// 		else
-// 		{
-// 			start = i;
-// 			while (input[i] && input[i] != ' '
-// 				&& input[i] != '|' && input[i] != '"' && input[i] != '\'')
-// 				i++;
-// 			tokens[j] = ft_strndup (&input[start], i - start);
-// 			j++;
-// 		}
-// 	}
-// 	tokens[j] = NULL;
-// 	return (tokens);
-// }
-
 char	*get_next_token(char *input, int *i)
 {
 	int		start;
 	char	*token;
 
-	while (input[*i] == ' ' || input[*i] == '\t') // Skip spaces
+	while (input[*i] == ' ' || input[*i] == '\t')
 		(*i)++;
 	if (!input[*i])
 		return (NULL);
@@ -94,7 +49,7 @@ char	*get_next_token(char *input, int *i)
 	else if (input[*i] == '"' || input[*i] == '\'')
 		return (handle_quotes(input, i, input[*i]));
 	start = *i;
-	while (input[*i] && input[*i] != ' ' && input[*i] != '|' 
+	while (input[*i] && input[*i] != ' ' && input[*i] != '|'
 		&& input[*i] != '"' && input[*i] != '\'')
 		(*i)++;
 	token = ft_strndup(&input[start], *i - start);
@@ -104,23 +59,24 @@ char	*get_next_token(char *input, int *i)
 char	**tokenize_input(char *input)
 {
 	char	**tokens;
-	int		i = 0;
-	int		j = 0;
+	int		i;
+	int		j;
 
 	tokens = malloc(sizeof(char *) * MAX_TOKENS);
 	if (!tokens)
-		return (perror("malloc failed for tokens"), NULL);
+		return (perror("malloc failed for tokens"), free(tokens), NULL);
+	i = 0;
+	j = 0;
 	while (input[i] && j < MAX_TOKENS - 1)
 	{
 		tokens[j] = get_next_token(input, &i);
 		if (!tokens[j])
-			break;
+			break ;
 		j++;
 	}
 	tokens[j] = NULL;
 	return (tokens);
 }
-
 
 void	execute_command(char **tokens, t_shell *shell)
 {

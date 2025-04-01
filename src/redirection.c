@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/29 15:11:21 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/01 11:51:29 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	output_redirection(char **tokens, int *i, int append)
 	else
 		fd = open(tokens[*i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
-		return (perror("Output redirection failed"), FAIL);
+		return (perror("Output redirection failed"), close(fd), FAIL);
 	if (dup2(fd, STDOUT_FILENO) < 0)
 		return (perror("Output redirection: dup2 failed"), close(fd), FAIL);
 	close(fd);
@@ -57,7 +57,7 @@ int	handle_heredoc(char *delimiter, int is_piped)
 
 	fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		return (perror("Heredoc file creation failed"), FAIL);
+		return (perror("Heredoc file creation failed"), close(fd), FAIL);
 	while (1)
 	{
 		line = readline("> ");
@@ -71,7 +71,7 @@ int	handle_heredoc(char *delimiter, int is_piped)
 	close(fd);
 	fd = open("/tmp/minishell_heredoc", O_RDONLY);
 	if (fd < 0)
-		return (perror("Heredoc read failed"), FAIL);
+		return (perror("Heredoc read failed"), close(fd), FAIL);
 	if (!is_piped)
 		return (dup2(fd, STDIN_FILENO), close(fd), SUCCESS);
 	else
