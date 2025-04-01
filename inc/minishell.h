@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/01 19:45:17 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/01 20:00:48 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ char	*handle_quotes(const char *input, int *index, char quote_type);
 char	*get_next_token(char *input, int *i);
 char	**tokenize_input(char *input);
 void	execute_command(char **tokens, t_shell *shell);
+void	run_command_in_child(char **tokens, t_shell *shell);
 void	process_input(t_shell *shell, char *input);
 
 /* signal */
