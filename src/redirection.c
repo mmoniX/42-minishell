@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/02 13:11:53 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 14:32:32 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,61 +133,3 @@ int	handle_redirections(char **tokens, t_shell *shell)
 	tokens[j] = NULL;
 	return (SUCCESS);
 }
-
-// void execute_redirection(char **tokens, t_shell *shell)
-// {
-//     int		i;
-// 	int		j;
-// 	int		cmd_index;
-// 	char	**cmd;
-// 	i = 0;
-//     cmd = ft_calloc(1024, sizeof(char *));
-//     if (!cmd)
-//         return (perror("execute_redirection: malloc failed"));
-//     if (handle_redirections(tokens) < 0)
-//         return (ft_putstr_fd("Redirection failed!\n", STDERR_FILENO), free(cmd));
-//     i = 0;
-//     cmd_index = 0;
-//     while (tokens[i])
-//         cmd[cmd_index++] = ft_strdup(tokens[i++]);
-//     cmd[cmd_index] = NULL;
-//     if (is_builtin(cmd[0]))
-//         execute_builtin(cmd, shell);
-//     else
-//     {
-//         ft_execvp(cmd[0], cmd, shell->env);
-// 		shell->exit_code = 127;
-//         return (perror("execvp failed"));
-//     }
-// 	j = -1;
-//     while (++j < cmd_index)
-//         free(cmd[j]);
-//     free(cmd);
-// 	exit (1);
-// }
-// int handle_redirections(char **tokens)
-// {
-//     int i;
-// 	int	j;
-// 	i = 0;
-// 	j = 0;
-//     while (tokens[i])
-//     {
-//         if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
-//         {
-//             if (output_redirection(tokens, &i, ft_strcmp(tokens[i], ">>") == 0))
-//                 return (FAIL);
-// 			i++;
-//         }
-//         else if (ft_strcmp(tokens[i], "<") == 0)
-//         {
-//             if (input_redirection(tokens, &i))
-//                 return (FAIL);
-// 			i++;
-//         }
-//         else
-//             tokens[j++] = tokens[i++];
-//     }
-// 	tokens[j] = NULL;
-//     return (SUCCESS);
-// }

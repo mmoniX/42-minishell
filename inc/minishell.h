@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/02 13:51:36 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 15:36:48 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ int		ft_exit(t_shell *minishell, char *args);
 /* builtin_utils */
 int		is_valid_var(char *var);
 int		is_builtin(char *args);
-int		execute_builtin(char **tokens, t_shell *minishell);
+int		execute_custom_builtin(char **tokens, t_shell *minishell);
+void	execute_builtins(char **tokens, t_shell *shell);
 
 /* env_define */
 char	*get_env(char *key, char **env);
@@ -81,8 +82,7 @@ char	*expand_variables(char *inputtt, t_shell *shell);
 char	*handle_quotes(const char *input, int *index, char quote_type);
 char	*get_next_token(char *input, int *i);
 char	**tokenize_input(char *input);
-void	execute_command(char **tokens, t_shell *shell);
-void	run_command_in_child(char **tokens, t_shell *shell);
+void	execute_single_commands(char **tokens, t_shell *shell);
 void	process_input(t_shell *shell, char *input);
 
 /* signal */
@@ -107,12 +107,12 @@ int		output_redirec(char **tokens, int *i, int append);
 int		handle_heredoc(char *delimiter, int is_piped);
 int		handle_heredoc_redirection(char **tokens, t_shell *shell);
 int		handle_redirections(char **tokens, t_shell *shell);
-// void	execute_redirection(char **tokens, t_shell *shell);
 
 /* pipes */
 void	execute_piped_commands(char **commands, t_shell *shell);
 char	**split_pipes(char *input);
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd);
 void	execute_parent_process(t_shell *shell, int has_cmd);
+// void	handle_pipe_process(char **tokens, t_shell *shell, int next_command);
 
 #endif
