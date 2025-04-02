@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/02 17:21:26 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:47:42 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	**split_pipes(char *input)
 	i = 0;
 	start = 0;
 	end = 0;
-	commands = malloc(sizeof(char *) * 1024); //dynaic
+	commands = malloc(sizeof(char *) * 1024);
 	if (!commands)
 		return (perror("malloc failed"), free(commands), NULL);
 	while (input[end])
@@ -41,31 +41,31 @@ char	**split_pipes(char *input)
 
 void	execute_piped_commands(char **commands, t_shell *shell)
 {
-    int		i;
+	int		i;
 	char	**tokens;
 	int		next_command;
 
-	i = 0;
+	i = -1;
 	shell->is_piped = (commands[1] != NULL);
-    while (commands[i])
-    {
-        tokens = tokenize_input(commands[i]);
-        if (!tokens || !tokens[0])
-        {
-            ft_free_tab(tokens);
-            i++;
-            continue;
-        }
+	while (commands[++i])
+	{
+		tokens = tokenize_input(commands[i]);
+		if (!tokens || !tokens[0])
+		{
+			ft_free_tab(tokens);
+			i++;
+			continue ;
+		}
 		if (handle_heredoc_redirection(tokens, shell) < 0)
 			return (perror("open failed for heredoc"), ft_free_tab(tokens));
 		next_command = (commands[i + 1] != NULL);
-        if (next_command && pipe(shell->fd) == -1)
-            return (perror("pipe failed"), ft_free_tab(tokens));
+		if (next_command && pipe(shell->fd) == -1)
+			return (perror("pipe failed"), ft_free_tab(tokens));
 		handle_pipe_process(tokens, shell, next_command);
-        ft_free_tab(tokens);
-        i++;
-    }
-    while (wait(NULL) > 0);
+		ft_free_tab(tokens);
+	}
+	while (wait(NULL) > 0)
+		;
 }
 
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd)
@@ -86,7 +86,7 @@ void	execute_child_process(char **tokens, t_shell *shell, int has_cmd)
 		close(shell->fd[0]);
 		close(shell->fd[1]);
 	}
-	if (handle_redirections(tokens) < 0)
+	if (handle_redirections(tokens, shell) < 0)
 	{
 		shell->exit_code = 1;
 		return (perror("Redirection failed"));
@@ -106,6 +106,7 @@ void	execute_parent_process(t_shell *shell, int has_cmd)
 	}
 	else
 		shell->input_fd = 0;
+	shell->is_piped = 0;
 }
 
 void	handle_pipe_process(char **tokens, t_shell *shell, int next_command)

@@ -6,31 +6,11 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/02 17:16:41 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:48:21 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-char	*handle_quotes(const char *input, int *index, char quote_type)
-{
-	int		start;
-	int		end;
-	char	*quoted_str;
-
-	start = *index + 1;
-	end = start;
-	while (input[end] && input[end] != quote_type)
-		end++;
-	if (input[end] != quote_type)
-	{
-		ft_putstr_fd("Error: Unclosed quote\n", STDERR_FILENO);
-		return (NULL);
-	}
-	quoted_str = ft_strndup(&input[start], end - start);
-	*index = end + 1;
-	return (quoted_str);
-}
 
 char	*get_next_token(char *input, int *i)
 {
@@ -56,15 +36,19 @@ char	*get_next_token(char *input, int *i)
 	return (token);
 }
 
-static int count_tokens(char *input)
+int	count_tokens(char *input)
 {
-	int count = 0, i = 0;
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
 	while (input[i])
 	{
 		if (get_next_token(input, &i))
 			count++;
 	}
-	return count;
+	return (count);
 }
 
 char	**tokenize_input(char *input)
@@ -101,7 +85,7 @@ void	execute_single_commands(char **tokens, t_shell *shell)
 	original_stdout = dup(STDOUT_FILENO);
 	if (!tokens || !tokens[0])
 		return (perror("No command to execute.\n"));
-	if (handle_redirections(tokens) < 0)
+	if (handle_redirections(tokens, shell) < 0)
 		return (perror("Redirection failed!\n"));
 	pid = fork();
 	if (pid == 0)

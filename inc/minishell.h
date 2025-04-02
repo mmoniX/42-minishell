@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/02 17:22:05 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:46:20 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ char	*ms_strjoin(char *s1, char *s2);
 char	*expand_variables(char *inputtt, t_shell *shell);
 
 /* execution */
-char	*handle_quotes(const char *input, int *index, char quote_type);
 char	*get_next_token(char *input, int *i);
+int		count_tokens(char *input);
 char	**tokenize_input(char *input);
 void	execute_single_commands(char **tokens, t_shell *shell);
 void	process_input(t_shell *shell, char *input);
@@ -100,14 +100,14 @@ void	ft_free_tab(char **tab);
 char	*ft_strndup(const char *src, size_t n);
 char	*get_path(char *cmd, char **env);
 int		ft_execvp(char *cmd, char **args, char **env);
+char	*handle_quotes(const char *input, int *index, char quote_type);
 
 /* redirection */
 int		input_redirection(char **tokens, int *i);
 int		output_redirec(char **tokens, int *i, int append);
 int		handle_heredoc(char *delimiter, int is_piped);
 int		handle_heredoc_redirection(char **tokens, t_shell *shell);
-// int		handle_redirections(char **tokens, t_shell *shell);
-int		handle_redirections(char **tokens);
+int		handle_redirections(char **tokens, t_shell *shell);
 
 /* pipes */
 void	execute_piped_commands(char **commands, t_shell *shell);

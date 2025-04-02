@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/02 17:16:00 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:41:12 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,23 +105,17 @@ int	handle_heredoc_redirection(char **tokens, t_shell *shell)
 	return (SUCCESS);
 }
 
-int	handle_redirections(char **tokens)
+int	handle_redirections(char **tokens, t_shell *shell)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	// handle_heredoc_redirection(tokens, shell);
+	handle_heredoc_redirection(tokens, shell);
 	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i], "<<") == 0)
-        {
-			if (handle_heredoc(tokens[i + 1], 0))
-				return (FAIL);
-			i += 2;
-		}
-		else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
+		if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
 		{
 			if (output_redirec(tokens, &i, ft_strcmp(tokens[i], ">>") == 0) < 0)
 				return (FAIL);

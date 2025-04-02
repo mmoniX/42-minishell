@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:54:41 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/29 15:17:06 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:46:03 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,24 @@ int	ft_execvp(char *cmd, char **args, char **env)
 	}
 	free(full_path);
 	return (SUCCESS);
+}
+
+char	*handle_quotes(const char *input, int *index, char quote_type)
+{
+	int		start;
+	int		end;
+	char	*quoted_str;
+
+	start = *index + 1;
+	end = start;
+	while (input[end] && input[end] != quote_type)
+		end++;
+	if (input[end] != quote_type)
+	{
+		ft_putstr_fd("Error: Unclosed quote\n", STDERR_FILENO);
+		return (NULL);
+	}
+	quoted_str = ft_strndup(&input[start], end - start);
+	*index = end + 1;
+	return (quoted_str);
 }
