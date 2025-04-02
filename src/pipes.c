@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/02 15:36:41 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:21:26 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	**split_pipes(char *input)
 	i = 0;
 	start = 0;
 	end = 0;
-	commands = malloc(sizeof(char *) * 1024);
+	commands = malloc(sizeof(char *) * 1024); //dynaic
 	if (!commands)
 		return (perror("malloc failed"), free(commands), NULL);
 	while (input[end])
@@ -41,7 +41,6 @@ char	**split_pipes(char *input)
 
 void	execute_piped_commands(char **commands, t_shell *shell)
 {
-	pid_t	pid;
     int		i;
 	char	**tokens;
 	int		next_command;
@@ -62,48 +61,12 @@ void	execute_piped_commands(char **commands, t_shell *shell)
 		next_command = (commands[i + 1] != NULL);
         if (next_command && pipe(shell->fd) == -1)
             return (perror("pipe failed"), ft_free_tab(tokens));
-		pid = fork();
-		if (pid == 0)
-		{
-			// if (shell->heredoc_fd != -1 && i == 0)
-			// {
-			// 	dup2(shell->heredoc_fd, STDIN_FILENO);
-			// 	close (shell->heredoc_fd);
-			// }
-			execute_child_process(tokens, shell, next_command);
-			exit (0);
-		}
-		else if (pid < 0)
-		{
-			perror("fork failed");
-			shell->exit_code = 1;
-		}
-		else
-			execute_parent_process(shell, next_command);
+		handle_pipe_process(tokens, shell, next_command);
         ft_free_tab(tokens);
         i++;
     }
     while (wait(NULL) > 0);
 }
-
-// void	handle_pipe_process(char **tokens, t_shell *shell, int next_command)
-// {
-// 	pid_t	pid;
-
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		execute_child_process(tokens, shell, next_command);
-// 		exit (0);
-// 	}
-// 	else if (pid < 0)
-// 	{
-// 		perror("fork failed");
-// 		shell->exit_code = 1;
-// 	}
-// 	else
-// 		execute_parent_process(shell, next_command);
-// }
 
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd)
 {
@@ -123,7 +86,7 @@ void	execute_child_process(char **tokens, t_shell *shell, int has_cmd)
 		close(shell->fd[0]);
 		close(shell->fd[1]);
 	}
-	if (handle_redirections(tokens, shell) < 0)
+	if (handle_redirections(tokens) < 0)
 	{
 		shell->exit_code = 1;
 		return (perror("Redirection failed"));
@@ -145,31 +108,21 @@ void	execute_parent_process(t_shell *shell, int has_cmd)
 		shell->input_fd = 0;
 }
 
-// void	execute_child_process(char **tokens, t_shell *shell, int has_cmd)
-// {
-// 	if (shell->heredoc_fd != -1 && shell->input_fd == 0)
-// 	{
-// 		dup2(shell->heredoc_fd, STDIN_FILENO);
-// 		close(shell->heredoc_fd);
-// 	}
-// 	else if (shell->input_fd != 0)
-// 	{
-// 		dup2(shell->input_fd, STDIN_FILENO);
-// 		close(shell->input_fd);
-// 	}
-// 	if (has_cmd)
-// 	{
-// 		dup2(shell->fd[1], STDOUT_FILENO);
-// 		close(shell->fd[0]);
-// 		close(shell->fd[1]);
-// 	}
-// 	execute_redirection(tokens, shell);
-// 	if (is_builtin(tokens[0]))
-// 		execute_builtin(tokens, shell);
-// 	else
-// 	{
-// 		ft_execvp(tokens[0], tokens, shell->env);
-// 		perror("execvp failed");
-// 		shell->exit_code = 127;
-// 	}
-// }
+void	handle_pipe_process(char **tokens, t_shell *shell, int next_command)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		execute_child_process(tokens, shell, next_command);
+		exit (0);
+	}
+	else if (pid < 0)
+	{
+		perror("fork failed");
+		shell->exit_code = 1;
+	}
+	else
+		execute_parent_process(shell, next_command);
+}

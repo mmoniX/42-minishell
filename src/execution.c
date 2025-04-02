@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/02 14:34:55 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:16:41 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,26 @@ char	*get_next_token(char *input, int *i)
 	return (token);
 }
 
+static int count_tokens(char *input)
+{
+	int count = 0, i = 0;
+	while (input[i])
+	{
+		if (get_next_token(input, &i))
+			count++;
+	}
+	return count;
+}
+
 char	**tokenize_input(char *input)
 {
 	char	**tokens;
 	int		i;
 	int		j;
+	int		token_count;
 
-	tokens = malloc(sizeof(char *) * MAX_TOKENS);
+	token_count = count_tokens(input);
+	tokens = malloc(sizeof(char *) * (token_count + 1));
 	if (!tokens)
 		return (perror("malloc failed for tokens"), free(tokens), NULL);
 	i = 0;
@@ -88,7 +101,7 @@ void	execute_single_commands(char **tokens, t_shell *shell)
 	original_stdout = dup(STDOUT_FILENO);
 	if (!tokens || !tokens[0])
 		return (perror("No command to execute.\n"));
-	if (handle_redirections(tokens, shell) < 0)
+	if (handle_redirections(tokens) < 0)
 		return (perror("Redirection failed!\n"));
 	pid = fork();
 	if (pid == 0)

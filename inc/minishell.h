@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/02 15:36:48 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:22:05 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,14 @@ int		input_redirection(char **tokens, int *i);
 int		output_redirec(char **tokens, int *i, int append);
 int		handle_heredoc(char *delimiter, int is_piped);
 int		handle_heredoc_redirection(char **tokens, t_shell *shell);
-int		handle_redirections(char **tokens, t_shell *shell);
+// int		handle_redirections(char **tokens, t_shell *shell);
+int		handle_redirections(char **tokens);
 
 /* pipes */
 void	execute_piped_commands(char **commands, t_shell *shell);
 char	**split_pipes(char *input);
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd);
 void	execute_parent_process(t_shell *shell, int has_cmd);
-// void	handle_pipe_process(char **tokens, t_shell *shell, int next_command);
+void	handle_pipe_process(char **tokens, t_shell *shell, int next_command);
 
 #endif
