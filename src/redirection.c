@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/01 19:45:41 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 13:11:53 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	input_redirection(char **tokens, int *i)
 	return (SUCCESS);
 }
 
-int	output_redirection(char **tokens, int *i, int append)
+int	output_redirec(char **tokens, int *i, int append)
 {
 	int	fd;
 
@@ -42,7 +42,7 @@ int	output_redirection(char **tokens, int *i, int append)
 	else
 		fd = open(tokens[*i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
-		return (perror("Output redirection failed"), close(fd), FAIL);
+		return (perror("Output redirection failed"), FAIL);
 	if (dup2(fd, STDOUT_FILENO) < 0)
 		return (perror("Output redirection: dup2 failed"), close(fd), FAIL);
 	close(fd);
@@ -57,7 +57,7 @@ int	handle_heredoc(char *delimiter, int is_piped)
 
 	fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		return (perror("Heredoc file creation failed"), close(fd), FAIL);
+		return (perror("Heredoc file creation failed"), FAIL);
 	while (1)
 	{
 		line = readline("> ");
@@ -71,85 +71,104 @@ int	handle_heredoc(char *delimiter, int is_piped)
 	close(fd);
 	fd = open("/tmp/minishell_heredoc", O_RDONLY);
 	if (fd < 0)
-		return (perror("Heredoc read failed"), close(fd), FAIL);
+		return (perror("Heredoc read failed"), FAIL);
 	if (!is_piped)
 		return (dup2(fd, STDIN_FILENO), close(fd), SUCCESS);
 	else
 		return (fd);
 }
 
-int handle_redirections(char **tokens)
+int	handle_heredoc_redirection(char **tokens, t_shell *shell)
 {
-    int i;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (tokens[i])
+	{
+		if (ft_strcmp(tokens[i], "<<") == 0 && tokens[i + 1])
+		{
+			shell->heredoc_fd = handle_heredoc(tokens[i + 1], shell->is_piped);
+			if (shell->heredoc_fd == -1)
+				return (FAIL);
+			j = i;
+			while (tokens[j + 2])
+			{
+				tokens[j] = tokens[j + 2];
+				j++;
+			}
+			tokens[j] = NULL;
+		}
+		else
+			i++;
+	}
+	return (SUCCESS);
+}
+
+int	handle_redirections(char **tokens, t_shell *shell)
+{
+	int	i;
 	int	j;
-	
+
 	i = 0;
 	j = 0;
-    while (tokens[i])
-    {
-		if (ft_strcmp(tokens[i], "<<") == 0)
-        {
-			if (handle_heredoc(tokens[i + 1], 0))
+	handle_heredoc_redirection(tokens, shell);
+	while (tokens[i])
+	{
+		if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
+		{
+			if (output_redirec(tokens, &i, ft_strcmp(tokens[i], ">>") == 0) < 0)
 				return (FAIL);
-			i += 2;
+			i++;
 		}
-        else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
-        {
-			if (output_redirection(tokens, &i, ft_strcmp(tokens[i], ">>") == 0))
-				return(FAIL);
-			i++;
-        }
-        else if (ft_strcmp(tokens[i], "<") == 0)
-        {
-			if (input_redirection(tokens, &i))
+		else if (ft_strcmp(tokens[i], "<") == 0)
+		{
+			if (input_redirection(tokens, &i) < 0)
 				return (FAIL);
 			i++;
-        }
-        else
-            tokens[j++] = tokens[i++];
-    }
+		}
+		else
+			tokens[j++] = tokens[i++];
+	}
 	tokens[j] = NULL;
-    return (SUCCESS);
+	return (SUCCESS);
 }
 
-void execute_redirection(char **tokens, t_shell *shell)
-{
-    int		i;
-	int		j;
-	int		cmd_index;
-	char	**cmd;
-
-	i = 0;
-    cmd = ft_calloc(1024, sizeof(char *));
-    if (!cmd)
-        return (perror("execute_redirection: malloc failed"));
-    if (handle_redirections(tokens) < 0)
-        return (ft_putstr_fd("Redirection failed!\n", STDERR_FILENO), free(cmd));
-    i = 0;
-    cmd_index = 0;
-    while (tokens[i])
-        cmd[cmd_index++] = ft_strdup(tokens[i++]);
-    cmd[cmd_index] = NULL;
-    if (is_builtin(cmd[0]))
-        execute_builtin(cmd, shell);
-    else
-    {
-        ft_execvp(cmd[0], cmd, shell->env);
-		shell->exit_code = 127;
-        return (perror("execvp failed"));
-    }
-	j = -1;
-    while (++j < cmd_index)
-        free(cmd[j]);
-    free(cmd);
-	exit (1);
-}
-
+// void execute_redirection(char **tokens, t_shell *shell)
+// {
+//     int		i;
+// 	int		j;
+// 	int		cmd_index;
+// 	char	**cmd;
+// 	i = 0;
+//     cmd = ft_calloc(1024, sizeof(char *));
+//     if (!cmd)
+//         return (perror("execute_redirection: malloc failed"));
+//     if (handle_redirections(tokens) < 0)
+//         return (ft_putstr_fd("Redirection failed!\n", STDERR_FILENO), free(cmd));
+//     i = 0;
+//     cmd_index = 0;
+//     while (tokens[i])
+//         cmd[cmd_index++] = ft_strdup(tokens[i++]);
+//     cmd[cmd_index] = NULL;
+//     if (is_builtin(cmd[0]))
+//         execute_builtin(cmd, shell);
+//     else
+//     {
+//         ft_execvp(cmd[0], cmd, shell->env);
+// 		shell->exit_code = 127;
+//         return (perror("execvp failed"));
+//     }
+// 	j = -1;
+//     while (++j < cmd_index)
+//         free(cmd[j]);
+//     free(cmd);
+// 	exit (1);
+// }
 // int handle_redirections(char **tokens)
 // {
 //     int i;
 // 	int	j;
-	
 // 	i = 0;
 // 	j = 0;
 //     while (tokens[i])
@@ -157,13 +176,13 @@ void execute_redirection(char **tokens, t_shell *shell)
 //         if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
 //         {
 //             if (output_redirection(tokens, &i, ft_strcmp(tokens[i], ">>") == 0))
-//                 return -1;
+//                 return (FAIL);
 // 			i++;
 //         }
 //         else if (ft_strcmp(tokens[i], "<") == 0)
 //         {
 //             if (input_redirection(tokens, &i))
-//                 return -1;
+//                 return (FAIL);
 // 			i++;
 //         }
 //         else

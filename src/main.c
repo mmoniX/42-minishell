@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/29 14:49:58 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 12:18:17 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	init_shell(t_shell *shell, char **env)
 	shell->old_pwd = NULL;
 	shell->heredoc_fd = -1;
 	shell->input_fd = 0;
+	shell->is_piped = 0;
 }
 
 int	main(int ac, char **av, char **env)

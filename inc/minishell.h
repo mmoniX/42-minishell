@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/01 19:45:17 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 13:12:13 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,11 @@ int		ft_execvp(char *cmd, char **args, char **env);
 
 /* redirection */
 int		input_redirection(char **tokens, int *i);
-int		output_redirection(char **tokens, int *i, int append);
+int		output_redirec(char **tokens, int *i, int append);
 int		handle_heredoc(char *delimiter, int is_piped);
-int		handle_redirections(char **tokens);
-void	execute_redirection(char **tokens, t_shell *shell);
+int		handle_heredoc_redirection(char **tokens, t_shell *shell);
+int		handle_redirections(char **tokens, t_shell *shell);
+// void	execute_redirection(char **tokens, t_shell *shell);
 
 /* pipes */
 void	execute_piped_commands(char **commands, t_shell *shell);

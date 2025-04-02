@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:29:57 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/24 15:00:18 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 13:49:46 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	is_builtin(char *args)
 	return (0);
 }
 
-int	execute_builtin(char **tokens, t_shell *minishell)
+int	execute_custom_builtin(char **tokens, t_shell *minishell)
 {
 	if (!ft_strcmp(tokens[0], "echo"))
 		return (ft_echo(tokens));
@@ -69,3 +69,16 @@ int	execute_builtin(char **tokens, t_shell *minishell)
 		return (ft_exit(minishell, *tokens));
 	return (1);
 }
+
+// void	single_command(char **tokens, t_shell *shell)
+// {
+// 	if (is_builtin(tokens[0]))
+// 		execute_custom_builtin(tokens, shell);
+// 	else
+// 	{
+// 		ft_execvp(tokens[0], tokens, shell->env);
+// 		perror("execvp failed");
+// 		shell->exit_code = 127;
+// 	}
+// 	exit(shell->exit_code);
+// }

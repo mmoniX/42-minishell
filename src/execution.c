@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/01 19:45:11 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 13:50:06 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,42 +78,79 @@ char	**tokenize_input(char *input)
 	return (tokens);
 }
 
-void	execute_command(char **tokens, t_shell *shell)
+// void	execute_command(char **tokens, t_shell *shell)
+// {
+// 	pid_t	pid;
+// 	int		original_stdin;
+// 	int		original_stdout;	
+// 	original_stdin = dup(STDIN_FILENO);
+// 	original_stdout = dup(STDOUT_FILENO);
+// 	if (!tokens || !tokens[0])
+// 		return (perror("No command to execute.\n"));
+// 	if (handle_redirections(tokens) < 0)
+//         return (perror("Redirection failed!\n"));
+// 	if (is_builtin(tokens[0]))
+// 		execute_builtin(tokens, shell);
+// 	else
+// 	{
+// 		pid = fork();
+// 		if (pid == 0)
+// 		{
+// 			execute_redirection(tokens, shell);
+// 			ft_execvp(tokens[0], tokens, shell->env);
+// 			shell->exit_code = 127;
+// 			return (perror("execvp failed"));
+// 		}
+// 		else if (pid < 0)
+// 		{
+// 			shell->exit_code = 1;
+// 			return (perror("fork failed"));
+// 		}
+// 		waitpid(pid, &shell->exit_code, 0);
+// 		shell->exit_code = WEXITSTATUS(shell->exit_code);
+// 	}
+// 	dup2(original_stdin, STDIN_FILENO);
+// 	dup2(original_stdout, STDOUT_FILENO);
+// 	close(original_stdin);
+// 	close(original_stdout);
+// }
+
+void execute_command(char **tokens, t_shell *shell)
 {
-	pid_t	pid;
-	int		original_stdin;
-	int		original_stdout;
-	
+    pid_t	pid;
+    int		original_stdin;
+    int		original_stdout;
+
 	original_stdin = dup(STDIN_FILENO);
-	original_stdout = dup(STDOUT_FILENO);
-	if (!tokens || !tokens[0])
-		return (perror("No command to execute.\n"));
-	if (handle_redirections(tokens) < 0)
+    original_stdout = dup(STDOUT_FILENO);
+    if (!tokens || !tokens[0])
+        return (perror("No command to execute.\n"));
+    if (handle_redirections(tokens, shell) < 0)
         return (perror("Redirection failed!\n"));
-	if (is_builtin(tokens[0]))
-		execute_builtin(tokens, shell);
-	else
-	{
-		pid = fork();
-		if (pid == 0)
-		{
-			execute_redirection(tokens, shell);
-			ft_execvp(tokens[0], tokens, shell->env);
-			shell->exit_code = 127;
-			return (perror("execvp failed"));
-		}
-		else if (pid < 0)
-		{
-			shell->exit_code = 1;
-			return (perror("fork failed"));
-		}
-		waitpid(pid, &shell->exit_code, 0);
-		shell->exit_code = WEXITSTATUS(shell->exit_code);
-	}
-	dup2(original_stdin, STDIN_FILENO);
-	dup2(original_stdout, STDOUT_FILENO);
-	close(original_stdin);
-	close(original_stdout);
+    pid = fork();
+    if (pid == 0)
+    {
+        if (is_builtin(tokens[0]))
+            execute_builtin(tokens, shell);
+        else
+        {
+            ft_execvp(tokens[0], tokens, shell->env);
+			perror("execvp failed");
+            shell->exit_code = 127;
+        }
+        exit(shell->exit_code);
+    }
+    else if (pid < 0)
+    {
+        shell->exit_code = 1;
+        return (perror("fork failed"));
+    }
+    waitpid(pid, &shell->exit_code, 0);
+    shell->exit_code = WEXITSTATUS(shell->exit_code);
+    dup2(original_stdin, STDIN_FILENO);
+    dup2(original_stdout, STDOUT_FILENO);
+    close(original_stdin);
+    close(original_stdout);
 }
 
 void	process_input(t_shell *shell, char *input)
