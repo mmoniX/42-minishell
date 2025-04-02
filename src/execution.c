@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/02 13:50:06 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 13:55:23 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,52 @@ char	**tokenize_input(char *input)
 	}
 	tokens[j] = NULL;
 	return (tokens);
+}
+
+void run_command_in_child(char **tokens, t_shell *shell)
+{
+    pid_t pid;
+
+    pid = fork();
+    if (pid == 0)
+    {
+        execute_redirection(tokens, shell);
+        ft_execvp(tokens[0], tokens, shell->env);
+        shell->exit_code = 127;
+        perror("execvp failed");
+        exit(shell->exit_code);
+    }
+    else if (pid < 0)
+    {
+        shell->exit_code = 1;
+        perror("fork failed");
+        return;
+    }
+    waitpid(pid, &shell->exit_code, 0);
+    shell->exit_code = WEXITSTATUS(shell->exit_code);
+}
+
+void run_command_in_child(char **tokens, t_shell *shell)
+{
+    pid_t pid;
+
+    pid = fork();
+    if (pid == 0)
+    {
+        execute_redirection(tokens, shell);
+        ft_execvp(tokens[0], tokens, shell->env);
+        shell->exit_code = 127;
+        perror("execvp failed");
+        exit(shell->exit_code);
+    }
+    else if (pid < 0)
+    {
+        shell->exit_code = 1;
+        perror("fork failed");
+        return;
+    }
+    waitpid(pid, &shell->exit_code, 0);
+    shell->exit_code = WEXITSTATUS(shell->exit_code);
 }
 
 // void	execute_command(char **tokens, t_shell *shell)
