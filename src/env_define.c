@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/03/23 15:53:47 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/02 19:02:02 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ char	*ms_strjoin(char *s1, char *s2)
 	ft_strcpy(str, s1);
 	ft_strcat(str, s2);
 	free(s1);
+	free(s2);
 	return (str);
 }
 
@@ -105,6 +106,7 @@ char	*expand_variables(char *input, t_shell *shell)
 		{
 			temp = get_value(input, &i, shell);
 			result = ms_strjoin(result, temp);
+			free(temp);
 		}
 		else
 		{
@@ -113,5 +115,5 @@ char	*expand_variables(char *input, t_shell *shell)
 			i++;
 		}
 	}
-	return (free (temp), result);
+	return (result);
 }
