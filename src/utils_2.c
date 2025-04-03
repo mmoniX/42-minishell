@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:54:41 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/02 17:46:03 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 17:23:51 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ char	*ft_strndup(const char *src, size_t n)
 	size_t	i;
 	char	*dup;
 
-	dup = (char *)malloc(n + 1);
+	if (!src)
+		return (NULL);
+	dup = (char *)malloc((n + 1) * sizeof(char));
 	if (!dup)
 		return (NULL);
 	i = 0;
-	while (i < n && src[i])
+	while (src[i] && i < n)
 	{
 		dup[i] = src[i];
 		i++;
@@ -97,6 +99,22 @@ char	*handle_quotes(const char *input, int *index, char quote_type)
 		return (NULL);
 	}
 	quoted_str = ft_strndup(&input[start], end - start);
+	if (!quoted_str)
+		return (NULL);
 	*index = end + 1;
 	return (quoted_str);
+}
+
+int count_pipes(const char *input)
+{
+    int count = 0;
+    int i = 0;
+
+    while (input[i])
+    {
+        if (input[i] == '|')
+            count++;
+        i++;
+    }
+    return count;
 }

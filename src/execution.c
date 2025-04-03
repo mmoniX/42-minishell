@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/03 15:48:52 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 16:53:29 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,16 @@ char	*get_next_token(char *input, int *i)
 	while (input[*i] && input[*i] != ' ' && input[*i] != '|'
 		&& input[*i] != '"' && input[*i] != '\'')
 		(*i)++;
-	token = ft_strndup(&input[start], *i - start);
+	token = ft_substr(input, start, *i - start);
+	// token = ft_strndup(&input[start], *i - start);
+	if (!token)
+		return (NULL);
 	return (token);
 }
 
 int	count_tokens(char *input)
 {
-	char	*token;
+	char	*token1;
 	int		count;
 	int		i;
 
@@ -49,11 +52,11 @@ int	count_tokens(char *input)
 	count = 0;
 	while (input[i])
 	{
-		token = get_next_token(input, &i);
-		if (token)
+		token1 = get_next_token(input, &i);
+		if (token1)
 		{
 			count++;
-			free (token);
+			free (token1);
 		}
 	}
 	return (count);
@@ -77,9 +80,7 @@ char	**tokenize_input(char *input)
 		tokens[j] = get_next_token(input, &i);
 		if (!tokens[j])
 		{
-			while (j > 0)
-				free(tokens[--j]);
-			free(tokens);
+			ft_free_tab(tokens);
 			return (NULL);
         }
 		j++;
@@ -118,7 +119,7 @@ void	execute_single_commands(char **tokens, t_shell *shell)
 
 void	process_input(t_shell *shell, char *input)
 {
-	char	**tokens;
+	char	**tokens1;
 	char	**commands;
 	char	*final_input;
 
@@ -136,11 +137,12 @@ void	process_input(t_shell *shell, char *input)
 	}
 	else
 	{
-		tokens = tokenize_input(final_input);
-		if (tokens && tokens[0])
+		tokens1 = tokenize_input(final_input);
+		if (tokens1)
 		{
-			execute_single_commands(tokens, shell);
-			ft_free_tab(tokens);
+			if (tokens1[0])
+				execute_single_commands(tokens1, shell);
+			ft_free_tab(tokens1);
 		}
 	}
 	free(final_input);

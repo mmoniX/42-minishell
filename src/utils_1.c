@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:14:30 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 15:55:45 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 15:57:18 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ void	ft_free_tab(char **tab)
 	if (!tab)
 		return ;
 	while (tab[i])
-		free(tab[i++]);
+	{
+		free(tab[i]);
+		i++;
+	}
 	free(tab);
 }

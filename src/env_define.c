@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/02 19:02:02 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 16:39:29 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,12 @@ char	*ms_strjoin(char *s1, char *s2)
 	char	*str;
 	size_t	len;
 
-	if (!s1)
-		return (ft_strdup(s2));
-	if (!s2)
-		return (s1);
+	// if (!s1)
+	// 	return (ft_strdup(s2));
+	// if (!s2)
+	// 	return (s1);
+	if (!s1 || !s2)
+		return (NULL);
 	len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	str = malloc (len * sizeof(char));
 	if (!str)

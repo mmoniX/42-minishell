@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/03 15:50:15 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 17:19:54 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,9 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		input = readline("\033[33mminishell$ \033[0m");
-		if (!input || ft_strncmp(input, "exit", 4) == 0)
+		if (!input || ft_strcmp(input, "exit") == 0)
 		{
-			shell.exit_code = ft_exit(&shell, input);
-			free(input);
+			ft_exit(&shell, input);
 			break ;
 		}
 		if (*input)

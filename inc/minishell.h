@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/02 17:46:20 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 17:24:09 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ void	update_env(t_shell *minishell, char *var);
 int		ft_export(t_shell *minishell, char **custom_env);
 void	update_directory(t_shell *minishell);
 int		ft_cd(t_shell *minishell, char **args);
-int		ft_exit(t_shell *minishell, char *args);
+void	ft_exit(t_shell *minishell, char *args);
+// int		ft_exit(t_shell *minishell, char *args);
 
 /* builtin_utils */
 int		is_valid_var(char *var);
@@ -101,6 +102,7 @@ char	*ft_strndup(const char *src, size_t n);
 char	*get_path(char *cmd, char **env);
 int		ft_execvp(char *cmd, char **args, char **env);
 char	*handle_quotes(const char *input, int *index, char quote_type);
+int		count_pipes(const char *input);
 
 /* redirection */
 int		input_redirection(char **tokens, int *i);

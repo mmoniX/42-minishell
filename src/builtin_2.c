@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:55:35 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/25 13:32:53 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 17:14:29 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,18 @@ int	ft_cd(t_shell *minishell, char **args)
 	return (SUCCESS);
 }
 
-int	ft_exit(t_shell *minishell, char *args)
+// int	ft_exit(t_shell *minishell, char *args)
+// {
+// 	printf("exit\n");
+// 	free(args);
+// 	if (minishell->old_pwd)
+// 		free(minishell->old_pwd);
+// 	if (minishell->denv)
+// 		ft_free_dlist(minishell->denv);
+// 	return (minishell->exit_code);
+// }
+
+void	ft_exit(t_shell *minishell, char *args)
 {
 	printf("exit\n");
 	free(args);
@@ -123,5 +134,6 @@ int	ft_exit(t_shell *minishell, char *args)
 		free(minishell->old_pwd);
 	if (minishell->denv)
 		ft_free_dlist(minishell->denv);
-	return (minishell->exit_code);
+	exit(minishell->exit_code);
+	// return (minishell->exit_code);
 }
