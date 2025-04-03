@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_define.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/03 16:39:29 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 23:17:07 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ char	*expand_variables(char *input, t_shell *shell)
 		{
 			temp = get_value(input, &i, shell);
 			result = ms_strjoin(result, temp);
-			free(temp);
+			// free(temp);
 		}
 		else
 		{

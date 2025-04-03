@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/03 16:53:29 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 23:12:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,46 @@ char	*get_next_token(char *input, int *i)
 	return (token);
 }
 
-int	count_tokens(char *input)
-{
-	char	*token1;
-	int		count;
-	int		i;
+// int	count_tokens(char *input)
+// {
+// 	char	*token1;
+// 	int		count;
+// 	int		i;
 
-	i = 0;
-	count = 0;
-	while (input[i])
-	{
-		token1 = get_next_token(input, &i);
-		if (token1)
-		{
-			count++;
-			free (token1);
-		}
-	}
-	return (count);
+// 	i = 0;
+// 	count = 0;
+// 	while (input[i])
+// 	{
+// 		token1 = get_next_token(input, &i);
+// 		if (token1)
+// 		{
+// 			count++;
+// 			free (token1);
+// 		}
+// 	}
+// 	return (count);
+// }
+
+int count_tokens(char *input)
+{
+    char    *token1;
+    int     count;
+    int     i;
+
+    i = 0;
+    count = 0;
+    while (input[i])
+    {
+        token1 = get_next_token(input, &i);
+        if (token1)
+        {
+            count++;
+            free(token1); // ✅ Fix the leak
+        }
+    }
+    return (count);
 }
+
 
 char	**tokenize_input(char *input)
 {

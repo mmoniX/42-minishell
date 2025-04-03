@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/03 17:24:09 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 23:00:27 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,7 @@ char	**split_pipes(char *input);
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd);
 void	execute_parent_process(t_shell *shell, int has_cmd);
 void	handle_pipe_process(char **tokens, t_shell *shell, int next_command);
+void free_tab(char **tab, int count);
+
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/03 17:23:44 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/03 23:10:42 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,66 +51,102 @@ char **split_pipes(char *input)
     int i = 0, start = 0, end = 0, token_count;
 
     token_count = count_pipes(input); // Count `|` to determine needed size
-    commands = malloc(sizeof(char *) * (token_count + 1));
+    commands = malloc(sizeof(char *) * (token_count + 2)); // FIXED: +2 for NULL
     if (!commands)
-        return (perror("malloc failed"), free(commands), NULL);
+        return (perror("malloc failed"), NULL);
+
     while (input[end])
     {
         if (input[end] == '|')
         {
             commands[i] = ft_strndup(&input[start], end - start);
             if (!commands[i]) // Free previously allocated commands if error
-            {
-                while (i > 0)
-                    free(commands[--i]);
-                free(commands);
-                return (NULL);
-            }
+                return (free_tab(commands, i), NULL);
             i++;
             start = end + 1;
         }
         end++;
     }
     commands[i] = ft_strndup(&input[start], end - start);
-    if (!commands[i]) // Free previously allocated commands if error
-    {
-        while (i > 0)
-            free(commands[--i]);
-        free(commands);
-        return (NULL);
-    }
-    commands[++i] = NULL;
+    if (!commands[i])
+        return (free_tab(commands, i), NULL);
+
+    commands[i + 1] = NULL; // FIXED: Ensure NULL termination without overflow
     return (commands);
 }
 
-void	execute_piped_commands(char **commands, t_shell *shell)
+void free_tab(char **tab, int count)
 {
-	int		i;
-	char	**tokens;
-	int		next_command;
-
-	i = -1;
-	shell->is_piped = (commands[1] != NULL);
-	while (commands[++i])
-	{
-		tokens = tokenize_input(commands[i]);
-		if (!tokens || !tokens[0])
-		{
-			ft_free_tab(tokens);
-			i++;
-			continue ;
-		}
-		if (handle_heredoc_redirection(tokens, shell) < 0)
-			return (perror("open failed for heredoc"), ft_free_tab(tokens));
-		next_command = (commands[i + 1] != NULL);
-		if (next_command && pipe(shell->fd) == -1)
-			return (perror("pipe failed"), ft_free_tab(tokens));
-		handle_pipe_process(tokens, shell, next_command);
-		ft_free_tab(tokens);
-	}
-	while (wait(NULL) > 0)
-		;
+    while (count > 0)
+        free(tab[--count]);
+    free(tab);
 }
+
+
+// void	execute_piped_commands(char **commands, t_shell *shell)
+// {
+// 	int		i;
+// 	char	**tokens;
+// 	int		next_command;
+
+// 	i = -1;
+// 	shell->is_piped = (commands[1] != NULL);
+// 	while (commands[++i])
+// 	{
+// 		tokens = tokenize_input(commands[i]);
+// 		if (!tokens || !tokens[0])
+// 		{
+// 			ft_free_tab(tokens);
+// 			i++;
+// 			continue ;
+// 		}
+// 		if (handle_heredoc_redirection(tokens, shell) < 0)
+// 			return (perror("open failed for heredoc"), ft_free_tab(tokens));
+// 		next_command = (commands[i + 1] != NULL);
+// 		if (next_command && pipe(shell->fd) == -1)
+// 			return (perror("pipe failed"), ft_free_tab(tokens));
+// 		handle_pipe_process(tokens, shell, next_command);
+// 		ft_free_tab(tokens);
+// 	}
+// 	while (wait(NULL) > 0)
+// 		;
+// }
+
+void execute_piped_commands(char **commands, t_shell *shell)
+{
+    int     i;
+    char    **tokens;
+    int     next_command;
+
+    i = -1;
+    shell->is_piped = (commands[1] != NULL);
+    while (commands[++i])
+    {
+        tokens = tokenize_input(commands[i]);
+        if (!tokens || !tokens[0])
+        {
+            ft_free_tab(tokens);
+            i++;
+            continue ;
+        }
+        if (handle_heredoc_redirection(tokens, shell) < 0)
+        {
+            ft_free_tab(tokens);
+            return; // Ensure no leaks on error
+        }
+        next_command = (commands[i + 1] != NULL);
+        if (next_command && pipe(shell->fd) == -1)
+        {
+            perror("pipe failed");
+            ft_free_tab(tokens);
+            return;
+        }
+        handle_pipe_process(tokens, shell, next_command);
+        ft_free_tab(tokens); // Ensure tokens are freed after processing
+    }
+    while (wait(NULL) > 0);
+}
+
 
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd)
 {
