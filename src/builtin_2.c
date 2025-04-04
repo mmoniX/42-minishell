@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:55:35 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/04 17:39:53 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/04 18:59:02 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,17 +114,6 @@ int	ft_cd(t_shell *minishell, char **args)
 	update_directory(minishell);
 	return (SUCCESS);
 }
-
-// int	ft_exit(t_shell *minishell, char *args)
-// {
-// 	printf("exit\n");
-// 	free(args);
-// 	if (minishell->old_pwd)
-// 		free(minishell->old_pwd);
-// 	if (minishell->denv)
-// 		ft_free_dlist(minishell->denv);
-// 	return (minishell->exit_code);
-// }
 
 void	ft_exit(t_shell *minishell, char *args)
 {

@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/04 17:53:00 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/04 19:04:40 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**tokenize_input(char *input)
 		{
 			ft_free_tab(tokens);
 			return (NULL);
-        }
+		}
 		j++;
 	}
 	tokens[j] = NULL;
