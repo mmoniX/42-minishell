@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/02 17:41:12 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/04 18:48:26 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	input_redirection(char **tokens, int *i)
 	if (dup2(fd, STDIN_FILENO) < 0)
 		return (perror("Input redirection: dup2 failed"), close(fd), FAIL);
 	close(fd);
+	ft_free_token(&tokens[*i]);
+    ft_free_token(&tokens[*i + 1]);
 	*i += 1;
 	return (SUCCESS);
 }
@@ -46,6 +48,8 @@ int	output_redirec(char **tokens, int *i, int append)
 	if (dup2(fd, STDOUT_FILENO) < 0)
 		return (perror("Output redirection: dup2 failed"), close(fd), FAIL);
 	close(fd);
+	ft_free_token(&tokens[*i]);
+    ft_free_token(&tokens[*i + 1]);
 	*i += 1;
 	return (SUCCESS);
 }
@@ -91,6 +95,8 @@ int	handle_heredoc_redirection(char **tokens, t_shell *shell)
 			shell->heredoc_fd = handle_heredoc(tokens[i + 1], shell->is_piped);
 			if (shell->heredoc_fd == -1)
 				return (FAIL);
+			ft_free_token(&tokens[i]);
+			ft_free_token(&tokens[i + 1]);
 			j = i;
 			while (tokens[j + 2])
 			{

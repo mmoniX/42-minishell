@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_define.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/03 23:17:07 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/04 18:49:14 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,10 @@ char	*ms_strjoin(char *s1, char *s2)
 	char	*str;
 	size_t	len;
 
-	// if (!s1)
-	// 	return (ft_strdup(s2));
-	// if (!s2)
-	// 	return (s1);
-	if (!s1 || !s2)
-		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (s1);
 	len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	str = malloc (len * sizeof(char));
 	if (!str)
@@ -108,7 +106,7 @@ char	*expand_variables(char *input, t_shell *shell)
 		{
 			temp = get_value(input, &i, shell);
 			result = ms_strjoin(result, temp);
-			// free(temp);
+			free(temp);
 		}
 		else
 		{

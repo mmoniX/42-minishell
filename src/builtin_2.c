@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:55:35 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/03 17:14:29 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/04 17:39:53 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,5 +135,4 @@ void	ft_exit(t_shell *minishell, char *args)
 	if (minishell->denv)
 		ft_free_dlist(minishell->denv);
 	exit(minishell->exit_code);
-	// return (minishell->exit_code);
 }

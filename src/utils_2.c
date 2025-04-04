@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:54:41 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/03 23:11:45 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/04 16:05:33 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,61 +83,40 @@ int	ft_execvp(char *cmd, char **args, char **env)
 	return (SUCCESS);
 }
 
-// char	*handle_quotes(const char *input, int *index, char quote_type)
-// {
-// 	int		start;
-// 	int		end;
-// 	char	*quoted_str;
-
-// 	start = *index + 1;
-// 	end = start;
-// 	while (input[end] && input[end] != quote_type)
-// 		end++;
-// 	if (input[end] != quote_type)
-// 	{
-// 		ft_putstr_fd("Error: Unclosed quote\n", STDERR_FILENO);
-// 		return (NULL);
-// 	}
-// 	quoted_str = ft_strndup(&input[start], end - start);
-// 	if (!quoted_str)
-// 		return (NULL);
-// 	*index = end + 1;
-// 	return (quoted_str);
-// }
-
-char *handle_quotes(const char *input, int *index, char quote_type)
+char	*handle_quotes(const char *input, int *index, char quote_type)
 {
-    int     start;
-    int     end;
-    char    *quoted_str;
+	int		start;
+	int		end;
+	char	*quoted_str;
 
-    start = *index + 1;
-    end = start;
-    while (input[end] && input[end] != quote_type)
-        end++;
-    if (input[end] != quote_type)
-    {
-        ft_putstr_fd("Error: Unclosed quote\n", STDERR_FILENO);
-        return (NULL);
-    }
-    quoted_str = ft_strndup(&input[start], end - start);
-    if (!quoted_str)
-        return (NULL);
-    *index = end + 1;
-    return (quoted_str);
+	start = *index + 1;
+	end = start;
+	while (input[end] && input[end] != quote_type)
+		end++;
+	if (input[end] != quote_type)
+	{
+		ft_putstr_fd("Error: Unclosed quote\n", STDERR_FILENO);
+		return (NULL);
+	}
+	quoted_str = ft_strndup(&input[start], end - start);
+	if (!quoted_str)
+		return (NULL);
+	*index = end + 1;
+	return (quoted_str);
 }
 
-
-int count_pipes(const char *input)
+int	count_pipes(const char *input)
 {
-    int count = 0;
-    int i = 0;
+	int	count;
+	int	i;
 
-    while (input[i])
-    {
-        if (input[i] == '|')
-            count++;
-        i++;
-    }
-    return count;
+	count = 0;
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '|')
+			count++;
+		i++;
+	}
+	return (count);
 }

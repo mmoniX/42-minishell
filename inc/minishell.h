@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/03 23:00:27 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/04 18:52:27 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ extern int	g_signal;
 
 # define SUCCESS	0
 # define FAIL		1
-# define MAX_TOKENS 100
 
 typedef struct s_dlist
 {
@@ -89,6 +88,7 @@ void	process_input(t_shell *shell, char *input);
 /* signal */
 void	signal_for_termination(int sig);
 void	signal_handler(void);
+void	ft_free_token(char **token);
 
 /* utils_1 */
 void	ft_dlstadd_back(t_dlist **lst, t_dlist *new);
@@ -117,7 +117,5 @@ char	**split_pipes(char *input);
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd);
 void	execute_parent_process(t_shell *shell, int has_cmd);
 void	handle_pipe_process(char **tokens, t_shell *shell, int next_command);
-void free_tab(char **tab, int count);
-
 
 #endif

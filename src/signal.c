@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:08:10 by mmonika           #+#    #+#             */
-/*   Updated: 2025/03/23 11:49:44 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/04 18:52:55 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,40 @@ void	signal_handler(void)
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal) != 0)
 		return (perror("Terminal Error"));
 }
+
+void	ft_free_token(char **token) 
+{
+	if (*token)
+	{
+		free(*token);
+		*token = NULL;
+	}
+}
+
+// void	terminal_setup(void)
+// {
+// 	struct termios		terminal;
+
+// 	if (tcgetattr(STDIN_FILENO, &terminal) != 0)
+// 		return (perror("Terminal Error"));
+// 	terminal.c_cc[VQUIT] = _POSIX_VDISABLE;
+// 	terminal.c_lflag |= ECHOE | ICANON;
+// 	if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal) != 0)
+// 		return (perror("Terminal Error"));
+// }
+
+// void	signal_handler(void)
+// {
+// 	struct sigaction	sa;
+
+
+// 	sa.sa_handler = signal_for_termination;
+// 	sa.sa_flags = 0;
+// 	sigemptyset(&sa.sa_mask);
+// 	sigaction(SIGINT, &sa, NULL);
+// 	sigaction(SIGQUIT, &sa, NULL);
+	
+// }
 /*
 	SIGINIT == ctl_C
 	SIGQUIT == ctl_\
