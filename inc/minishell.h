@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/04 18:52:27 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/04 18:54:01 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ t_dlist	*ft_dlstnew(void *content);
 t_dlist	*convert_env_to_list(char **env);
 void	ft_free_dlist(t_dlist *env);
 void	ft_free_tab(char **tab);
+void ft_free_token(char **token);
 
 /* utils_2 */
 char	*ft_strndup(const char *src, size_t n);

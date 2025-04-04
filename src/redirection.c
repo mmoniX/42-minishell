@@ -6,15 +6,14 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/04 18:48:26 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/04 18:57:13 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	input_redirection(char **tokens, int *i)
-{
-	int	fd;
+int input_redirection(char **tokens, int *i) {
+    int fd;
 
 	if (!tokens[*i + 1])
 	{
@@ -33,9 +32,8 @@ int	input_redirection(char **tokens, int *i)
 	return (SUCCESS);
 }
 
-int	output_redirec(char **tokens, int *i, int append)
-{
-	int	fd;
+int output_redirec(char **tokens, int *i, int append) {
+    int fd;
 
 	if (!tokens[*i + 1])
 		return (ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO), FAIL);
@@ -54,32 +52,33 @@ int	output_redirec(char **tokens, int *i, int append)
 	return (SUCCESS);
 }
 
-int	handle_heredoc(char *delimiter, int is_piped)
-{
-	char	*line;
-	int		fd;
+int handle_heredoc(char *delimiter, int is_piped) {
+    char *line;
+    int fd;
 
-	fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-		return (perror("Heredoc file creation failed"), FAIL);
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
-			break ;
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-	}
-	free(line);
-	close(fd);
-	fd = open("/tmp/minishell_heredoc", O_RDONLY);
-	if (fd < 0)
-		return (perror("Heredoc read failed"), FAIL);
-	if (!is_piped)
-		return (dup2(fd, STDIN_FILENO), close(fd), SUCCESS);
-	else
-		return (fd);
+    fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0)
+        return (perror("Heredoc file creation failed"), FAIL);
+
+    while (1) {
+        line = readline("> ");
+        if (!line || ft_strcmp(line, delimiter) == 0)
+            break;
+        write(fd, line, ft_strlen(line));
+        write(fd, "\n", 1);
+        free(line);
+    }
+    free(line);
+    close(fd);
+
+    fd = open("/tmp/minishell_heredoc", O_RDONLY);
+    if (fd < 0)
+        return (perror("Heredoc read failed"), FAIL);
+
+    if (!is_piped)
+        return (dup2(fd, STDIN_FILENO), close(fd), SUCCESS);
+    else
+        return (fd);
 }
 
 int	handle_heredoc_redirection(char **tokens, t_shell *shell)
@@ -111,31 +110,27 @@ int	handle_heredoc_redirection(char **tokens, t_shell *shell)
 	return (SUCCESS);
 }
 
-int	handle_redirections(char **tokens, t_shell *shell)
-{
-	int	i;
-	int	j;
+int handle_redirections(char **tokens, t_shell *shell) {
+    int i = 0, j = 0;
 
-	i = 0;
-	j = 0;
-	handle_heredoc_redirection(tokens, shell);
-	while (tokens[i])
-	{
-		if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
-		{
-			if (output_redirec(tokens, &i, ft_strcmp(tokens[i], ">>") == 0) < 0)
-				return (FAIL);
-			i++;
-		}
-		else if (ft_strcmp(tokens[i], "<") == 0)
-		{
-			if (input_redirection(tokens, &i) < 0)
-				return (FAIL);
-			i++;
-		}
-		else
-			tokens[j++] = tokens[i++];
-	}
-	tokens[j] = NULL;
-	return (SUCCESS);
+    handle_heredoc_redirection(tokens, shell);
+
+    while (tokens[i]) {
+        if (tokens[i + 1] == NULL)
+            break;
+
+        if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0) {
+            if (output_redirec(tokens, &i, ft_strcmp(tokens[i], ">>") == 0) < 0)
+                return (FAIL);
+            i++;
+        } else if (ft_strcmp(tokens[i], "<") == 0) {
+            if (input_redirection(tokens, &i) < 0)
+                return (FAIL);
+            i++;
+        } else {
+            tokens[j++] = tokens[i++];
+        }
+    }
+    tokens[j] = NULL;
+    return (SUCCESS);
 }
