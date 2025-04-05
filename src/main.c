@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/05 13:36:24 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 16:44:20 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ int	main(int ac, char **av, char **env)
 			ft_exit(&shell, input);
 		if (*input)
 			add_history(input);
-		process_input(&shell, input);
+		if (check_input(&shell, input) == 0)
+			process_input(&shell, input);
 		free(input);
 	}
 	return (shell.exit_code);
