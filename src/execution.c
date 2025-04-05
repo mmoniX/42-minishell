@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/05 13:40:06 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 18:12:15 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,33 +41,7 @@ char	*get_next_token(char *input, int *i)
 	return (token);
 }
 
-// int	count_tokens(char *input)
-// {
-// 	char	*token;
-// 	int		count;
-// 	int		i;
-// 	int		j;
-
-// 	i = 0;
-// 	count = 0;
-// 	while (input[i])
-// 	{
-// 		j = i;
-// 		token = get_next_token(input, &i);
-// 		if (token)
-// 		{
-// 			count++;
-// 			free (token);
-// 		}
-// 		else if (i == j)
-// 			break ;
-// 		else if (!token)
-// 			return (FAIL);
-// 	}
-// 	return (count);
-// }
-
-char	**tokenize_input(char *input)
+char	**tokenize_input(char *input, t_shell *shell)
 {
 	char	**tokens;
 	int		i;
@@ -86,7 +60,10 @@ char	**tokenize_input(char *input)
 		j++;
 	}
 	tokens[j] = NULL;
-	return (tokens);
+	if (check_syntax_errors(tokens) == FAIL)
+		return (ft_free_tab(tokens), shell->exit_code = 258, NULL);
+	else
+		return (tokens);
 }
 
 void	execute_single_commands(char **tokens, t_shell *shell)
@@ -137,7 +114,7 @@ void	process_input(t_shell *shell, char *input)
 	}
 	else
 	{
-		tokens = tokenize_input(final_input);
+		tokens = tokenize_input(final_input, shell);
 		if (tokens && tokens[0])
 			execute_single_commands(tokens, shell);
 		ft_free_tab(tokens);

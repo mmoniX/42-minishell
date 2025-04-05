@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/05 13:38:47 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 18:16:07 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,12 @@ char	**split_pipes(char *input)
 	{
 		if (input[end] == '|')
 		{
-			commands[i] = ft_strndup(&input[start], end - start);
-			if (!commands[i])
-				return (ft_free_tab(commands), NULL);
-			i++;
+			commands[i++] = ft_strndup(&input[start], end - start);
 			start = end + 1;
 		}
 		end++;
 	}
 	commands[i] = ft_strndup(&input[start], end - start);
-	if (!commands[i])
-		return (ft_free_tab(commands), NULL);
 	commands[i + 1] = NULL;
 	return (commands);
 }
@@ -56,7 +51,7 @@ void	execute_piped_commands(char **commands, t_shell *shell)
 	shell->is_piped = (commands[1] != NULL);
 	while (commands[++i])
 	{
-		tokens = tokenize_input(commands[i]);
+		tokens = tokenize_input(commands[i], shell);
 		if (!tokens || !tokens[0])
 		{
 			ft_free_tab(tokens);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/05 12:45:51 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 18:11:33 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*expand_variables(char *inputtt, t_shell *shell);
 
 /* execution */
 char	*get_next_token(char *input, int *i);
-char	**tokenize_input(char *input);
+char	**tokenize_input(char *input, t_shell *shell);
 void	execute_single_commands(char **tokens, t_shell *shell);
 void	process_input(t_shell *shell, char *input);
 
@@ -116,5 +116,11 @@ char	**split_pipes(char *input);
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd);
 void	execute_parent_process(t_shell *shell, int has_cmd);
 void	handle_pipe_process(char **tokens, t_shell *shell, int next_command);
+
+/* check */
+int		check_syntax_errors(char **args);
+int		check_quote(char *input, int value_i);
+int		check_pipe(char *input, int i);
+int		check_input(t_shell *shell, char *input);
 
 #endif
