@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/04 19:26:09 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 12:45:51 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ extern int	g_signal;
 
 # define SUCCESS	0
 # define FAIL		1
+# define MAX_TOKEN	100
 
 typedef struct s_dlist
 {
@@ -63,7 +64,6 @@ int		ft_export(t_shell *minishell, char **custom_env);
 void	update_directory(t_shell *minishell);
 int		ft_cd(t_shell *minishell, char **args);
 void	ft_exit(t_shell *minishell, char *args);
-// int		ft_exit(t_shell *minishell, char *args);
 
 /* builtin_utils */
 int		is_valid_var(char *var);
@@ -80,7 +80,6 @@ char	*expand_variables(char *inputtt, t_shell *shell);
 
 /* execution */
 char	*get_next_token(char *input, int *i);
-int		count_tokens(char *input);
 char	**tokenize_input(char *input);
 void	execute_single_commands(char **tokens, t_shell *shell);
 void	process_input(t_shell *shell, char *input);

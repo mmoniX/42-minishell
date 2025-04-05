@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/04 19:04:40 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 13:40:06 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,47 +41,48 @@ char	*get_next_token(char *input, int *i)
 	return (token);
 }
 
-int	count_tokens(char *input)
-{
-	char	*token;
-	int		count;
-	int		i;
+// int	count_tokens(char *input)
+// {
+// 	char	*token;
+// 	int		count;
+// 	int		i;
+// 	int		j;
 
-	i = 0;
-	count = 0;
-	while (input[i])
-	{
-		token = get_next_token(input, &i);
-		if (token)
-		{
-			count++;
-			free (token);
-		}
-	}
-	return (count);
-}
+// 	i = 0;
+// 	count = 0;
+// 	while (input[i])
+// 	{
+// 		j = i;
+// 		token = get_next_token(input, &i);
+// 		if (token)
+// 		{
+// 			count++;
+// 			free (token);
+// 		}
+// 		else if (i == j)
+// 			break ;
+// 		else if (!token)
+// 			return (FAIL);
+// 	}
+// 	return (count);
+// }
 
 char	**tokenize_input(char *input)
 {
 	char	**tokens;
 	int		i;
 	int		j;
-	int		token_count;
 
-	token_count = count_tokens(input);
-	tokens = malloc(sizeof(char *) * (token_count + 1));
+	tokens = malloc(sizeof(char *) * MAX_TOKEN);
 	if (!tokens)
 		return (perror("malloc failed for tokens"), NULL);
 	i = 0;
 	j = 0;
-	while (input[i] && j < token_count)
+	while (input[i] && j < MAX_TOKEN - 1)
 	{
 		tokens[j] = get_next_token(input, &i);
 		if (!tokens[j])
-		{
-			ft_free_tab(tokens);
-			return (NULL);
-		}
+			break ;
 		j++;
 	}
 	tokens[j] = NULL;
@@ -137,12 +138,9 @@ void	process_input(t_shell *shell, char *input)
 	else
 	{
 		tokens = tokenize_input(final_input);
-		if (tokens)
-		{
-			if (tokens[0])
-				execute_single_commands(tokens, shell);
-			ft_free_tab(tokens);
-		}
+		if (tokens && tokens[0])
+			execute_single_commands(tokens, shell);
+		ft_free_tab(tokens);
 	}
 	free(final_input);
 }
