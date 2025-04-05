@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:29:57 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/04 17:31:59 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 21:07:39 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	execute_builtins(char **tokens, t_shell *shell)
 	else
 	{
 		ft_execvp(tokens[0], tokens, shell->env);
-		perror("execvp failed");
 		shell->exit_code = 127;
 	}
 	exit(shell->exit_code);

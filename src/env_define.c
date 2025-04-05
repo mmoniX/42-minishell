@@ -3,35 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   env_define.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/04 19:52:45 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/05 21:52:53 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*get_env(char *key, char **env)
+char	*get_denv(char *key, t_dlist *denv)
 {
-	int		i;
-	int		j;
-	char	*prefix;
+	t_dlist	*current;
+	int		len;
+	char	*env;
 
-	i = 0;
-	while (env[i])
+	current = denv;
+	len = ft_strlen(key);
+	while (current)
 	{
-		j = 0;
-		while (env[i][j] && env[i][j] != '=')
-			j++;
-		prefix = ft_substr(env[i], 0, j);
-		if (ft_strcmp(prefix, key) == 0)
-		{
-			free(prefix);
-			return (env[i] + j + 1);
-		}
-		free(prefix);
-		i++;
+		env = (char *)current->content;
+		if (ft_strncmp(env, key, len) == 0 && env[len] == '=')
+			return (env + len + 1);
+		current = current->next;
 	}
 	return (NULL);
 }
@@ -40,7 +34,7 @@ char	*env_str(char *key, t_shell *shell)
 {
 	char	*value;
 
-	value = get_env(key, shell->env);
+	value = get_denv(key, shell->denv);
 	if (value)
 		return (ft_strdup(value));
 	else

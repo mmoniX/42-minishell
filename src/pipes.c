@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/05 13:38:47 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 22:28:57 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,12 @@ char	**split_pipes(char *input)
 	{
 		if (input[end] == '|')
 		{
-			commands[i] = ft_strndup(&input[start], end - start);
-			if (!commands[i])
-				return (ft_free_tab(commands), NULL);
-			i++;
+			commands[i++] = ft_strndup(&input[start], end - start);
 			start = end + 1;
 		}
 		end++;
 	}
 	commands[i] = ft_strndup(&input[start], end - start);
-	if (!commands[i])
-		return (ft_free_tab(commands), NULL);
 	commands[i + 1] = NULL;
 	return (commands);
 }

@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/05 12:45:51 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 22:24:14 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <dirent.h>
 # include <signal.h>
 # include <termios.h>
 # include "../libft/libft.h"
@@ -72,7 +73,7 @@ int		execute_custom_builtin(char **tokens, t_shell *minishell);
 void	execute_builtins(char **tokens, t_shell *shell);
 
 /* env_define */
-char	*get_env(char *key, char **env);
+char	*get_denv(char *key, t_dlist *denv);
 char	*env_str(char *key, t_shell *shell);
 char	*get_value(char *input, int *i, t_shell *shell);
 char	*ms_strjoin(char *s1, char *s2);
@@ -88,6 +89,7 @@ void	process_input(t_shell *shell, char *input);
 void	signal_for_termination(int sig);
 void	signal_handler(void);
 void	ft_free_token(char **token);
+int		count_pipes(const char *input);
 
 /* utils_1 */
 void	ft_dlstadd_back(t_dlist **lst, t_dlist *new);
@@ -98,10 +100,10 @@ void	ft_free_tab(char **tab);
 
 /* utils_2 */
 char	*ft_strndup(const char *src, size_t n);
+char	*get_env(char *key, char **env);
 char	*get_path(char *cmd, char **env);
 int		ft_execvp(char *cmd, char **args, char **env);
 char	*handle_quotes(const char *input, int *index, char quote_type);
-int		count_pipes(const char *input);
 
 /* redirection */
 int		input_redirection(char **tokens, int *i);

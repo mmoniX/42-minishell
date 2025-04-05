@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:08:10 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/04 19:25:54 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 21:46:12 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,22 @@ void	ft_free_token(char **token)
 		free(*token);
 		*token = NULL;
 	}
+}
+
+int	count_pipes(const char *input)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '|')
+			count++;
+		i++;
+	}
+	return (count);
 }
 
 /*

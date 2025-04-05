@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/05 13:40:06 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 22:38:00 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,14 +101,14 @@ void	execute_single_commands(char **tokens, t_shell *shell)
 		return (perror("No command to execute.\n"));
 	if (handle_redirections(tokens, shell) < 0)
 		return (perror("Redirection failed!\n"));
+	if (is_builtin(*tokens))
+	{
+		execute_custom_builtin(tokens, shell);
+		return ;
+	}
 	pid = fork();
 	if (pid == 0)
 		execute_builtins(tokens, shell);
-	else if (pid < 0)
-	{
-		shell->exit_code = 1;
-		return (perror("fork failed"));
-	}
 	waitpid(pid, &shell->exit_code, 0);
 	shell->exit_code = WEXITSTATUS(shell->exit_code);
 	dup2(original_stdin, STDIN_FILENO);

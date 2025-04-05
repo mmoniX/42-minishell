@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:54:41 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/04 16:05:33 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/05 22:26:29 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,30 @@ char	*ft_strndup(const char *src, size_t n)
 	}
 	dup[i] = '\0';
 	return (dup);
+}
+
+char	*get_env(char *key, char **env)
+{
+	int		i;
+	int		j;
+	char	*prefix;
+
+	i = 0;
+	while (env[i])
+	{
+		j = 0;
+		while (env[i][j] && env[i][j] != '=')
+			j++;
+		prefix = ft_substr(env[i], 0, j);
+		if (ft_strcmp(prefix, key) == 0)
+		{
+			free(prefix);
+			return (env[i] + j + 1);
+		}
+		free(prefix);
+		i++;
+	}
+	return (NULL);
 }
 
 char	*get_path(char *cmd, char **env)
@@ -62,23 +86,27 @@ char	*get_path(char *cmd, char **env)
 int	ft_execvp(char *cmd, char **args, char **env)
 {
 	char	*full_path;
+	DIR		*directory;
 
-	if (ft_strchr(cmd, '/') && access(cmd, F_OK | X_OK) == 0)
+	directory = opendir(cmd);
+	if (directory != NULL)
+	{
+		closedir(directory);
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putstr_fd(": is a directory\n", STDERR_FILENO);
+		return (FAIL);
+	}
+	else if (ft_strchr(cmd, '/') && access(cmd, F_OK | X_OK) == 0)
 		return (execve(cmd, args, env));
 	full_path = get_path(cmd, env);
 	if (!full_path)
 	{
-		ft_putstr_fd("Command not found: ", STDERR_FILENO);
 		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
+		ft_putstr_fd(": Command not found\n", STDERR_FILENO);
 		return (FAIL);
 	}
 	if (execve(full_path, args, env) == -1)
-	{
-		perror("execve failed");
-		free(full_path);
-		return (FAIL);
-	}
+		return (perror("execve failed"), free(full_path), FAIL);
 	free(full_path);
 	return (SUCCESS);
 }
@@ -103,20 +131,4 @@ char	*handle_quotes(const char *input, int *index, char quote_type)
 		return (NULL);
 	*index = end + 1;
 	return (quoted_str);
-}
-
-int	count_pipes(const char *input)
-{
-	int	count;
-	int	i;
-
-	count = 0;
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] == '|')
-			count++;
-		i++;
-	}
-	return (count);
 }
