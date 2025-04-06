@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/05 22:41:12 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/06 16:11:57 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,14 @@ char	**tokenize_input(char *input, t_shell *shell)
 		return (tokens);
 }
 
+void	dup_close(int o_stdin, int o_stdout)
+{
+	dup2(o_stdin, STDIN_FILENO);
+	dup2(o_stdout, STDOUT_FILENO);
+	close(o_stdin);
+	close(o_stdout);
+}
+
 void	execute_single_commands(char **tokens, t_shell *shell)
 {
 	pid_t	pid;
@@ -81,6 +89,7 @@ void	execute_single_commands(char **tokens, t_shell *shell)
 	if (is_builtin(*tokens))
 	{
 		execute_custom_builtin(tokens, shell);
+		dup_close(original_stdin, original_stdout);
 		return ;
 	}
 	pid = fork();
@@ -88,10 +97,7 @@ void	execute_single_commands(char **tokens, t_shell *shell)
 		execute_builtins(tokens, shell);
 	waitpid(pid, &shell->exit_code, 0);
 	shell->exit_code = WEXITSTATUS(shell->exit_code);
-	dup2(original_stdin, STDIN_FILENO);
-	dup2(original_stdout, STDOUT_FILENO);
-	close(original_stdin);
-	close(original_stdout);
+	dup_close(original_stdin, original_stdout);
 }
 
 void	process_input(t_shell *shell, char *input)

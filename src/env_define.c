@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/06 13:52:40 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/06 15:27:20 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ char	*expand_variables(char *input, t_shell *shell)
 {
 	char	*result;
 	char	*temp;
+	char	*segment;
 	int		i;
 
 	i = 0;
@@ -95,18 +96,17 @@ char	*expand_variables(char *input, t_shell *shell)
 		return (NULL);
 	while (input[i])
 	{
-		if (input[i] == '$' && (ft_isalnum(input[i + 1])
-				|| input[i + 1] == '_' || input[i + 1] == '?'))
-		{
-			temp = get_value(input, &i, shell);
-			result = ms_strjoin(result, temp);
-		}
-		else
+		if (input[i] == '\'' || input[i] == '"')
 		{
 			temp = ft_substr(input, i, 1);
 			result = ms_strjoin(result, temp);
-			i++;
+			segment = expand_segment(input, &i, shell);
 		}
+		else if (input[i] == '$')
+			segment = get_value(input, &i, shell);
+		else
+			segment = ft_substr(input, i++, 1);
+		result = ms_strjoin(result, segment);
 	}
 	return (result);
 }
