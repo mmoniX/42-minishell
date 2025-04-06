@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:44:08 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/05 18:17:50 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/04/06 13:39:13 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,18 @@ int	check_quote(char *input, int value_i)
 			quote = 0;
 	}
 	return ((int)quote);
+}
+
+int	is_pipe(char c, char *quote)
+{
+	if (c == '\'' || c == '"')
+	{
+		if (*quote == 0)
+			*quote = c;
+		else if (*quote == c)
+			*quote = 0;
+	}
+	return (c == '|' && *quote == 0);
 }
 
 int	check_pipe(char *input, int i)

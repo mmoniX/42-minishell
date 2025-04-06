@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/05 22:40:50 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/06 13:39:40 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void	handle_pipe_process(char **tokens, t_shell *shell, int next_command);
 /* check */
 int		check_syntax_errors(char **args);
 int		check_quote(char *input, int value_i);
+int		is_pipe(char c, char *quote);
 int		check_pipe(char *input, int i);
 int		check_input(t_shell *shell, char *input);
 

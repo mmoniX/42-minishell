@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/05 22:41:24 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/06 13:38:57 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,26 @@ char	**split_pipes(char *input)
 	int		i;
 	int		start;
 	int		end;
-	int		pipe_count;
+	char	quote;
 
 	i = 0;
 	start = 0;
 	end = 0;
-	pipe_count = count_pipes(input);
-	commands = malloc(sizeof(char *) * (pipe_count + 2));
+	quote = 0;
+	commands = malloc(sizeof(char *) * (count_pipes(input) + 2));
 	if (!commands)
 		return (perror("pipe malloc failed"), NULL);
 	while (input[end])
 	{
-		if (input[end] == '|')
+		if (is_pipe(input[end], &quote))
 		{
 			commands[i++] = ft_strndup(&input[start], end - start);
 			start = end + 1;
 		}
 		end++;
 	}
-	commands[i] = ft_strndup(&input[start], end - start);
-	commands[i + 1] = NULL;
+	commands[i++] = ft_strndup(&input[start], ft_strlen(&input[start]));
+	commands[i] = NULL;
 	return (commands);
 }
 
