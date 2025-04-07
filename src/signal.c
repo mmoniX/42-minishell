@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:08:10 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/06 16:17:45 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/07 14:31:33 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,22 @@ void	signal_for_termination(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (g_signal == 2)
+		{
+			write(1, "\033[A", 3);
+			ioctl(0, TIOCSTI, "\n");
+		}
+		else
+		{
+			write(1, "\n", 1);
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
+		g_signal = 1;
 	}
+	else if (sig == SIGQUIT)
+		g_signal = 0;
 }
 
 void	signal_handler(void)

@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/06 16:18:00 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/07 13:37:08 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <sys/ioctl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <dirent.h>
@@ -30,6 +31,8 @@
 # define SUCCESS	0
 # define FAIL		1
 # define MAX_TOKEN	100
+
+extern int	g_signal;
 
 typedef struct s_dlist
 {
