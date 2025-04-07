@@ -14,12 +14,15 @@ NAME = minishell
 
 all: $(NAME)
 
+
+
 $(LIBFT):
+	@echo "\033[34m🔄 Loading....\033[0m"
 	@make --no-print-directory -C libft
 
 $(NAME): $(OBJ) $(LIBFT)
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT) -lreadline
-	@echo "\033[32mProgram is ready to execute\033[0m"
+	@echo "\033[32m🚀 Program is ready to execute\033[0m"
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir	-p	$(dir $@)

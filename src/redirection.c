@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/04 19:10:34 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/07 12:13:54 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int	input_redirection(char **tokens, int *i)
 	}
 	fd = open(tokens[*i + 1], O_RDONLY);
 	if (fd < 0)
-		return (perror("Input redirection failed"), FAIL);
+		return (ft_free_token(&tokens[*i]), FAIL);
 	if (dup2(fd, STDIN_FILENO) < 0)
-		return (perror("Input redirection: dup2 failed"), close(fd), FAIL);
+		return (close(fd), FAIL);
 	close(fd);
 	ft_free_token(&tokens[*i]);
 	ft_free_token(&tokens[*i + 1]);
