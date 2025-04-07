@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:54:41 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/05 22:26:29 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/07 15:52:17 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,31 +32,31 @@ char	*ft_strndup(const char *src, size_t n)
 	return (dup);
 }
 
-char	*get_env(char *key, char **env)
-{
-	int		i;
-	int		j;
-	char	*prefix;
+// char	*get_env(char *key, char **env)
+// {
+// 	int		i;
+// 	int		j;
+// 	char	*prefix;
 
-	i = 0;
-	while (env[i])
-	{
-		j = 0;
-		while (env[i][j] && env[i][j] != '=')
-			j++;
-		prefix = ft_substr(env[i], 0, j);
-		if (ft_strcmp(prefix, key) == 0)
-		{
-			free(prefix);
-			return (env[i] + j + 1);
-		}
-		free(prefix);
-		i++;
-	}
-	return (NULL);
-}
+// 	i = 0;
+// 	while (env[i])
+// 	{
+// 		j = 0;
+// 		while (env[i][j] && env[i][j] != '=')
+// 			j++;
+// 		prefix = ft_substr(env[i], 0, j);
+// 		if (ft_strcmp(prefix, key) == 0)
+// 		{
+// 			free(prefix);
+// 			return (env[i] + j + 1);
+// 		}
+// 		free(prefix);
+// 		i++;
+// 	}
+// 	return (NULL);
+// }
 
-char	*get_path(char *cmd, char **env)
+char	*get_path(char *cmd, t_dlist *denv)
 {
 	int		i;
 	char	**allpath;
@@ -65,7 +65,7 @@ char	*get_path(char *cmd, char **env)
 	i = -1;
 	if (access(cmd, F_OK | X_OK) == 0)
 		return (ft_strdup(cmd));
-	allpath = ft_split(get_env("PATH", env), ':');
+	allpath = ft_split(get_denv("PATH", denv), ':');
 	if (!allpath)
 		return (NULL);
 	while (allpath[++i])
@@ -83,32 +83,53 @@ char	*get_path(char *cmd, char **env)
 	return (ft_free_tab(allpath), NULL);
 }
 
-int	ft_execvp(char *cmd, char **args, char **env)
+void	check_directory(char *cmd, t_shell *shell)
 {
-	char	*full_path;
 	DIR		*directory;
 
 	directory = opendir(cmd);
+	if (!cmd)
+	{
+		shell->exit_code = 1;
+		return ;
+	}
 	if (directory != NULL)
 	{
 		closedir(directory);
 		ft_putstr_fd(cmd, STDERR_FILENO);
 		ft_putstr_fd(": is a directory\n", STDERR_FILENO);
-		return (FAIL);
+		shell->exit_code = 1;
+		return ;
+	}
+}
+
+int	ft_execvp(char *cmd, char **args, t_shell *shell)
+{
+	char	*full_path;
+
+	check_directory(cmd, shell);
+	if (!get_denv("PATH", shell->denv)
+		|| ft_strlen(get_denv("PATH", shell->denv)) == 0)
+	{
+		if (!ft_strchr(cmd, '/'))
+		{
+			ft_putstr_fd(cmd, STDERR_FILENO);
+			ft_putstr_fd(": Command not found\n", STDERR_FILENO);
+			return (FAIL);
+		}
 	}
 	else if (ft_strchr(cmd, '/') && access(cmd, F_OK | X_OK) == 0)
-		return (execve(cmd, args, env));
-	full_path = get_path(cmd, env);
+		return (execve(cmd, args, shell->env));
+	full_path = get_path(cmd, shell->denv);
 	if (!full_path)
 	{
 		ft_putstr_fd(cmd, STDERR_FILENO);
 		ft_putstr_fd(": Command not found\n", STDERR_FILENO);
 		return (FAIL);
 	}
-	if (execve(full_path, args, env) == -1)
+	if (execve(full_path, args, shell->env) == -1)
 		return (perror("execve failed"), free(full_path), FAIL);
-	free(full_path);
-	return (SUCCESS);
+	return (free(full_path), SUCCESS);
 }
 
 char	*handle_quotes(const char *input, int *index, char quote_type)

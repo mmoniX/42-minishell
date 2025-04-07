@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/07 13:37:08 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/07 15:50:49 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,9 @@ void	ft_free_tab(char **tab);
 
 /* utils_2 */
 char	*ft_strndup(const char *src, size_t n);
-char	*get_env(char *key, char **env);
-char	*get_path(char *cmd, char **env);
-int		ft_execvp(char *cmd, char **args, char **env);
+char	*get_path(char *cmd, t_dlist *denv);
+void	check_directory(char *cmd, t_shell *shell);
+int		ft_execvp(char *cmd, char **args, t_shell *minishell);
 char	*handle_quotes(const char *input, int *index, char quote_type);
 
 /* redirection */

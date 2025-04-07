@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/07 14:43:28 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/07 15:45:28 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	output_redirec(char **tokens, int *i, int append)
 	else
 		fd = open(tokens[*i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
-		return (perror("Output redirection failed"), ft_free_token(&tokens[*i]), FAIL);
+		return (ft_free_token(&tokens[*i]), FAIL);
 	if (dup2(fd, STDOUT_FILENO) < 0)
 		return (perror("Output redirection: dup2 failed"), close(fd), FAIL);
 	close(fd);
