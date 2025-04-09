@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:29:57 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/07 15:15:38 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/09 14:13:31 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,18 @@ int	is_builtin(char *args)
 int	execute_custom_builtin(char **tokens, t_shell *minishell)
 {
 	if (!ft_strcmp(tokens[0], "echo"))
-		return (ft_echo(tokens));
+		minishell->exit_code = ft_echo(tokens);
 	if (!ft_strcmp(tokens[0], "cd"))
-		return (ft_cd(minishell, tokens));
+		minishell->exit_code = ft_cd(minishell, tokens);
 	if (!ft_strcmp(tokens[0], "pwd"))
-		return (ft_pwd());
+		minishell->exit_code = ft_pwd();
 	if (!ft_strcmp(tokens[0], "export"))
-		return (ft_export(minishell, tokens));
+		minishell->exit_code = ft_export(minishell, tokens);
 	if (!ft_strcmp(tokens[0], "unset"))
-		return (ft_unset(minishell, tokens));
+		minishell->exit_code = ft_unset(minishell, tokens);
 	if (!ft_strcmp(tokens[0], "env"))
-		return (ft_env(minishell, 0));
-	return (1);
+		minishell->exit_code = ft_env(minishell, 0);
+	return (minishell->exit_code);
 }
 
 void	execute_builtins(char **tokens, t_shell *shell)
@@ -72,8 +72,7 @@ void	execute_builtins(char **tokens, t_shell *shell)
 		execute_custom_builtin(tokens, shell);
 	else
 	{
-		ft_execvp(tokens[0], tokens, shell);
-		shell->exit_code = 127;
+		if (ft_execvp(tokens[0], tokens, shell) == FAIL)
+			shell->exit_code = 127;
 	}
-	exit(shell->exit_code);
 }

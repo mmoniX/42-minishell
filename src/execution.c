@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/07 12:56:59 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/04/09 14:14:53 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,10 @@ void	execute_single_commands(char **tokens, t_shell *shell)
 	}
 	pid = fork();
 	if (pid == 0)
+	{
 		execute_builtins(tokens, shell);
+		exit(shell->exit_code);
+	}
 	waitpid(pid, &shell->exit_code, 0);
 	shell->exit_code = WEXITSTATUS(shell->exit_code);
 	dup_close(original_stdin, original_stdout);

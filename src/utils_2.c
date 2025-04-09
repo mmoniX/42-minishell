@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:54:41 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/07 15:52:17 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/09 14:19:00 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,30 +31,6 @@ char	*ft_strndup(const char *src, size_t n)
 	dup[i] = '\0';
 	return (dup);
 }
-
-// char	*get_env(char *key, char **env)
-// {
-// 	int		i;
-// 	int		j;
-// 	char	*prefix;
-
-// 	i = 0;
-// 	while (env[i])
-// 	{
-// 		j = 0;
-// 		while (env[i][j] && env[i][j] != '=')
-// 			j++;
-// 		prefix = ft_substr(env[i], 0, j);
-// 		if (ft_strcmp(prefix, key) == 0)
-// 		{
-// 			free(prefix);
-// 			return (env[i] + j + 1);
-// 		}
-// 		free(prefix);
-// 		i++;
-// 	}
-// 	return (NULL);
-// }
 
 char	*get_path(char *cmd, t_dlist *denv)
 {
@@ -98,7 +74,7 @@ void	check_directory(char *cmd, t_shell *shell)
 		closedir(directory);
 		ft_putstr_fd(cmd, STDERR_FILENO);
 		ft_putstr_fd(": is a directory\n", STDERR_FILENO);
-		shell->exit_code = 1;
+		shell->exit_code = 126;
 		return ;
 	}
 }
@@ -115,7 +91,7 @@ int	ft_execvp(char *cmd, char **args, t_shell *shell)
 		{
 			ft_putstr_fd(cmd, STDERR_FILENO);
 			ft_putstr_fd(": Command not found\n", STDERR_FILENO);
-			return (FAIL);
+			return (shell->exit_code = 127, FAIL);
 		}
 	}
 	else if (ft_strchr(cmd, '/') && access(cmd, F_OK | X_OK) == 0)
@@ -124,11 +100,11 @@ int	ft_execvp(char *cmd, char **args, t_shell *shell)
 	if (!full_path)
 	{
 		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": Command not found\n", STDERR_FILENO);
-		return (FAIL);
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+		return (shell->exit_code = 127, FAIL);
 	}
 	if (execve(full_path, args, shell->env) == -1)
-		return (perror("execve failed"), free(full_path), FAIL);
+		return (free(full_path), shell->exit_code = 126, FAIL);
 	return (free(full_path), SUCCESS);
 }
 
