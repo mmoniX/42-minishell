@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/09 14:16:35 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/10 12:43:41 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	execute_piped_commands(char **commands, t_shell *shell)
 		if (!tokens || !tokens[0])
 		{
 			ft_free_tab(tokens);
-			i++;
 			continue ;
 		}
 		if (handle_heredoc_redirection(tokens, shell) < 0)

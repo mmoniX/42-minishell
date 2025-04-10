@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:54:41 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/09 14:19:00 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/10 12:15:25 by gahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ int	ft_execvp(char *cmd, char **args, t_shell *shell)
 {
 	char	*full_path;
 
+	if (!cmd || *cmd == '\0')
+		return (shell->exit_code = 127, FAIL);
 	check_directory(cmd, shell);
 	if (!get_denv("PATH", shell->denv)
 		|| ft_strlen(get_denv("PATH", shell->denv)) == 0)
