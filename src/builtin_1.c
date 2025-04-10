@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/06 13:54:20 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:31:41 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,16 @@ int	ft_pwd(void)
 int	ft_env(t_shell *minishell, int export_flag)
 {
 	t_dlist	*current;
+	char	*variable;
 
 	current = minishell->denv;
 	while (current)
 	{
+		variable = (char *)current->content;
 		if (export_flag == 1)
-			printf("declare -x %s\n", (char *)current->content);
-		else
-			printf("%s\n", (char *)current->content);
+			printf("declare -x %s\n", variable);
+		else if (ft_strchr(variable, '='))
+			printf("%s\n", variable);
 		current = current->next;
 	}
 	return (SUCCESS);
@@ -80,7 +82,8 @@ void	update_unset(t_shell *minishell, char *var)
 	while (current)
 	{
 		env_var = (char *)current->content;
-		if (ft_strncmp (env_var, var, len) == 0 && env_var[len] == '=')
+		if (ft_strncmp (env_var, var, len) == 0
+			&& (env_var[len] == '=' || env_var[len] == '\0'))
 		{
 			if (current->prev)
 				current->prev->next = current->next;
