@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/10 16:07:02 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/04/12 16:17:46 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	execute_piped_commands(char **commands, t_shell *shell)
 			ft_free_tab(tokens);
 			continue ;
 		}
-
 		next_command = (commands[i + 1] != NULL);
 		if (next_command && pipe(shell->fd) == -1)
 			return (perror("pipe failed"), ft_free_tab(tokens));

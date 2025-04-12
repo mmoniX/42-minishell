@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:58:45 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/10 17:31:41 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/12 16:15:34 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,7 @@ void	update_unset(t_shell *minishell, char *var)
 			if (current == minishell->denv)
 				minishell->denv = current->next;
 			free (current->content);
-			free (current);
-			return ;
+			return (free (current));
 		}
 		current = current->next;
 	}

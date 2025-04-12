@@ -1,6 +1,6 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
-# VAL = valgrind --leak-check=full --track-origins=yes
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
+VAL = valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all
 
 SRC = src/builtin_1.c src/builtin_2.c src/builtin_utils.c src/env_define.c \
 	  src/execution.c src/main.c src/pipes.c src/redirection.c src/signal.c \
@@ -37,7 +37,7 @@ fclean: clean
 
 re: fclean all
 
-# valgrind: $(NAME)
-# 	$(VAL) ./$(NAME)
+valgrind: $(NAME)
+	$(VAL) ./$(NAME)
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re valgrind
