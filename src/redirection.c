@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <mmonika@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:45:20 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/12 21:21:57 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/13 15:04:33 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,6 @@ int	handle_redirections(char **tokens, t_shell *shell)
 	i = 0;
 	j = 0;
 	handle_heredoc_redirection(tokens, shell);
-	if (!tokens[0])
-		return (shell->exit_code = 0, FAIL);
 	while (tokens[i])
 	{
 		if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)

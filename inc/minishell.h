@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:16:06 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/07 15:50:49 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:06:48 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ int		is_valid_var(char *var);
 int		is_builtin(char *args);
 int		execute_custom_builtin(char **tokens, t_shell *minishell);
 void	execute_builtins(char **tokens, t_shell *shell);
+void	dup_close(int o_stdin, int o_stdout);
+
+/* check */
+int		is_redirection(char *token);
+int		is_valid_token(char *token);
+int		check_syntax_errors(char **args);
+int		is_pipe(char c, char *quote);
+char	*get_simple_token(char *input, int *i);
 
 /* env_define */
 char	*get_denv(char *key, t_dlist *denv);
@@ -121,12 +129,5 @@ char	**split_pipes(char *input);
 void	execute_child_process(char **tokens, t_shell *shell, int has_cmd);
 void	execute_parent_process(t_shell *shell, int has_cmd);
 void	handle_pipe_process(char **tokens, t_shell *shell, int next_command);
-
-/* check */
-int		check_syntax_errors(char **args);
-int		check_quote(char *input, int value_i);
-int		is_pipe(char c, char *quote);
-int		check_pipe(char *input, int i);
-int		check_input(t_shell *shell, char *input);
 
 #endif

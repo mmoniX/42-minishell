@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 VAL = valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all
 
 SRC = src/builtin_1.c src/builtin_2.c src/builtin_utils.c src/env_define.c \

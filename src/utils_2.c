@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gahmed <gahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:54:41 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/10 12:15:25 by gahmed           ###   ########.fr       */
+/*   Updated: 2025/04/13 15:15:48 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,7 @@ int	ft_execvp(char *cmd, char **args, t_shell *shell)
 	{
 		if (!ft_strchr(cmd, '/'))
 		{
-			ft_putstr_fd(cmd, STDERR_FILENO);
-			ft_putstr_fd(": Command not found\n", STDERR_FILENO);
+			perror(cmd);
 			return (shell->exit_code = 127, FAIL);
 		}
 	}
@@ -101,8 +100,7 @@ int	ft_execvp(char *cmd, char **args, t_shell *shell)
 	full_path = get_path(cmd, shell->denv);
 	if (!full_path)
 	{
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+		perror(cmd);
 		return (shell->exit_code = 127, FAIL);
 	}
 	if (execve(full_path, args, shell->env) == -1)

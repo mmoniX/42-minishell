@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/13 10:16:09 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:05:49 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ char	*handle_special_tokens(char *input, int *i)
 
 	if (input[*i] == '>' || input[*i] == '<')
 	{
-		if ((input[*i] == '>' && input[*i + 1] == '>') ||
-			(input[*i] == '<' && input[*i + 1] == '<'))
+		if ((input[*i] == '>' && input[*i + 1] == '>')
+			|| (input[*i] == '<' && input[*i + 1] == '<'))
 		{
 			token = ft_substr(input, *i, 2);
 			*i += 2;
@@ -36,16 +36,17 @@ char	*handle_special_tokens(char *input, int *i)
 
 char	*get_next_token(char *input, int *i)
 {
-	int		start;
 	char	*token;
 	char	*quoted;
 
+	token = NULL;
+	quoted = NULL;
 	while (input[*i] == ' ' || input[*i] == '\t')
 		(*i)++;
 	if (!input[*i])
 		return (NULL);
 	if (input[*i] == '|')
-		return (ft_strdup("|"), (*i)++, ft_strdup("|"));
+		return ((*i)++, ft_strdup("|"));
 	if (input[*i] == '"' || input[*i] == '\'')
 	{
 		quoted = handle_quotes(input, i, input[*i]);
@@ -56,15 +57,7 @@ char	*get_next_token(char *input, int *i)
 	token = handle_special_tokens(input, i);
 	if (token)
 		return (token);
-	start = *i;
-	while (input[*i] && input[*i] != ' ' && input[*i] != '\t'
-			&& input[*i] != '|' && input[*i] != '"' && input[*i] != '\''
-			&& input[*i] != '<' && input[*i] != '>')
-		(*i)++;
-	token = ft_substr(input, start, *i - start);
-	if (!token)
-		return (NULL);
-	return (token);
+	return (get_simple_token(input, i));
 }
 
 char	**tokenize_input(char *input, t_shell *shell)
@@ -92,17 +85,30 @@ char	**tokenize_input(char *input, t_shell *shell)
 		return (tokens);
 }
 
-void	dup_close(int o_stdin, int o_stdout)
+void	single_fork(char **tokens, t_shell *shell)
 {
-	dup2(o_stdin, STDIN_FILENO);
-	dup2(o_stdout, STDOUT_FILENO);
-	close(o_stdin);
-	close(o_stdout);
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		execute_builtins(tokens, shell);
+		exit(shell->exit_code);
+	}
+	else if (pid < 0)
+	{
+		perror("fork failed");
+		shell->exit_code = 1;
+	}
+	else
+	{
+		waitpid(pid, &shell->exit_code, 0);
+		shell->exit_code = WEXITSTATUS(shell->exit_code);
+	}
 }
 
 void	execute_single_commands(char **tokens, t_shell *shell)
 {
-	pid_t	pid;
 	int		original_stdin;
 	int		original_stdout;
 
@@ -115,20 +121,17 @@ void	execute_single_commands(char **tokens, t_shell *shell)
 		return ;
 	}
 	if (handle_redirections(tokens, shell) < 0)
-		return (perror("Redirection failed!\n"));
+	{
+		perror("Redirection failed!\n");
+		dup_close(original_stdin, original_stdout);
+		return ;
+	}
 	if (is_builtin(*tokens))
 	{
 		execute_custom_builtin(tokens, shell);
 		dup_close(original_stdin, original_stdout);
 		return ;
 	}
-	pid = fork();
-	if (pid == 0)
-	{
-		execute_builtins(tokens, shell);
-		exit(shell->exit_code);
-	}
-	waitpid(pid, &shell->exit_code, 0);
-	shell->exit_code = WEXITSTATUS(shell->exit_code);
+	single_fork(tokens, shell);
 	dup_close(original_stdin, original_stdout);
 }

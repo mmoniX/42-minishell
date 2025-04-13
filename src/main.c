@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/13 10:08:02 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:08:58 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,16 @@ void	init_shell(t_shell *shell, char **env)
 	shell->heredoc_fd = -1;
 	shell->input_fd = 0;
 	shell->is_piped = 0;
+	shell->fd[0] = 0;
+	shell->fd[1] = 0;
+}
+
+void	dup_close(int o_stdin, int o_stdout)
+{
+	dup2(o_stdin, STDIN_FILENO);
+	dup2(o_stdout, STDOUT_FILENO);
+	close(o_stdin);
+	close(o_stdout);
 }
 
 void	process_input(t_shell *shell, char *input)
@@ -33,7 +43,7 @@ void	process_input(t_shell *shell, char *input)
 
 	final_input = expand_variables(input, shell);
 	if (!final_input || !*final_input)
-		return ;
+		return (free(final_input));
 	if (ft_strchr(final_input, '|'))
 	{
 		commands = split_pipes(final_input);
@@ -60,7 +70,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)av;
 	if (ac != 1)
-		return (printf("Invalid Input\n"), 0);
+		return (printf("Invalid Input\n"), 1);
 	signal_handler();
 	init_shell(&shell, env);
 	while (1)

@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:29:57 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/09 14:13:31 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:08:45 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,14 @@ void	execute_builtins(char **tokens, t_shell *shell)
 		if (ft_execvp(tokens[0], tokens, shell) == FAIL)
 			shell->exit_code = 127;
 	}
+}
+
+int	skip_empty_token(char **token)
+{
+	if (!token || !token[0])
+	{
+		ft_free_tab(token);
+		return (FAIL);
+	}
+	return (SUCCESS);
 }

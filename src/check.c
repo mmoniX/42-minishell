@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:44:08 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/13 10:11:52 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:07:10 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,13 @@ int	check_syntax_errors(char **args)
 		if (!ft_strcmp(args[i], "|"))
 		{
 			if (i == 0 || !args[i + 1] || !ft_strcmp(args[i + 1], "|"))
-				return (ft_putstr_fd("Syntax Error: invalid pipe\n", STDERR_FILENO), FAIL);
+				return (ft_putstr_fd("Syntax Error\n", STDERR_FILENO), FAIL);
 		}
 		if (is_redirection(args[i]))
 		{
-			if (!args[i + 1] || is_redirection(args[i + 1]) || !ft_strcmp(args[i + 1], "|"))
-				return (ft_putstr_fd("Syntax Error: invalid redirection\n", STDERR_FILENO), FAIL);
+			if (!args[i + 1] || is_redirection(args[i + 1])
+				|| !ft_strcmp(args[i + 1], "|"))
+				return (ft_putstr_fd("Syntax Error\n", STDERR_FILENO), FAIL);
 		}
 	}
 	return (SUCCESS);
@@ -66,4 +67,18 @@ int	is_pipe(char c, char *quote)
 			*quote = 0;
 	}
 	return (c == '|' && *quote == 0);
+}
+
+char	*get_simple_token(char *input, int *i)
+{
+	int	start;
+
+	start = *i;
+	while (input[*i] && input[*i] != ' ' && input[*i] != '\t'
+		&& input[*i] != '|' && input[*i] != '"' && input[*i] != '\''
+		&& input[*i] != '<' && input[*i] != '>')
+		(*i)++;
+	if (*i == start)
+		return (NULL);
+	return (ft_substr(input, start, *i - start));
 }

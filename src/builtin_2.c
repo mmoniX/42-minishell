@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:55:35 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/06 13:53:57 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 15:48:02 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,8 @@ int	ft_cd(t_shell *minishell, char **args)
 void	ft_exit(t_shell *minishell, char *args)
 {
 	printf("exit\n");
-	free(args);
+	if (args)
+		free(args);
 	if (minishell->old_pwd)
 		free(minishell->old_pwd);
 	if (minishell->denv)
