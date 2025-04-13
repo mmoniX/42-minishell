@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 12:24:34 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/07 15:39:20 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:48:52 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,32 @@ char	*get_value(char *input, int *i, t_shell *shell)
 	return (var_value);
 }
 
-char	*ms_strjoin(char *s1, char *s2)
+char	*expand_segment(char *input, int *i, t_shell *shell)
 {
-	char	*str;
-	size_t	len;
+	char	quote;
+	char	*segment;
+	int		start;
 
-	if (!s1)
-		return (ft_strdup(s2));
-	if (!s2)
-		return (s1);
-	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	str = malloc (len * sizeof(char));
-	if (!str)
-		return (free (s1), NULL);
-	ft_strcpy(str, s1);
-	ft_strcat(str, s2);
-	free(s1);
-	free(s2);
-	return (str);
+	quote = '\0';
+	segment = malloc_protection(ft_calloc(1, 1));
+	while (input[*i])
+	{
+		if (!quote && (input[*i] == '"' || input[*i] == '\''))
+			quote = input[(*i)++];
+		else if (quote && input[*i] == quote)
+		{
+			segment = ms_strjoin(segment, ft_substr(input, (*i)++, 1));
+			break ;
+		}
+		else if (input[*i] == '$' && quote != '\'')
+			segment = ms_strjoin(segment, get_value(input, i, shell));
+		else
+		{
+			start = (*i)++;
+			segment = ms_strjoin(segment, ft_substr(input, start, 1));
+		}
+	}
+	return (segment);
 }
 
 char	*expand_variables(char *input, t_shell *shell)

@@ -6,32 +6,24 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/13 16:05:49 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:01:34 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*handle_special_tokens(char *input, int *i)
+char	*get_simple_token(char *input, int *i)
 {
-	char	*token;
+	int	start;
 
-	if (input[*i] == '>' || input[*i] == '<')
-	{
-		if ((input[*i] == '>' && input[*i + 1] == '>')
-			|| (input[*i] == '<' && input[*i + 1] == '<'))
-		{
-			token = ft_substr(input, *i, 2);
-			*i += 2;
-		}
-		else
-		{
-			token = ft_substr(input, *i, 1);
-			(*i)++;
-		}
-		return (token);
-	}
-	return (NULL);
+	start = *i;
+	while (input[*i] && input[*i] != ' ' && input[*i] != '\t'
+		&& input[*i] != '|' && input[*i] != '"' && input[*i] != '\''
+		&& input[*i] != '<' && input[*i] != '>')
+		(*i)++;
+	if (*i == start)
+		return (NULL);
+	return (ft_substr(input, start, *i - start));
 }
 
 char	*get_next_token(char *input, int *i)

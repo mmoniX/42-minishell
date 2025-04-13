@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:44:08 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/13 16:07:10 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:02:26 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,28 +57,46 @@ int	check_syntax_errors(char **args)
 	return (SUCCESS);
 }
 
-int	is_pipe(char c, char *quote)
+char	*handle_quotes(const char *input, int *index, char quote_type)
 {
-	if (c == '\'' || c == '"')
+	int		start;
+	int		end;
+	char	*quoted_str;
+
+	start = *index + 1;
+	end = start;
+	while (input[end] && input[end] != quote_type)
+		end++;
+	if (input[end] != quote_type)
 	{
-		if (*quote == 0)
-			*quote = c;
-		else if (*quote == c)
-			*quote = 0;
+		ft_putstr_fd("Error: Unclosed quote\n", STDERR_FILENO);
+		return (NULL);
 	}
-	return (c == '|' && *quote == 0);
+	quoted_str = ft_strndup(&input[start], end - start);
+	if (!quoted_str)
+		return (NULL);
+	*index = end + 1;
+	return (quoted_str);
 }
 
-char	*get_simple_token(char *input, int *i)
+char	*handle_special_tokens(char *input, int *i)
 {
-	int	start;
+	char	*token;
 
-	start = *i;
-	while (input[*i] && input[*i] != ' ' && input[*i] != '\t'
-		&& input[*i] != '|' && input[*i] != '"' && input[*i] != '\''
-		&& input[*i] != '<' && input[*i] != '>')
-		(*i)++;
-	if (*i == start)
-		return (NULL);
-	return (ft_substr(input, start, *i - start));
+	if (input[*i] == '>' || input[*i] == '<')
+	{
+		if ((input[*i] == '>' && input[*i + 1] == '>')
+			|| (input[*i] == '<' && input[*i + 1] == '<'))
+		{
+			token = ft_substr(input, *i, 2);
+			*i += 2;
+		}
+		else
+		{
+			token = ft_substr(input, *i, 1);
+			(*i)++;
+		}
+		return (token);
+	}
+	return (NULL);
 }

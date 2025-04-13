@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:08:10 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/07 14:31:33 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:58:55 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,6 @@ void	signal_handler(void)
 		return (perror("Terminal Error"));
 }
 
-void	ft_free_token(char **token)
-{
-	if (*token)
-	{
-		free(*token);
-		*token = NULL;
-	}
-}
-
 int	count_pipes(const char *input)
 {
 	int	count;
@@ -77,33 +68,16 @@ int	count_pipes(const char *input)
 	return (count);
 }
 
-char	*expand_segment(char *input, int *i, t_shell *shell)
+int	is_pipe(char c, char *quote)
 {
-	char	quote;
-	char	*segment;
-	int		start;
-
-	segment = ft_calloc(1, 1);
-	if (!segment)
-		return (NULL);
-	while (input[*i])
+	if (c == '\'' || c == '"')
 	{
-		if (!quote && (input[*i] == '"' || input[*i] == '\''))
-			quote = input[(*i)++];
-		else if (quote && input[*i] == quote)
-		{
-			segment = ms_strjoin(segment, ft_substr(input, (*i)++, 1));
-			break ;
-		}
-		else if (input[*i] == '$' && quote != '\'')
-			segment = ms_strjoin(segment, get_value(input, i, shell));
-		else
-		{
-			start = (*i)++;
-			segment = ms_strjoin(segment, ft_substr(input, start, 1));
-		}
+		if (*quote == 0)
+			*quote = c;
+		else if (*quote == c)
+			*quote = 0;
 	}
-	return (segment);
+	return (c == '|' && *quote == 0);
 }
 
 /*

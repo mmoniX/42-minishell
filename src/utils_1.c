@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:14:30 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/04 19:03:45 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:48:16 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,31 +64,32 @@ t_dlist	*convert_env_to_list(char **env)
 	return (temp);
 }
 
-void	ft_free_dlist(t_dlist *env)
+char	*ms_strjoin(char *s1, char *s2)
 {
-	t_dlist	*temp;
+	char	*str;
+	size_t	len;
 
-	while (env)
-	{
-		temp = env;
-		env = env->next;
-		if (temp->content)
-			free(temp->content);
-		free(temp);
-	}
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (s1);
+	len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	str = malloc (len * sizeof(char));
+	if (!str)
+		return (free (s1), NULL);
+	ft_strcpy(str, s1);
+	ft_strcat(str, s2);
+	free(s1);
+	free(s2);
+	return (str);
 }
 
-void	ft_free_tab(char **tab)
+int	skip_empty_token(char **token)
 {
-	size_t	i;
-
-	i = 0;
-	if (!tab)
-		return ;
-	while (tab[i])
+	if (!token || !token[0])
 	{
-		free(tab[i]);
-		i++;
+		ft_free_tab(token);
+		return (FAIL);
 	}
-	free(tab);
+	return (SUCCESS);
 }

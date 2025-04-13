@@ -1,10 +1,10 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 VAL = valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all
 
 SRC = src/builtin_1.c src/builtin_2.c src/builtin_utils.c src/env_define.c \
 	  src/execution.c src/main.c src/pipes.c src/redirection.c src/signal.c \
-	  src/utils_1.c src/utils_2.c src/check.c
+	  src/utils_1.c src/utils_2.c src/check.c src/utils_3.c
 OBJ_DIR = obj
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
