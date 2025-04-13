@@ -6,20 +6,20 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 12:41:01 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/12 16:16:29 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 10:16:09 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static char	*handle_special_tokens(char *input, int *i)
+char	*handle_special_tokens(char *input, int *i)
 {
 	char	*token;
 
-	if (input[*i] == '|' || input[*i] == '<' || input[*i] == '>')
+	if (input[*i] == '>' || input[*i] == '<')
 	{
-		if ((input[*i] == '<' && input[*i + 1] == '<')
-			|| (input[*i] == '>' && input[*i + 1] == '>'))
+		if ((input[*i] == '>' && input[*i + 1] == '>') ||
+			(input[*i] == '<' && input[*i + 1] == '<'))
 		{
 			token = ft_substr(input, *i, 2);
 			*i += 2;
@@ -31,8 +31,6 @@ static char	*handle_special_tokens(char *input, int *i)
 		}
 		return (token);
 	}
-	else if (input[*i] == '"' || input[*i] == '\'')
-		return (handle_quotes(input, i, input[*i]));
 	return (NULL);
 }
 
@@ -40,24 +38,32 @@ char	*get_next_token(char *input, int *i)
 {
 	int		start;
 	char	*token;
+	char	*quoted;
 
 	while (input[*i] == ' ' || input[*i] == '\t')
 		(*i)++;
 	if (!input[*i])
 		return (NULL);
+	if (input[*i] == '|')
+		return (ft_strdup("|"), (*i)++, ft_strdup("|"));
+	if (input[*i] == '"' || input[*i] == '\'')
+	{
+		quoted = handle_quotes(input, i, input[*i]);
+		if (!quoted)
+			return (NULL);
+		return (quoted);
+	}
 	token = handle_special_tokens(input, i);
 	if (token)
 		return (token);
 	start = *i;
-	while (input[*i] && !(input[*i] == ' ' || input[*i] == '\t'
-			|| input[*i] == '|' || input[*i] == '<' || input[*i] == '>'
-			|| input[*i] == '"' || input[*i] == '\''))
-	{
-		if ((input[*i] == '<' || input[*i] == '>') && (*i != start))
-			break ;
+	while (input[*i] && input[*i] != ' ' && input[*i] != '\t'
+			&& input[*i] != '|' && input[*i] != '"' && input[*i] != '\''
+			&& input[*i] != '<' && input[*i] != '>')
 		(*i)++;
-	}
 	token = ft_substr(input, start, *i - start);
+	if (!token)
+		return (NULL);
 	return (token);
 }
 
@@ -105,7 +111,8 @@ void	execute_single_commands(char **tokens, t_shell *shell)
 	if (!tokens || !tokens[0])
 	{
 		dup_close(original_stdin, original_stdout);
-		return (shell->exit_code = 0);
+		shell->exit_code = 0;
+		return ;
 	}
 	if (handle_redirections(tokens, shell) < 0)
 		return (perror("Redirection failed!\n"));

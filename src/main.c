@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:00:37 by mmonika           #+#    #+#             */
-/*   Updated: 2025/04/07 15:27:25 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 10:08:02 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,7 @@ int	main(int ac, char **av, char **env)
 			ft_exit(&shell, input);
 		if (*input)
 			add_history(input);
-		if (check_input(&shell, input) == 0)
-			process_input(&shell, input);
+		process_input(&shell, input);
 		free(input);
 	}
 	return (shell.exit_code);

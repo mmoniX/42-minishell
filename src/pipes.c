@@ -6,7 +6,7 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:06:41 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/12 16:17:46 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 10:16:41 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ void	execute_piped_commands(char **commands, t_shell *shell)
 	while (commands[++i])
 	{
 		tokens = tokenize_input(commands[i], shell);
-		if (handle_heredoc_redirection(tokens, shell) < 0)
-			return (perror("open failed for heredoc"), ft_free_tab(tokens));
 		if (!tokens || !tokens[0])
 		{
 			ft_free_tab(tokens);
 			continue ;
 		}
+		if (handle_heredoc_redirection(tokens, shell) < 0)
+			return (perror("open failed for heredoc"), ft_free_tab(tokens));
 		next_command = (commands[i + 1] != NULL);
 		if (next_command && pipe(shell->fd) == -1)
 			return (perror("pipe failed"), ft_free_tab(tokens));

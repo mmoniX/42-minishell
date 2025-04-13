@@ -6,49 +6,54 @@
 /*   By: mmonika <mmonika@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 15:44:08 by gahmed            #+#    #+#             */
-/*   Updated: 2025/04/06 13:39:13 by mmonika          ###   ########.fr       */
+/*   Updated: 2025/04/13 10:11:52 by mmonika          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+int	is_redirection(char *token)
+{
+	return (!ft_strcmp(token, ">") || !ft_strcmp(token, ">>")
+		|| !ft_strcmp(token, "<") || !ft_strcmp(token, "<<"));
+}
+
+int	is_valid_token(char *token)
+{
+	if (!token)
+		return (0);
+	if (!ft_strcmp(token, "<") || !ft_strcmp(token, ">")
+		|| !ft_strcmp(token, "<<") || !ft_strcmp(token, ">>")
+		|| !ft_strcmp(token, "|"))
+		return (1);
+	if (ft_strlen(token) > 2 && (token[0] == '<' || token[0] == '>'))
+		return (0);
+	return (1);
+}
+
 int	check_syntax_errors(char **args)
 {
 	int	i;
 
+	if (!args || !args[0])
+		return (SUCCESS);
 	i = -1;
 	while (args[++i])
 	{
-		if ((ft_strcmp(args[i], "<>") == 0) || (ft_strcmp(args[i], "><") == 0)
-			|| (ft_strcmp(args[i], ">>>") == 0) || (ft_strcmp(args[i],
-					"<<<") == 0))
+		if (!is_valid_token(args[i]))
 			return (ft_putstr_fd("Syntax Error\n", STDERR_FILENO), FAIL);
-		if ((ft_strcmp(args[i], ">") == 0 || ft_strcmp(args[i], "<") == 0
-				|| ft_strcmp(args[i], ">>") == 0) && (!args[i + 1] || (args[i
-						+ 1] && ft_strlen(args[i + 1]) == 0)))
-			return (ft_putstr_fd("Syntax Error\n", STDERR_FILENO), FAIL);
-		if ((ft_strcmp(args[i], "<<") == 0) && (!args[i + 1] || (args[i + 1]
-					&& ft_strlen(args[i + 1]) == 0)))
-			return (ft_putstr_fd("Syntax Error\n", STDERR_FILENO), FAIL);
+		if (!ft_strcmp(args[i], "|"))
+		{
+			if (i == 0 || !args[i + 1] || !ft_strcmp(args[i + 1], "|"))
+				return (ft_putstr_fd("Syntax Error: invalid pipe\n", STDERR_FILENO), FAIL);
+		}
+		if (is_redirection(args[i]))
+		{
+			if (!args[i + 1] || is_redirection(args[i + 1]) || !ft_strcmp(args[i + 1], "|"))
+				return (ft_putstr_fd("Syntax Error: invalid redirection\n", STDERR_FILENO), FAIL);
+		}
 	}
 	return (SUCCESS);
-}
-
-int	check_quote(char *input, int value_i)
-{
-	int		i;
-	char	quote;
-
-	quote = 0;
-	i = -1;
-	while (++i < value_i)
-	{
-		if (quote == 0 && (input[i] == '\'' || input[i] == '\"'))
-			quote = input[i];
-		else if (quote != 0 && quote == input[i])
-			quote = 0;
-	}
-	return ((int)quote);
 }
 
 int	is_pipe(char c, char *quote)
@@ -61,41 +66,4 @@ int	is_pipe(char c, char *quote)
 			*quote = 0;
 	}
 	return (c == '|' && *quote == 0);
-}
-
-int	check_pipe(char *input, int i)
-{
-	if (input[i] == '|' && !check_quote(input, i) && input[i + 1]
-		&& input[i + 1] == '|')
-		return (ft_putstr_fd("Syntax Error: `||\'\n", STDERR_FILENO), FAIL);
-	else if (input[0] == '|' && !check_quote(input, i))
-		return (ft_putstr_fd("Syntax Error:  `|\'\n", STDERR_FILENO), FAIL);
-	return (SUCCESS);
-}
-
-int	check_input(t_shell *shell, char *input)
-{
-	int	i;
-	int	pipe;
-
-	i = -1;
-	pipe = 0;
-	while (input[++i])
-	{
-		if (check_pipe(input, i))
-		{
-			shell->exit_code = 2;
-			return (free(input), FAIL);
-		}
-		if (pipe != 1 && input[i] == '|' && !check_quote(input, i))
-			pipe = 1;
-		else if (ft_isprint(input[i]) && input[i] != ' ' && input[i] != '|')
-			pipe = 0;
-		else if (input[i] == '|')
-			break ;
-	}
-	if (pipe == 1)
-		return (ft_putstr_fd("Syntax Error: `|\'\n", STDERR_FILENO),
-			shell->exit_code = 2, FAIL);
-	return (SUCCESS);
 }
